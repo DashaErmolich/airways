@@ -1,0 +1,15 @@
+@import '../../../../styles/abstracts/variables';
+
+.header {
+  position: fixed;
+  height: $header-height;
+  width: 100%;
+  border: 1px solid red;
+  display: flex;
+  align-items: center;
+}
+
+.header__logo {
+  width: 130px;
+  height: 40px;
+}
