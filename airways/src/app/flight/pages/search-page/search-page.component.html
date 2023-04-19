@@ -1,1 +1,58 @@
-<p>search-page works!</p>
+<form [formGroup]="searchForm" class="form" (ngSubmit)="submitForm()">
+
+  <div class="form__control">
+    <mat-radio-group aria-label="Select an option" formControlName="typeOfFlight">
+      <mat-radio-button color="primary" value="round">Round Trip</mat-radio-button>
+      <mat-radio-button color="primary" value="one">One Way</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="form__control">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>From</mat-label>
+      <input matInput placeholder="From" formControlName="destinationFrom" [matAutocomplete]="from" type="text">
+      <mat-autocomplete #from="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom">
+          <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.IATA}})</span> </div>
+          <div class="airport__subinfo"><span>{{airportFrom.name}}</span><span> {{airportFrom.country}}</span></div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <div class="form__control">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Destination</mat-label>
+      <input matInput placeholder="Destination" formControlName="destinationTo" [matAutocomplete]="to" type="text">
+      <mat-autocomplete #to="matAutocomplete" [displayWith]="displayFn">
+        <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo">
+          <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.IATA}})</span> </div>
+          <div class="airport__subinfo"><span>{{airportTo.name}}</span><span> {{airportTo.country}}</span></div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  <div class="form__control">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker" formGroupName="range">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error *ngIf="searchForm.get('range')?.get('start')?.hasError('matStartDateInvalid')">Invalid start
+        date</mat-error>
+      <mat-error *ngIf="searchForm.get('range')?.get('end')?.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+
+    
+  </div>
+  
+  <div class="form__control">
+    <button mat-raised-button color="primary" type="submit">Search</button>
+  </div>
+
+</form>
