@@ -21,12 +21,12 @@
     </mat-select>
   </mat-form-field>
 
-  <button mat-raised-button class="header__sign-in-button">
+  <button *ngIf="(isAuth$ | async) === false" mat-raised-button class="header__sign-in-button">
     <mat-icon>account_circle</mat-icon>
     Sign in
   </button>
 
-  <button mat-raised-button class="header__user-account-button">
+  <button *ngIf="isAuth$ | async" mat-raised-button class="header__user-account-button">
     <mat-icon>account_circle</mat-icon>
     Username
   </button>
@@ -34,4 +34,9 @@
   <a mat-button routerLink="/booking/cart" class="header__shopping-cart-link">
     <mat-icon>shopping_cart</mat-icon>
   </a>
+
+  <button mat-raised-button (click)="login()" color="primary">LOGIN</button>
+  <button mat-raised-button (click)="logout()" color="warn">LOGOUT</button>
+
+  <span>Auth: {{ isAuth$ | async }}</span>
 </header>
