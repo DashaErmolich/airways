@@ -8,6 +8,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+// import {MatSelectModule} from '@angular/material/select';
+import {MatIconModule} from '@angular/material/icon';
+
 // import { BrowserModule } from '@angular/platform-browser';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -33,7 +36,8 @@ import { SelectionPageComponent } from './pages/selection-page/selection-page.co
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
+    // MatSelectModule,
+    MatIconModule,
     // FormsModule,
     // // BrowserModule,
     // // BrowserAnimationsModule,

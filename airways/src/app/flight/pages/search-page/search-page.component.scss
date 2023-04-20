@@ -29,3 +29,84 @@
     color: #74767A;
   }
 }
+
+.passengers {
+
+  &__info {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__form {
+    position: relative;
+  }
+
+  &__btn {
+    position: absolute;
+    display: block;
+    top: 50%;
+    right: 0;
+    transform: translate(0px, -50%);
+  }
+
+  &__options {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    transform: translateY(calc(100% - 22px));
+    background-color: white;
+    width: -webkit-fill-available;
+
+  }
+
+  &__option {
+    display: flex;
+    padding: 8px 16px;
+  }
+}
+
+.option {
+
+  &__info {
+    width: 50%;
+  }
+
+  &__name {
+
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+
+  }
+
+  &__age {
+    display: block;
+    color: #74767A;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+  }
+
+  &__counter {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__count {
+    color: initial;
+    font-size: unset;
+    padding: 0;
+    border: none;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+  }
+}

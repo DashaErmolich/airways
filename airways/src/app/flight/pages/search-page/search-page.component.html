@@ -11,7 +11,7 @@
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>From</mat-label>
       <input matInput placeholder="From" formControlName="destinationFrom" [matAutocomplete]="from" type="text">
-      <mat-autocomplete #from="matAutocomplete" [displayWith]="displayFn">
+      <mat-autocomplete #from="matAutocomplete" [displayWith]="displayAirport">
         <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom">
           <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.IATA}})</span> </div>
           <div class="airport__subinfo"><span>{{airportFrom.name}}</span><span> {{airportFrom.country}}</span></div>
@@ -24,7 +24,7 @@
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Destination</mat-label>
       <input matInput placeholder="Destination" formControlName="destinationTo" [matAutocomplete]="to" type="text">
-      <mat-autocomplete #to="matAutocomplete" [displayWith]="displayFn">
+      <mat-autocomplete #to="matAutocomplete" [displayWith]="displayAirport">
         <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo">
           <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.IATA}})</span> </div>
           <div class="airport__subinfo"><span>{{airportTo.name}}</span><span> {{airportTo.country}}</span></div>
@@ -40,7 +40,6 @@
         <input matStartDate formControlName="start" placeholder="Start date">
         <input matEndDate formControlName="end" placeholder="End date">
       </mat-date-range-input>
-      <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
       <mat-error *ngIf="searchForm.get('range')?.get('start')?.hasError('matStartDateInvalid')">Invalid start
@@ -48,7 +47,52 @@
       <mat-error *ngIf="searchForm.get('range')?.get('end')?.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
 
-    
+
+    <div class="passengers__form">
+      <mat-form-field class="example-full-width" (click)="vis()">
+        <mat-label>Passengers</mat-label>
+        <input class="passengers__info" matInput readonly [value]="getCountPassengers()">
+        <mat-icon class="passengers__btn" color="primary">arrow_drop_down</mat-icon>
+      </mat-form-field>
+
+      <div *ngIf="isVisibleCounter" formGroupName="passengers" class="passengers__options">
+        <div class="passengers__option">
+          <div class="option__info">
+            <span class="option__name">Adult</span>
+            <span class="option__age">14+ years</span>
+          </div>
+          <div class="option__counter">
+            <mat-icon (click)="decrementAdult()">remove</mat-icon>
+            <input class="option__count" type="text" readonly formControlName="adult" [value]="countAdult">
+            <mat-icon (click)="incrementAdult()">add</mat-icon>              
+          </div> 
+        </div>
+
+        <div class="passengers__option">
+          <div class="option__info">
+            <span class="option__name">Child</span>
+            <span class="option__age">2-14 years</span>
+          </div>
+          <div class="option__counter">
+            <mat-icon (click)="decrementChild()">remove</mat-icon>
+            <input class="option__count" type="text" readonly formControlName="child" [value]="countChild">
+            <mat-icon (click)="incrementChild()">add</mat-icon>              
+          </div> 
+        </div>
+
+        <div class="passengers__option">
+          <div class="option__info">
+            <span class="option__name">Infant</span>
+            <span class="option__age">0-2 years</span>
+          </div>
+          <div class="option__counter">
+            <mat-icon (click)="decrementInfant()">remove</mat-icon>
+            <input class="option__count" type="text" readonly formControlName="infant" [value]="countInfant">
+            <mat-icon (click)="incrementInfant()">add</mat-icon>              
+          </div> 
+        </div>
+      </div> 
+    </div>
   </div>
   
   <div class="form__control">
