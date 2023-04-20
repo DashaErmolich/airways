@@ -1,20 +1,20 @@
 <header class="header">
-  <a mat-button routerLink="">
+  <a mat-button routerLink="/">
     <svg class="header__logo">
-      <use xlink:href="../../../../assets/icons/sprite.svg#logo"></use>
+      <use xlink:href="assets/icons/sprite.svg#logo"></use>
     </svg>
   </a>
 
-  <mat-form-field appearance="outline" class="header__date-format-select">
-    <mat-select [(value)]="selectedDateView">
-      <mat-option *ngFor="let dateView of dateViews" [value]="dateView">
-        {{ dateView }}
+  <mat-form-field appearance="outline" class="header__currency-select">
+    <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
+      <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">
+        {{ dateFormat }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="header__currency-select">
-    <mat-select [(value)]="selectedCurrency">
+    <mat-select [value]="currency$ | async" (selectionChange)="onCurrencyChange($event)">
       <mat-option *ngFor="let currency of currencies" [value]="currency">
         {{ currency }}
       </mat-option>
@@ -37,6 +37,4 @@
 
   <button mat-raised-button (click)="login()" color="primary">LOGIN</button>
   <button mat-raised-button (click)="logout()" color="warn">LOGOUT</button>
-
-  <span>Auth: {{ isAuth$ | async }}</span>
 </header>

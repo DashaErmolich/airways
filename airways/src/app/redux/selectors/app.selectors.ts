@@ -7,3 +7,13 @@ export const selectIsAuth = createSelector(
   selectFeature,
   (state) => state.isAuth,
 );
+
+export const selectDateFormat = createSelector(
+  selectFeature,
+  (state) => state.dateFormat,
+);
+
+export const selectCurrency = createSelector(
+  selectFeature,
+  (state) => state.currency,
+);
