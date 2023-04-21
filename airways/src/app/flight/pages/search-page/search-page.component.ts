@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl, FormGroup, ValidationErrors, Validators,
+} from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { airports } from '../../constants';
+import { data } from '../../constants';
 import { Airport } from '../../models/flight.models';
 
 @Component({
@@ -13,9 +16,11 @@ import { Airport } from '../../models/flight.models';
 export class SearchPageComponent implements OnInit {
   searchForm!: FormGroup;
 
-  range!: FormGroup;
+  // range!: FormGroup;
 
-  passengers!: FormGroup;
+  // passengers!: FormGroup;
+
+  // directions!: FormGroup;
 
   countAdult = 1;
 
@@ -25,7 +30,7 @@ export class SearchPageComponent implements OnInit {
 
   isVisibleCounter = false;
 
-  airports: Airport[] = airports;
+  airports: Airport[] = data;
 
   filteredAirportsFrom!: Observable<Airport[]>;
 
@@ -33,14 +38,16 @@ export class SearchPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm = new FormGroup({
-      typeOfFlight: new FormControl(''),
-      destinationFrom: new FormControl(''),
-      destinationTo: new FormControl(''),
+      isRoundTrip: new FormControl(true),
+      directions: new FormGroup({
+        departureFrom: new FormControl('', [Validators.required]),
+        destinationTo: new FormControl('', [Validators.required]),
+      }, { validators: this.sameDirectionsValidator }),
       range: new FormGroup({
-        start: new FormControl<Date | null>(null),
-        end: new FormControl<Date | null>(null),
+        start: new FormControl<Date | null>(null, Validators.required),
+        end: new FormControl<Date | null>(null, Validators.required),
       }),
-
+      date: new FormControl('', Validators.required),
       passengers: new FormGroup({
         adult: new FormControl(1),
         child: new FormControl(0),
@@ -48,13 +55,13 @@ export class SearchPageComponent implements OnInit {
       }),
     });
 
-    this.filteredAirportsFrom = this.searchForm.get('destinationFrom')!.valueChanges
+    this.filteredAirportsFrom = this.searchForm.get('directions')!.get('departureFrom')!.valueChanges
       .pipe(
         startWith(''),
         map((value) => this.filter(value)),
       );
 
-    this.filteredAirportsTo = this.searchForm.get('destinationTo')!.valueChanges
+    this.filteredAirportsTo = this.searchForm.get('directions')!.get('destinationTo')!.valueChanges
       .pipe(
         startWith(''),
         map((value) => this.filter(value)),
@@ -62,9 +69,19 @@ export class SearchPageComponent implements OnInit {
   }
 
   // eslint-disable-next-line class-methods-use-this
+  sameDirectionsValidator(group: AbstractControl): ValidationErrors | null {
+    const departureFrom = group.get('departureFrom')?.value;
+    const destinationTo = group.get('destinationTo')?.value;
+    if (departureFrom && destinationTo && departureFrom.IATA === destinationTo.IATA) {
+      return { sameDirectionsValidator: true };
+    }
+    return null;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   filter(value: string) {
     const val = typeof value === 'string' ? value.toLowerCase().trim() : '';
-    return airports.filter((airport) => airport.IATA.toLowerCase().includes(val)
+    return data.filter((airport) => airport.IATA.toLowerCase().includes(val)
     || airport.city.toLowerCase().includes(val)
     || airport.name.toLowerCase().includes(val)
     || airport.country.toLowerCase().includes(val));
@@ -73,6 +90,15 @@ export class SearchPageComponent implements OnInit {
   // eslint-disable-next-line class-methods-use-this
   displayAirport(airport: Airport): string {
     return airport ? `${airport.city} ${airport.IATA}` : '';
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  unavailableDate(calendarDate: Date | null): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (calendarDate && calendarDate.getTime() === today.getTime()) return true;
+    if (calendarDate) return calendarDate > today;
+    return true;
   }
 
   decrementAdult() {
@@ -128,13 +154,31 @@ export class SearchPageComponent implements OnInit {
     return countPassengers;
   }
 
-  submitForm() {
-    // console.log(this.range.get('start')?.value);
-    console.log(this.searchForm.getRawValue());
+  visibleCounter() {
+    this.isVisibleCounter = !this.isVisibleCounter;
   }
 
-  vis() {
-    this.isVisibleCounter = !this.isVisibleCounter;
-    console.log(this.isVisibleCounter);
+  swapDirections() {
+    const departureFrom = this.searchForm.get('directions')?.get('departureFrom')?.value;
+    const destinationTo = this.searchForm.get('directions')?.get('destinationTo')?.value;
+    this.searchForm.get('directions')?.patchValue({
+      departureFrom: destinationTo,
+      destinationTo: departureFrom,
+    });
+  }
+
+  isFormInvalid() {
+    const formValue = this.searchForm.getRawValue();
+    if (this.searchForm.get('directions')?.valid && formValue.directions.departureFrom
+      && formValue.directions.destinationTo
+      && ((formValue.isRoundTrip && formValue.range.start && formValue.range.end)
+    || (!formValue.isRoundTrip && formValue.date))) {
+      return false;
+    }
+    return true;
+  }
+
+  submitForm() {
+    console.log('submit', this.searchForm.getRawValue());
   }
 }

@@ -1,4 +1,4 @@
-export const airports = [
+export const data = [
   {
     city: 'Moscow',
     IATA: 'SVO',

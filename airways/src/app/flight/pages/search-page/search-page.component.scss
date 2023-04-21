@@ -1,12 +1,41 @@
 .form {
-  width: 60%;
+  width: 50%;
+  margin-top: 60px;
   min-height: 200px;
-  background-color: beige;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  border: 1px solid grey;
   padding: 24px;
+
+  &__btn {
+    margin-left: auto;
+  }
+
+  &__directions{
+    width: 100%;
+    position: relative;
+    margin-bottom: 16px;
+
+    &_btn{
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translate(50%, calc(-50% - 11px));
+    }
+
+    &_error {
+      position: absolute;
+      bottom: 0;
+      font-size: 12px;
+      letter-spacing: 0.4;
+      line-height: 20px;
+    }
+  }
 
   &__control {
     display: flex;
     gap: 16px;
+    margin-bottom: 16px;
   }
 }
 
@@ -43,6 +72,7 @@
 
   &__form {
     position: relative;
+    width: 50%;
   }
 
   &__btn {
@@ -61,7 +91,6 @@
     transform: translateY(calc(100% - 22px));
     background-color: white;
     width: -webkit-fill-available;
-
   }
 
   &__option {
@@ -77,12 +106,10 @@
   }
 
   &__name {
-
     display: block;
     font-size: 16px;
     line-height: 24px;
     letter-spacing: 0.5px;
-
   }
 
   &__age {
@@ -98,15 +125,26 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    &_btn {
+      all: unset;
+      font-size: 14px;
+      width: 24px;
+      height: 24px;
+      color: #74767A;
+      cursor: pointer;
+    }
   }
 
   &__count {
-    color: initial;
-    font-size: unset;
-    padding: 0;
-    border: none;
+    all: unset;
+    font-size: 16px;
     width: 24px;
     height: 24px;
     text-align: center;
   }
+}
+
+.dates__form {
+  width: 50%;
 }

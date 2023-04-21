@@ -1,55 +1,77 @@
 <form [formGroup]="searchForm" class="form" (ngSubmit)="submitForm()">
 
   <div class="form__control">
-    <mat-radio-group aria-label="Select an option" formControlName="typeOfFlight">
-      <mat-radio-button color="primary" value="round">Round Trip</mat-radio-button>
-      <mat-radio-button color="primary" value="one">One Way</mat-radio-button>
+    <mat-radio-group aria-label="Select an option" formControlName="isRoundTrip">
+      <mat-radio-button color="primary" [value]="true">Round Trip</mat-radio-button>
+      <mat-radio-button color="primary" [value]="false">One Way</mat-radio-button>
     </mat-radio-group>
   </div>
 
-  <div class="form__control">
+  <form class="form__directions" formGroupName="directions">
     <mat-form-field class="example-full-width" appearance="fill">
-      <mat-label>From</mat-label>
-      <input matInput placeholder="From" formControlName="destinationFrom" [matAutocomplete]="from" type="text">
+      <mat-label>Departure</mat-label>
+      <input matInput placeholder="From" formControlName="departureFrom" [matAutocomplete]="from" type="text">
       <mat-autocomplete #from="matAutocomplete" [displayWith]="displayAirport">
         <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom">
           <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.IATA}})</span> </div>
           <div class="airport__subinfo"><span>{{airportFrom.name}}</span><span> {{airportFrom.country}}</span></div>
         </mat-option>
       </mat-autocomplete>
+      <mat-error *ngIf="searchForm.get('directions')?.get('departureFrom')?.hasError('required')">
+        Please select from
+      </mat-error>
     </mat-form-field>
-  </div>
 
-  <div class="form__control">
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Destination</mat-label>
-      <input matInput placeholder="Destination" formControlName="destinationTo" [matAutocomplete]="to" type="text">
+      <input matInput placeholder="To" formControlName="destinationTo" [matAutocomplete]="to" type="text">
       <mat-autocomplete #to="matAutocomplete" [displayWith]="displayAirport">
         <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo">
           <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.IATA}})</span> </div>
           <div class="airport__subinfo"><span>{{airportTo.name}}</span><span> {{airportTo.country}}</span></div>
         </mat-option>
       </mat-autocomplete>
+      <mat-error *ngIf="searchForm.get('directions')?.get('destinationTo')?.hasError('required')">
+        Please select destination
+      </mat-error>
     </mat-form-field>
-  </div>
-  <div class="form__control">
 
-    <mat-form-field appearance="fill">
+    <mat-error class="form__directions_error" *ngIf="searchForm.get('directions')?.hasError('sameDirectionsValidator')">
+      Please choose different airports
+    </mat-error>
+
+    <button mat-mini-fab class="form__directions_btn" color="primary" type="button"
+      (click)="swapDirections()"><mat-icon>sync_alt</mat-icon></button>
+  </form>
+
+  <div class="form__control">
+    <mat-form-field class="dates__form" *ngIf="searchForm.get('isRoundTrip')?.value" appearance="fill">
       <mat-label>Enter a date range</mat-label>
-      <mat-date-range-input [rangePicker]="picker" formGroupName="range">
+      <mat-date-range-input [rangePicker]="picker" formGroupName="range" [dateFilter]="unavailableDate">
         <input matStartDate formControlName="start" placeholder="Start date">
         <input matEndDate formControlName="end" placeholder="End date">
       </mat-date-range-input>
       <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
+      <mat-error
+        *ngIf="searchForm.get('range')?.get('start')?.hasError('required') || searchForm.get('range')?.get('end')?.hasError('required') ">
+        Please select dates
+      </mat-error>
       <mat-error *ngIf="searchForm.get('range')?.get('start')?.hasError('matStartDateInvalid')">Invalid start
         date</mat-error>
       <mat-error *ngIf="searchForm.get('range')?.get('end')?.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
 
+    <mat-form-field class="dates__form" *ngIf="!searchForm.get('isRoundTrip')?.value" appearance="fill">
+      <mat-label>Enter a date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" [matDatepickerFilter]="unavailableDate">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="searchForm.get('date')?.hasError('required')">Please enter a date</mat-error>
+    </mat-form-field>
 
     <div class="passengers__form">
-      <mat-form-field class="example-full-width" (click)="vis()">
+      <mat-form-field class="example-full-width" (click)="visibleCounter()">
         <mat-label>Passengers</mat-label>
         <input class="passengers__info" matInput readonly [value]="getCountPassengers()">
         <mat-icon class="passengers__btn" color="primary">arrow_drop_down</mat-icon>
@@ -62,10 +84,12 @@
             <span class="option__age">14+ years</span>
           </div>
           <div class="option__counter">
-            <mat-icon (click)="decrementAdult()">remove</mat-icon>
+            <button class="option__counter_btn" type="button"
+              (click)="decrementAdult()"><mat-icon>remove</mat-icon></button>
             <input class="option__count" type="text" readonly formControlName="adult" [value]="countAdult">
-            <mat-icon (click)="incrementAdult()">add</mat-icon>              
-          </div> 
+            <button class="option__counter_btn" type="button"
+              (click)="incrementAdult()"><mat-icon>add</mat-icon></button>
+          </div>
         </div>
 
         <div class="passengers__option">
@@ -74,10 +98,12 @@
             <span class="option__age">2-14 years</span>
           </div>
           <div class="option__counter">
-            <mat-icon (click)="decrementChild()">remove</mat-icon>
+            <button class="option__counter_btn" type="button"
+              (click)="decrementChild()"><mat-icon>remove</mat-icon></button>
             <input class="option__count" type="text" readonly formControlName="child" [value]="countChild">
-            <mat-icon (click)="incrementChild()">add</mat-icon>              
-          </div> 
+            <button class="option__counter_btn" type="button"
+              (click)="incrementChild()"><mat-icon>add</mat-icon></button>
+          </div>
         </div>
 
         <div class="passengers__option">
@@ -86,17 +112,19 @@
             <span class="option__age">0-2 years</span>
           </div>
           <div class="option__counter">
-            <mat-icon (click)="decrementInfant()">remove</mat-icon>
+            <button class="option__counter_btn" type="button"
+              (click)="decrementInfant()"><mat-icon>remove</mat-icon></button>
             <input class="option__count" type="text" readonly formControlName="infant" [value]="countInfant">
-            <mat-icon (click)="incrementInfant()">add</mat-icon>              
-          </div> 
+            <button class="option__counter_btn" type="button"
+              (click)="incrementInfant()"><mat-icon>add</mat-icon></button>
+          </div>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
-  
-  <div class="form__control">
-    <button mat-raised-button color="primary" type="submit">Search</button>
-  </div>
 
+  <div class="form__control">
+    <button class="form__btn" mat-raised-button color="primary" type="submit"
+      [disabled]="isFormInvalid()">Search</button>
+  </div>
 </form>
