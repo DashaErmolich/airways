@@ -85,10 +85,10 @@
           </div>
           <div class="option__counter">
             <button class="option__counter_btn" type="button"
-              (click)="decrementAdult()"><mat-icon>remove</mat-icon></button>
-            <input class="option__count" type="text" readonly formControlName="adult" [value]="countAdult">
+              (click)="decrement('adult')"><mat-icon>remove</mat-icon></button>
+            <input class="option__count" type="text" readonly formControlName="adult">
             <button class="option__counter_btn" type="button"
-              (click)="incrementAdult()"><mat-icon>add</mat-icon></button>
+              (click)="increment('adult')"><mat-icon>add</mat-icon></button>
           </div>
         </div>
 
@@ -99,10 +99,10 @@
           </div>
           <div class="option__counter">
             <button class="option__counter_btn" type="button"
-              (click)="decrementChild()"><mat-icon>remove</mat-icon></button>
-            <input class="option__count" type="text" readonly formControlName="child" [value]="countChild">
+              (click)="decrement('child')"><mat-icon>remove</mat-icon></button>
+            <input class="option__count" type="text" readonly formControlName="child">
             <button class="option__counter_btn" type="button"
-              (click)="incrementChild()"><mat-icon>add</mat-icon></button>
+              (click)="increment('child')"><mat-icon>add</mat-icon></button>
           </div>
         </div>
 
@@ -113,10 +113,10 @@
           </div>
           <div class="option__counter">
             <button class="option__counter_btn" type="button"
-              (click)="decrementInfant()"><mat-icon>remove</mat-icon></button>
-            <input class="option__count" type="text" readonly formControlName="infant" [value]="countInfant">
+              (click)="decrement('infant')"><mat-icon>remove</mat-icon></button>
+            <input class="option__count" type="text" readonly formControlName="infant">
             <button class="option__counter_btn" type="button"
-              (click)="incrementInfant()"><mat-icon>add</mat-icon></button>
+              (click)="increment('infant')"><mat-icon>add</mat-icon></button>
           </div>
         </div>
       </div>
@@ -128,3 +128,5 @@
       [disabled]="isFormInvalid()">Search</button>
   </div>
 </form>
+
+<div style="width: 60%;">{{searchParams | json}}</div>

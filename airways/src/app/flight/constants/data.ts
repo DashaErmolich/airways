@@ -1,9 +1,9 @@
 export const data = [
   {
-    city: 'Moscow',
+    city: 'Москва',
     IATA: 'SVO',
     name: 'Sheremetyevo',
-    country: 'Russia',
+    country: 'Россия',
   },
   {
     city: 'Стамбул',
