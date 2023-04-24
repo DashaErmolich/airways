@@ -1,1 +1,114 @@
-<p>sign-up-tab works!</p>
+<mat-dialog-content [formGroup]="signUpForm" class="form">
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+    <mat-error *ngIf="signUpForm.controls['email'].hasError('required')">
+      {{ errorsMessages.email.required }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['email'].hasError('email')">
+      {{ errorsMessages.email.email }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput formControlName="password">
+    <mat-error *ngIf="signUpForm.controls['password'].hasError('required')">
+      {{ errorsMessages.password.required }}
+    </mat-error>
+    <mat-error *ngIf="
+      signUpForm.controls['password'].hasError('minlength')
+      || signUpForm.controls['password'].hasError(customErrors.HasLettersUpperAndLowerCase)
+      || signUpForm.controls['password'].hasError(customErrors.HasNumber)
+      || signUpForm.controls['password'].hasError(customErrors.HasSpecialChar)
+      ">
+      {{ errorsMessages.password.strong.inform }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['password'].hasError('minlength')">
+      {{ errorsMessages.password.strong.length }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['password'].hasError(customErrors.HasLettersUpperAndLowerCase)">
+      {{ errorsMessages.password.strong.hasUpperCaseAndLowerCaseLetters }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['password'].hasError(customErrors.HasNumber)">
+      {{  errorsMessages.password.strong.hasNumber }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['password'].hasError(customErrors.HasSpecialChar)">
+      {{ errorsMessages.password.strong.hasSpecialChar
+       }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>First name</mat-label>
+    <input matInput formControlName="firstName">
+    <mat-error *ngIf="signUpForm.controls['firstName'].hasError('required')">
+      {{  errorsMessages.firstName.required }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['firstName'].hasError('pattern')">
+      {{  errorsMessages.firstName.pattern }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Last name</mat-label>
+    <input matInput formControlName="lastName">
+    <mat-error *ngIf="signUpForm.controls['lastName'].hasError('required')">
+      {{  errorsMessages.lastName.required }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['firstName'].hasError('pattern')">
+      {{  errorsMessages.lastName.pattern }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Date of birth</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+    <mat-hint>MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+    <mat-error *ngIf="signUpForm.controls['dateOfBirth'].hasError('required')">
+      {{ errorsMessages.dateOfBirth.required }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['dateOfBirth'].hasError(customErrors.ValidDate)">
+      {{ errorsMessages.dateOfBirth.validDate }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-radio-group formControlName="gender">
+    <mat-radio-button value="male">Male</mat-radio-button>
+    <mat-radio-button value="female">Female</mat-radio-button>
+  </mat-radio-group>
+
+
+  <mat-form-field>
+    <mat-label>Country code</mat-label>
+      <mat-select formControlName="countryCode">
+        <mat-option *ngFor="let code of COUNTRY_CODES" [value]="code.dial_code">
+          {{ code.name }} ({{ code.dial_code }})
+        </mat-option>
+      </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Mobile phone number</mat-label>
+    <input matInput formControlName="phoneNumber">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Citizenship</mat-label>
+      <mat-select formControlName="citizenship">
+        <mat-option *ngFor="let code of COUNTRY_CODES" [value]="code.name">
+          {{ code.name }}
+        </mat-option>
+      </mat-select>
+  </mat-form-field>
+
+  <mat-checkbox>I agree to Airway's Privacy Policy and Terms of Use</mat-checkbox>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="close()" color="primary">Sign up</button>
+</mat-dialog-actions>

@@ -22,7 +22,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button *ngIf="(isAuth$ | async) === false" mat-raised-button class="header__sign-in-button">
+    <button *ngIf="(isAuth$ | async) === false" mat-raised-button class="header__sign-in-button" (click)="openDialog()">
       <mat-icon>account_circle</mat-icon>
       Sign in
     </button>

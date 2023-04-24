@@ -4,6 +4,8 @@ import { selectCurrency, selectIsAuth } from 'src/app/redux/selectors/app.select
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/redux/state.models';
 import { MatSelectChange } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { AuthDialogComponent } from 'src/app/auth/components/auth-dialog/auth-dialog.component';
 import * as AuthActions from '../../../redux/actions/app.actions';
 import { CurrenciesEnum } from '../../constants/currency.enum';
 import { DateFormatEnum } from '../../constants/date-format.enum';
@@ -27,6 +29,7 @@ export class HeaderComponent {
 
   constructor(
     private store$: Store<AppState>,
+    private dialog: MatDialog,
   ) {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
@@ -47,5 +50,9 @@ export class HeaderComponent {
 
   onDateFormatChange(selectChange: MatSelectChange) {
     this.store$.dispatch(AuthActions.setDateFormat({ dateFormat: selectChange.value }));
+  }
+
+  openDialog(): void {
+    this.dialog.open(AuthDialogComponent);
   }
 }

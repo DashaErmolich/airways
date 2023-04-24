@@ -1,1 +1,47 @@
-<p>login-tab works!</p>
+<mat-dialog-content [formGroup]="loginForm" class="form">
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email">
+    <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+      {{ errorsMessages.email.required }}
+    </mat-error>
+    <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+      {{ errorsMessages.email.email }}
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput formControlName="password">
+    <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+      {{ errorsMessages.password.required }}
+    </mat-error>
+    <mat-error *ngIf="
+      loginForm.controls['password'].hasError('minlength')
+      || loginForm.controls['password'].hasError(customErrors.HasLettersUpperAndLowerCase)
+      || loginForm.controls['password'].hasError(customErrors.HasNumber)
+      || loginForm.controls['password'].hasError(customErrors.HasSpecialChar)
+      ">
+      {{ errorsMessages.password.strong.inform }}
+    </mat-error>
+    <mat-error *ngIf="loginForm.controls['password'].hasError('minlength')">
+      {{ errorsMessages.password.strong.length }}
+    </mat-error>
+    <mat-error *ngIf="loginForm.controls['password'].hasError(customErrors.HasLettersUpperAndLowerCase)">
+      {{ errorsMessages.password.strong.hasUpperCaseAndLowerCaseLetters }}
+    </mat-error>
+    <mat-error *ngIf="loginForm.controls['password'].hasError(customErrors.HasNumber)">
+      {{  errorsMessages.password.strong.hasNumber }}
+    </mat-error>
+    <mat-error *ngIf="loginForm.controls['password'].hasError(customErrors.HasSpecialChar)">
+      {{ errorsMessages.password.strong.hasSpecialChar
+       }}
+    </mat-error>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button (click)="close()" color="primary">Log in</button>
+</mat-dialog-actions>
