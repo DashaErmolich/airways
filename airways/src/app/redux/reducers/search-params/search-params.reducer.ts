@@ -4,32 +4,47 @@ import { SearchParamsActionsTypes } from '../../actions/app.actions';
 export const searchParamsNode = 'searchParams';
 
 const initialState: SearchParams = {
-  isRoundTrip: false,
+  isRoundTrip: true,
   directions: {
     departureFrom: {
-      city: '',
-      IATA: '',
-      name: '',
-      country: '',
+      city: 'Москва', IATA: 'SVO', name: 'Sheremetyevo', country: 'Россия',
     },
     destinationTo: {
-      city: '',
-      IATA: '',
-      name: '',
-      country: '',
+      city: 'Стамбул', IATA: 'IST', name: 'Ataturk', country: 'Турция',
     },
   },
-  range: {
-    start: '',
-    end: '',
-  },
-  date: '',
-  passengers: {
-    adult: 1,
-    child: 0,
-    infant: 0,
-  },
+  range: { start: '2023-04-24T22:00:00.000Z', end: '2023-04-28T22:00:00.000Z' },
+  date: '2023-04-27T22:00:00.000Z',
+  passengers: { adult: 1, child: 1, infant: 1 },
 };
+
+// const initialState: SearchParams = {
+//   isRoundTrip: false,
+//   directions: {
+//     departureFrom: {
+//       city: '',
+//       IATA: '',
+//       name: '',
+//       country: '',
+//     },
+//     destinationTo: {
+//       city: '',
+//       IATA: '',
+//       name: '',
+//       country: '',
+//     },
+//   },
+//   range: {
+//     start: '',
+//     end: '',
+//   },
+//   date: '',
+//   passengers: {
+//     adult: 1,
+//     child: 0,
+//     infant: 0,
+//   },
+// };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const searchParamsReducer = (state = initialState, action: any) => {
