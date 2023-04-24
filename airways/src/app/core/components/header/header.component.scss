@@ -3,8 +3,7 @@
 .header {
   position: fixed;
   height: $header-height;
-  width: 100%;
-  border: 1px solid red;
+  width: 100vw;
   display: flex;
   align-items: center;
 }

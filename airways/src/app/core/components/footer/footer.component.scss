@@ -1,0 +1,40 @@
+@import '../../../../styles/abstracts/variables';
+
+.footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: $footer-height;
+}
+
+.footer-container {
+  height: 100%;
+  padding: 0 40px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer__copyrights {
+  color: $color-primary-blue;
+}
+
+.payments {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.payments__icons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.payments__icon {
+  width: 32px;
+  height: 22px;
+}

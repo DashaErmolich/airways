@@ -1,11 +1,30 @@
 @import './styles/abstracts/variables';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
 
 .container {
   max-width: $desktop-width;
-  height: 100%;
   margin: auto;
+}
+
+.content-wrapper {
   padding-top: $header-height;
+  padding-bottom: $footer-height;
 }
