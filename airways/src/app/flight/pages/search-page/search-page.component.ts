@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormControl, FormGroup, ValidationErrors, Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { debounceTime, map, startWith } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import { selectAllSearchParams } from 'src/app/redux/selectors/app.selectors';
+import { chooseAllParamsAction } from 'src/app/redux/actions/app.actions';
+import { Router } from '@angular/router';
 import { minCountPassengers } from '../../constants/constants';
 import { Airport, CountPassengers, SearchParams } from '../../models/flight.models';
 import { data } from '../../constants/data';
@@ -15,7 +19,7 @@ import { data } from '../../constants/data';
   styleUrls: ['./search-page.component.scss'],
 })
 
-export class SearchPageComponent implements OnInit {
+export class SearchPageComponent implements OnInit, OnDestroy {
   searchForm!: FormGroup;
 
   isVisibleCounter = false;
@@ -26,22 +30,42 @@ export class SearchPageComponent implements OnInit {
 
   searchParams!: SearchParams;
 
+  searchParams$ = new Subscription();
+
+  constructor(private store$: Store<SearchParams>, private router: Router) {}
+
   ngOnInit(): void {
+    this.store$
+      .pipe(select(selectAllSearchParams))
+      .subscribe((res) => { this.searchParams = res; });
+
     this.searchForm = new FormGroup({
-      isRoundTrip: new FormControl(true),
+      isRoundTrip: new FormControl(this.searchParams.isRoundTrip),
       directions: new FormGroup({
-        departureFrom: new FormControl('', [Validators.required]),
-        destinationTo: new FormControl('', [Validators.required]),
+        departureFrom: new FormControl(
+          this.searchParams.directions.departureFrom,
+          [Validators.required],
+        ),
+        destinationTo: new FormControl(
+          this.searchParams.directions.destinationTo,
+          [Validators.required],
+        ),
       }, { validators: this.sameDirectionsValidator }),
       range: new FormGroup({
-        start: new FormControl<Date | null>(null, Validators.required),
-        end: new FormControl<Date | null>(null, Validators.required),
+        start: new FormControl(
+          new Date(this.searchParams.range.start),
+          Validators.required,
+        ),
+        end: new FormControl(
+          new Date(this.searchParams.range.end),
+          Validators.required,
+        ),
       }),
-      date: new FormControl('', Validators.required),
+      date: new FormControl(new Date(this.searchParams.date), Validators.required),
       passengers: new FormGroup({
-        adult: new FormControl(minCountPassengers.adult),
-        child: new FormControl(minCountPassengers.child),
-        infant: new FormControl(minCountPassengers.infant),
+        adult: new FormControl(this.searchParams.passengers.adult),
+        child: new FormControl(this.searchParams.passengers.child),
+        infant: new FormControl(this.searchParams.passengers.infant),
       }),
     });
 
@@ -60,11 +84,15 @@ export class SearchPageComponent implements OnInit {
       );
   }
 
+  ngOnDestroy(): void {
+    this.searchParams$.unsubscribe();
+  }
+
   // eslint-disable-next-line class-methods-use-this
   sameDirectionsValidator(group: AbstractControl): ValidationErrors | null {
     const departureFrom = group.get('departureFrom')?.value;
     const destinationTo = group.get('destinationTo')?.value;
-    if (departureFrom && destinationTo && departureFrom.IATA === destinationTo.IATA) {
+    if (departureFrom.IATA && destinationTo.IATA && departureFrom.IATA === destinationTo.IATA) {
       return { sameDirectionsValidator: true };
     }
     return null;
@@ -142,6 +170,8 @@ export class SearchPageComponent implements OnInit {
   }
 
   submitForm() {
-    this.searchParams = this.searchForm.getRawValue();
+    const searchParams = this.searchForm.getRawValue();
+    this.store$.dispatch(chooseAllParamsAction(searchParams));
+    this.router.navigate(['flight', 'selection']);
   }
 }

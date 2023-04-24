@@ -12,14 +12,16 @@ export interface CountPassengers {
 
 export interface SearchParams {
   isRoundTrip: boolean,
-  directions: {
-    departureFrom: Airport,
-    destinationTo: Airport,
-  },
+  directions: Directions,
   range: {
     start: string,
     end: string,
   },
   date: string,
   passengers: CountPassengers,
+}
+
+export interface Directions {
+  departureFrom: Airport,
+  destinationTo: Airport,
 }
