@@ -1,0 +1,10 @@
+@import './styles/abstracts/variables';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+  max-width: $desktop-width;
+  height: 100%;
+  margin: auto;
+}
