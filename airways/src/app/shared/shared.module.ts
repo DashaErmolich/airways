@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { HttpClientModule } from '@angular/common/http';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,6 +37,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatCheckboxModule,
     MatRadioModule,
     MatTabsModule,
+    HttpClientModule,
   ],
   providers: [
     {

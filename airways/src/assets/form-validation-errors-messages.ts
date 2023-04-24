@@ -16,18 +16,21 @@ export const formValidationErrorsMessages = {
     },
     firstName: {
       required: 'Please enter your first name',
-      pattern: 'The first name must not contain numbers',
+      pattern: 'The first name cannot contain numbers',
     },
     lastName: {
       required: 'Please enter your last name',
-      pattern: 'The last name must not contain numbers',
+      pattern: 'The last name cannot contain numbers',
     },
     dateOfBirth: {
-      required: 'Please enter a date of birth',
+      required: 'Please enter your date of birth',
       validDate: 'The date is invalid',
     },
     gender: {
       required: 'Please enter your gender',
+    },
+    countryCode: {
+      required: 'Please enter your country code',
     },
     phoneNumber: {
       required: 'Please enter your phone number',

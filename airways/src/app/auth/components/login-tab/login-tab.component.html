@@ -13,7 +13,10 @@
 
   <mat-form-field>
     <mat-label>Password</mat-label>
-    <input matInput formControlName="password">
+    <input matInput formControlName="password" [type]="isPasswordHidden ? 'password' : 'text'">
+    <button mat-icon-button matSuffix (click)="isPasswordHidden = !isPasswordHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isPasswordHidden">
+      <mat-icon>{{isPasswordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
     <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
       {{ errorsMessages.password.required }}
     </mat-error>
@@ -35,13 +38,12 @@
       {{  errorsMessages.password.strong.hasNumber }}
     </mat-error>
     <mat-error *ngIf="loginForm.controls['password'].hasError(customErrors.HasSpecialChar)">
-      {{ errorsMessages.password.strong.hasSpecialChar
-       }}
+      {{ errorsMessages.password.strong.hasSpecialChar }}
     </mat-error>
   </mat-form-field>
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-raised-button (click)="close()" color="primary">Log in</button>
+    <button type="submit" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="loginForm.invalid" class="form__submit-button">Log in</button>
 </mat-dialog-actions>

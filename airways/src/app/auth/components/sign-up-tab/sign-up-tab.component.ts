@@ -4,8 +4,11 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
 import { FormValidatorService } from 'src/app/core/services/form-validator.service';
 import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
-import countryCodes from '../../../../assets/country-codes.json';
-import { CountryCode } from '../../models/country-code.model';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/redux/state.models';
+import countryInfo from '../../../../assets/country-codes.json';
+import { CountryInfo } from '../../models/country-code.model';
+import * as AuthActions from '../../../redux/actions/app.actions';
 
 @Component({
   selector: 'app-sign-up-tab',
@@ -19,12 +22,15 @@ export class SignUpTabComponent implements OnInit {
 
   customErrors = CustomFormValidatorErrorsEnum;
 
-  COUNTRY_CODES: CountryCode[] = countryCodes;
+  COUNTRY_INFO: CountryInfo[] = countryInfo;
+
+  isPasswordHidden = true;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<SignUpTabComponent>,
     private formValidatorService: FormValidatorService,
+    private store$: Store<AppState>,
   ) { }
 
   ngOnInit() {
@@ -83,6 +89,7 @@ export class SignUpTabComponent implements OnInit {
         '',
         [
           Validators.required,
+          Validators.pattern('[0-9]+'),
         ],
       ],
       citizenship: [
@@ -91,10 +98,18 @@ export class SignUpTabComponent implements OnInit {
           Validators.required,
         ],
       ],
+      agreement: [
+        '',
+        [
+          Validators.requiredTrue,
+        ],
+      ],
     });
   }
 
-  close() {
-    this.dialogRef.close(this.signUpForm.value);
+  onSubmit(): void {
+    this.store$.dispatch(AuthActions.login({ user: this.signUpForm.value }));
+    this.dialogRef.close();
+    this.signUpForm.reset();
   }
 }

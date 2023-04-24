@@ -13,7 +13,10 @@
 
   <mat-form-field>
     <mat-label>Password</mat-label>
-    <input matInput formControlName="password">
+    <input matInput formControlName="password" [type]="isPasswordHidden ? 'password' : 'text'">
+    <button mat-icon-button matSuffix (click)="isPasswordHidden = !isPasswordHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isPasswordHidden">
+      <mat-icon>{{isPasswordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
     <mat-error *ngIf="signUpForm.controls['password'].hasError('required')">
       {{ errorsMessages.password.required }}
     </mat-error>
@@ -76,7 +79,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-radio-group formControlName="gender">
+  <mat-radio-group formControlName="gender" class="form__radio-group">
     <mat-radio-button value="male">Male</mat-radio-button>
     <mat-radio-button value="female">Female</mat-radio-button>
   </mat-radio-group>
@@ -85,30 +88,42 @@
   <mat-form-field>
     <mat-label>Country code</mat-label>
       <mat-select formControlName="countryCode">
-        <mat-option *ngFor="let code of COUNTRY_CODES" [value]="code.dial_code">
+        <mat-option *ngFor="let code of COUNTRY_INFO" [value]="code.dial_code">
           {{ code.name }} ({{ code.dial_code }})
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="signUpForm.controls['countryCode'].hasError('required')">
+        {{ errorsMessages.countryCode.required}}
+      </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Mobile phone number</mat-label>
     <input matInput formControlName="phoneNumber">
+    <mat-error *ngIf="signUpForm.controls['phoneNumber'].hasError('required')">
+      {{ errorsMessages.phoneNumber.required }}
+    </mat-error>
+    <mat-error *ngIf="signUpForm.controls['phoneNumber'].hasError('pattern')">
+      {{ errorsMessages.phoneNumber.pattern }}
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Citizenship</mat-label>
       <mat-select formControlName="citizenship">
-        <mat-option *ngFor="let code of COUNTRY_CODES" [value]="code.name">
+        <mat-option *ngFor="let code of COUNTRY_INFO" [value]="code.name">
           {{ code.name }}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="signUpForm.controls['citizenship'].hasError('required')">
+        {{ errorsMessages.citizenship.required }}
+      </mat-error>
   </mat-form-field>
 
-  <mat-checkbox>I agree to Airway's Privacy Policy and Terms of Use</mat-checkbox>
+  <mat-checkbox formControlName="agreement">I agree to Airway's Privacy Policy and Terms of Use</mat-checkbox>
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-raised-button (click)="close()" color="primary">Sign up</button>
+    <button type="submit" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="signUpForm.invalid" class="form__submit-button">Sign up</button>
 </mat-dialog-actions>

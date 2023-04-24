@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { User } from 'src/app/shared/models/user.model';
 
 const enum AppActionsTypes {
   AUTH_LOGIN = '[Auth] Login',
@@ -9,6 +10,7 @@ const enum AppActionsTypes {
 
 export const login = createAction(
   AppActionsTypes.AUTH_LOGIN,
+  props<{ user: User }>(),
 );
 
 export const logout = createAction(

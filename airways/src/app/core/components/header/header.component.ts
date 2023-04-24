@@ -36,10 +36,6 @@ export class HeaderComponent {
     this.currency$ = this.store$.pipe(select(selectCurrency));
   }
 
-  login() {
-    this.store$.dispatch(AuthActions.login());
-  }
-
   logout() {
     this.store$.dispatch(AuthActions.logout());
   }

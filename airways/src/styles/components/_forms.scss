@@ -2,3 +2,13 @@
   display: flex !important;
   flex-direction: column;
 }
+
+.form__radio-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form__submit-button {
+  width: 100%;
+}
