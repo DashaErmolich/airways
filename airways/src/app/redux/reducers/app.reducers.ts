@@ -9,22 +9,45 @@ export const initialState: AuthState = {
   error: null,
   dateFormat: DateFormatEnum.MM_DD_YYYY,
   currency: CurrenciesEnum.EUR,
+  token: null,
 };
 
 export const reducers = createReducer(
   initialState,
   on(
-    AuthActions.signUp,
-    (state) => ({
+    AuthActions.signUpSuccess,
+    (state, action) => ({
       ...state,
       isAuth: true,
+      error: null,
+      token: action.activeUser.accessToken,
     }),
   ),
   on(
-    AuthActions.login,
-    (state) => ({
+    AuthActions.signUpFailure,
+    (state, action) => ({
+      ...state,
+      isAuth: false,
+      error: action.error,
+      token: null,
+    }),
+  ),
+  on(
+    AuthActions.loginSuccess,
+    (state, action) => ({
       ...state,
       isAuth: true,
+      error: null,
+      token: action.activeUser.accessToken,
+    }),
+  ),
+  on(
+    AuthActions.loginFailure,
+    (state, action) => ({
+      ...state,
+      isAuth: false,
+      error: action.error,
+      token: null,
     }),
   ),
   on(
@@ -32,6 +55,8 @@ export const reducers = createReducer(
     (state) => ({
       ...state,
       isAuth: false,
+      error: null,
+      token: null,
     }),
   ),
   on(

@@ -42,6 +42,8 @@
     </mat-error>
   </mat-form-field>
 
+  <span *ngIf="error$ | async" class="error__message">{{ error$ | async }}</span>
+
 </mat-dialog-content>
 
 <mat-dialog-actions>

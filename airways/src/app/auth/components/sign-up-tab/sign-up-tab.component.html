@@ -124,6 +124,8 @@
 
 </mat-dialog-content>
 
+<span *ngIf="error$ | async">{{ error$ | async }}</span>
+
 <mat-dialog-actions>
     <button type="submit" mat-raised-button (click)="onSubmit()" color="primary" [disabled]="signUpForm.invalid" class="form__submit-button">Sign up</button>
 </mat-dialog-actions>

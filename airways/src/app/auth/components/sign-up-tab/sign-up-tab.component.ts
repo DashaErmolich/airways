@@ -4,8 +4,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
 import { FormValidatorService } from 'src/app/core/services/form-validator.service';
 import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
+import { Observable } from 'rxjs';
+import { selectError } from 'src/app/redux/selectors/app.selectors';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
 import * as AuthActions from '../../../redux/actions/app.actions';
@@ -26,12 +28,16 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
 
   isPasswordHidden = true;
 
+  error$!: Observable<string | null>;
+
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<SignUpTabComponent>,
     private formValidatorService: FormValidatorService,
     private store$: Store<AppState>,
-  ) { }
+  ) {
+    this.error$ = this.store$.pipe(select(selectError));
+  }
 
   ngOnInit() {
     this.signUpForm = this.fb.group({

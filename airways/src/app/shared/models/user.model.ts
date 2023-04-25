@@ -9,3 +9,8 @@ export interface User {
   phoneNumber: number;
   citizenship: string;
 }
+
+export interface ActiveUser {
+  accessToken: string,
+  user: User,
+}

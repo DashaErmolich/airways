@@ -17,3 +17,8 @@ export const selectCurrency = createSelector(
   selectFeature,
   (state) => state.currency,
 );
+
+export const selectError = createSelector(
+  selectFeature,
+  (state) => state.error,
+);

@@ -3,6 +3,7 @@ export interface AuthState {
   error: string | null;
   dateFormat: string;
   currency: string;
+  token: string | null;
 }
 
 export interface AppState {
