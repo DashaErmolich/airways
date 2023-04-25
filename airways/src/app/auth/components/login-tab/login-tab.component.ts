@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -13,7 +13,7 @@ import * as AuthActions from '../../../redux/actions/app.actions';
   templateUrl: './login-tab.component.html',
   styleUrls: ['./login-tab.component.scss'],
 })
-export class LoginTabComponent implements OnInit {
+export class LoginTabComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
 
   errorsMessages = formValidationErrorsMessages.authForm;
@@ -51,9 +51,12 @@ export class LoginTabComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    this.dialogRef.close(this.loginForm.value);
+  ngOnDestroy(): void {
     this.loginForm.reset();
-    this.store$.dispatch(AuthActions.login(this.loginForm.value));
+  }
+
+  onSubmit(): void {
+    this.store$.dispatch(AuthActions.login({ user: this.loginForm.value }));
+    this.dialogRef.close(this.loginForm.value);
   }
 }

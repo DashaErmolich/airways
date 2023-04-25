@@ -6,6 +6,14 @@ import * as AuthActions from '../actions/app.actions';
 
 @Injectable()
 export class AuthEffects {
+  signUp$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(AuthActions.signUp),
+      mergeMap(({ user }) => this.authService.signUp(user)),
+    ),
+    { dispatch: false },
+  );
+
   login$ = createEffect(
     () => this.actions$.pipe(
       ofType(AuthActions.login),

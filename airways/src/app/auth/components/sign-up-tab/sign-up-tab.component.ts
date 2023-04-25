@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
@@ -15,7 +15,7 @@ import * as AuthActions from '../../../redux/actions/app.actions';
   templateUrl: './sign-up-tab.component.html',
   styleUrls: ['./sign-up-tab.component.scss'],
 })
-export class SignUpTabComponent implements OnInit {
+export class SignUpTabComponent implements OnInit, OnDestroy {
   signUpForm!: FormGroup;
 
   errorsMessages = formValidationErrorsMessages.authForm;
@@ -107,9 +107,12 @@ export class SignUpTabComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
-    this.store$.dispatch(AuthActions.login({ user: this.signUpForm.value }));
-    this.dialogRef.close();
+  ngOnDestroy(): void {
     this.signUpForm.reset();
+  }
+
+  onSubmit(): void {
+    this.store$.dispatch(AuthActions.signUp({ user: this.signUpForm.value }));
+    this.dialogRef.close();
   }
 }

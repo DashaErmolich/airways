@@ -15,9 +15,19 @@ export class AuthService {
     private http: HttpClient,
   ) { }
 
-  login(user: User): Observable<User> {
+  signUp(user: User): Observable<User> {
     localStorage.setItem(LocalStorageKeys.AuthToken, '12345');
     return this.http.post<User>(`${this.BASE_URL}/register`, user, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  login(user: User): Observable<User> {
+    localStorage.setItem(LocalStorageKeys.AuthToken, '12345');
+    console.log('LOGIN!!');
+    return this.http.post<User>(`${this.BASE_URL}/login`, user, {
       headers: {
         'Content-Type': 'application/json',
       },
