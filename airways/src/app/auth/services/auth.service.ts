@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LocalStorageKeys } from 'src/app/shared/constants/local-storage-keys.enum';
+import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { ActiveUser, User } from 'src/app/shared/models/user.model';
 
 @Injectable({
@@ -16,22 +16,18 @@ export class AuthService {
   ) { }
 
   signUp(user: User): Observable<ActiveUser> {
-    return this.http.post<ActiveUser>(`${this.BASE_URL}/register`, user, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return this.http.post<ActiveUser>(`${this.BASE_URL}/register`, user);
   }
 
   login(user: User): Observable<ActiveUser> {
-    return this.http.post<ActiveUser>(`${this.BASE_URL}/login`, user, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return this.http.post<ActiveUser>(`${this.BASE_URL}/login`, user);
   }
 
   logout(): void {
-    localStorage.removeItem(LocalStorageKeys.AccessToken);
+    localStorage.removeItem(LocalStorageKeysEnum.AccessToken);
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem(LocalStorageKeysEnum.AccessToken);
   }
 }

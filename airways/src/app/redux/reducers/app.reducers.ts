@@ -1,15 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { CurrenciesEnum } from 'src/app/core/constants/currency.enum';
+import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { AuthState } from '../state.models';
 import * as AuthActions from '../actions/app.actions';
 
 export const initialState: AuthState = {
-  isAuth: false,
+  isAuth: !!localStorage.getItem(LocalStorageKeysEnum.AccessToken),
   error: null,
   dateFormat: DateFormatEnum.MM_DD_YYYY,
   currency: CurrenciesEnum.EUR,
-  token: null,
+  token: localStorage.getItem(LocalStorageKeysEnum.AccessToken),
 };
 
 export const reducers = createReducer(

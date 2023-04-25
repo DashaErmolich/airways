@@ -6,7 +6,7 @@ import {
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { ActiveUser } from 'src/app/shared/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
-import { LocalStorageKeys } from 'src/app/shared/constants/local-storage-keys.enum';
+import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import * as AuthActions from '../actions/app.actions';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class AuthEffects {
     () => this.actions$.pipe(
       ofType(AuthActions.loginSuccess),
       tap(({ activeUser }) => {
-        localStorage.setItem(LocalStorageKeys.AccessToken, activeUser.accessToken);
+        localStorage.setItem(LocalStorageKeysEnum.AccessToken, activeUser.accessToken);
         this.dialog.closeAll();
       }),
     ),
@@ -50,7 +50,7 @@ export class AuthEffects {
     () => this.actions$.pipe(
       ofType(AuthActions.signUpSuccess),
       tap(({ activeUser }) => {
-        localStorage.setItem(LocalStorageKeys.AccessToken, activeUser.accessToken);
+        localStorage.setItem(LocalStorageKeysEnum.AccessToken, activeUser.accessToken);
         this.dialog.closeAll();
       }),
     ),
