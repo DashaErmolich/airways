@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { selectCurrency, selectIsAuth } from 'src/app/redux/selectors/app.selectors';
+import { selectCurrency, selectIsAuth, selectUsername } from 'src/app/redux/selectors/app.selectors';
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/redux/state.models';
 import { MatSelectChange } from '@angular/material/select';
@@ -27,6 +27,8 @@ export class HeaderComponent {
 
   public currency$: Observable<string>;
 
+  public username$: Observable<string>;
+
   constructor(
     private store$: Store<AppState>,
     private dialog: MatDialog,
@@ -34,6 +36,7 @@ export class HeaderComponent {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
+    this.username$ = this.store$.pipe(select(selectUsername));
   }
 
   logout() {

@@ -12,9 +12,6 @@ const routes: Routes = [
   {
     path: 'flights',
     loadChildren: () => import('./flight/flight.module').then((m) => m.FlightModule),
-    canLoad: [
-      AuthGuard,
-    ],
   },
   {
     path: 'booking',

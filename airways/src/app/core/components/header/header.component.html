@@ -27,9 +27,9 @@
       Sign in
     </button>
 
-    <button *ngIf="isAuth$ | async" mat-raised-button class="header__user-account-button">
+    <button *ngIf="isAuth$ | async" mat-raised-button class="header__user-account-button" routerLink="/booking/user">
       <mat-icon>account_circle</mat-icon>
-      Username
+      {{ username$ | async }}
     </button>
 
     <a mat-button routerLink="/booking/cart" class="header__shopping-cart-link">

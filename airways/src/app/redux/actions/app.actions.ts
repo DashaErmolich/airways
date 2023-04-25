@@ -11,6 +11,7 @@ const enum AppActionsTypes {
   AUTH_LOGOUT = '[Auth] Logout',
   SETTINGS_DATE = '[Settings] Change Date Format',
   SETTINGS_CURRENCY = '[Settings] Change Currency',
+  AUTH_CLEAR_ERROR = '[Auth] Clear Error',
 }
 
 export const signUp = createAction(
@@ -55,4 +56,8 @@ export const setDateFormat = createAction(
 export const setCurrency = createAction(
   AppActionsTypes.SETTINGS_CURRENCY,
   props<{ currency: string }>(),
+);
+
+export const clearError = createAction(
+  AppActionsTypes.AUTH_CLEAR_ERROR,
 );

@@ -35,22 +35,12 @@ export class AuthEffects {
     ),
   );
 
-  loginSuccess$ = createEffect(
+  authSuccess$ = createEffect(
     () => this.actions$.pipe(
-      ofType(AuthActions.loginSuccess),
+      ofType(AuthActions.loginSuccess, AuthActions.signUpSuccess),
       tap(({ activeUser }) => {
         localStorage.setItem(LocalStorageKeysEnum.AccessToken, activeUser.accessToken);
-        this.dialog.closeAll();
-      }),
-    ),
-    { dispatch: false },
-  );
-
-  signUpSuccess$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(AuthActions.signUpSuccess),
-      tap(({ activeUser }) => {
-        localStorage.setItem(LocalStorageKeysEnum.AccessToken, activeUser.accessToken);
+        localStorage.setItem(LocalStorageKeysEnum.User, JSON.stringify(activeUser.user));
         this.dialog.closeAll();
       }),
     ),

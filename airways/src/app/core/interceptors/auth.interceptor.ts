@@ -12,9 +12,7 @@ import { Observable } from 'rxjs';
 export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request.clone({
-      setHeaders: {
-        'Content-Type': 'application/json',
-      },
+      params: request.params.set('Content-Type', 'application/json'),
     }));
   }
 }

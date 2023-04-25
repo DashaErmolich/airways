@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { ActiveUser, User } from 'src/app/shared/models/user.model';
@@ -13,6 +14,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
   ) { }
 
   signUp(user: User): Observable<ActiveUser> {
@@ -25,6 +27,8 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(LocalStorageKeysEnum.AccessToken);
+    localStorage.removeItem(LocalStorageKeysEnum.User);
+    this.router.navigateByUrl('');
   }
 
   getToken(): string | null {

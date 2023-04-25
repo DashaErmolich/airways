@@ -22,3 +22,8 @@ export const selectError = createSelector(
   selectFeature,
   (state) => state.error,
 );
+
+export const selectUsername = createSelector(
+  selectFeature,
+  (state) => `${state.user?.firstName} ${state.user?.lastName}`,
+);
