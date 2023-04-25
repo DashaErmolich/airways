@@ -12,11 +12,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
+import { SearchFormComponent } from './components/search-form/search-form.component';
 
 @NgModule({
   declarations: [
     SearchPageComponent,
     SelectionPageComponent,
+    SearchFormComponent,
   ],
   imports: [
     CommonModule,

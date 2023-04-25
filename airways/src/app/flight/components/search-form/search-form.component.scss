@@ -1,0 +1,177 @@
+.search__form {
+  width: 50%;
+  margin-top: 60px;
+  min-height: 200px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  border: 1px solid grey;
+  padding: 24px;
+}
+
+.selection__form {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateY(100%);
+  box-sizing: border-box;
+  width: 100%;
+  background: #FFFFFF;
+  border: 1px solid grey;
+  display: flex;
+  padding: 20px 20px 0 20px;
+  gap: 20px;
+}
+
+.form {
+  &__btn {
+    margin-left: auto;
+  }
+
+  &__directions{
+    width: 100%;
+    position: relative;
+    margin-bottom: 16px;
+
+    &_selection{
+      width: 50%;
+      display: flex;
+      gap: 20px;
+    }
+
+    &_btn{
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translate(50%, calc(-50% - 11px));
+    }
+
+    &_error {
+      position: absolute;
+      bottom: 0;
+      font-size: 12px;
+      letter-spacing: 0.4;
+      line-height: 20px;
+    }
+  }
+
+  &__control {
+    display: flex;
+    gap: 16px;
+    // margin-bottom: 16px;
+    &_selection {
+      display: flex;
+      gap: 20px;
+      width: 50%;
+    }
+  }
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.airport {
+
+  &__info {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+  }
+
+  &__subinfo {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: #74767A;
+  }
+}
+
+.passengers {
+
+  &__info {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__form {
+    position: relative;
+    width: 50%;
+  }
+
+  &__btn {
+    position: absolute;
+    display: block;
+    top: 50%;
+    right: 0;
+    transform: translate(0px, -50%);
+  }
+
+  &__options {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    left: 0;
+    transform: translateY(calc(100% - 22px));
+    background-color: white;
+    width: -webkit-fill-available;
+  }
+
+  &__option {
+    display: flex;
+    padding: 8px 16px;
+  }
+}
+
+.option {
+
+  &__info {
+    width: 50%;
+  }
+
+  &__name {
+    display: block;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+  }
+
+  &__age {
+    display: block;
+    color: #74767A;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+  }
+
+  &__counter {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &_btn {
+      all: unset;
+      font-size: 14px;
+      width: 24px;
+      height: 24px;
+      color: #74767A;
+      cursor: pointer;
+    }
+  }
+
+  &__count {
+    all: unset;
+    font-size: 16px;
+    width: 24px;
+    height: 24px;
+    text-align: center;
+  }
+}
+
+.dates__form {
+  width: 50%;
+}

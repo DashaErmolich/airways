@@ -4,7 +4,7 @@ export interface Airport {
   name: string,
   country: string,
 }
-export interface CountPassengers {
+export interface Passengers {
   adult: number;
   child: number;
   infant: number;
@@ -13,15 +13,17 @@ export interface CountPassengers {
 export interface SearchParams {
   isRoundTrip: boolean,
   directions: Directions,
-  range: {
-    start: string,
-    end: string,
-  },
+  range: Range,
   date: string,
-  passengers: CountPassengers,
+  passengers: Passengers,
 }
 
 export interface Directions {
   departureFrom: Airport,
   destinationTo: Airport,
+}
+
+export interface Range {
+  start: string,
+  end: string,
 }
