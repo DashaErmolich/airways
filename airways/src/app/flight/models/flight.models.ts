@@ -27,3 +27,20 @@ export interface Range {
   start: string,
   end: string,
 }
+
+export interface Flight {
+  departureFrom: Airport,
+  departureDate: string,
+  destinationTo: Airport,
+  destinationDate: string,
+  duration: string,
+  flightNumber: string,
+  countPlaces: number,
+  countAvailablePlaces: number,
+  price: number,
+}
+
+export interface FoundFlightsWithDate {
+  day: string;
+  flights: Flight[] | undefined;
+}

@@ -1,0 +1,5 @@
+<h2 class="direction__title">{{searchParams.directions.departureFrom.city + ' '+ searchParams.directions.departureFrom.IATA + ' to ' +
+  searchParams.directions.destinationTo.city+ ' '+ searchParams.directions.destinationTo.IATA}}</h2>
+
+<app-date-list [foundFlightsWithDate]="foundFlightsWithDate" ></app-date-list>
+<app-active-flights [activeFlights]="activeFlights"></app-active-flights>

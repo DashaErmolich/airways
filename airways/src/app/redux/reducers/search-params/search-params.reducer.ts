@@ -4,17 +4,17 @@ import { SearchParamsActionsTypes } from '../../actions/app.actions';
 export const searchParamsNode = 'searchParams';
 
 const initialState: SearchParams = {
-  isRoundTrip: true,
+  isRoundTrip: false,
   directions: {
     departureFrom: {
-      city: 'Москва', IATA: 'SVO', name: 'Sheremetyevo', country: 'Россия',
+      city: 'Moscow', IATA: 'SVO', name: 'Sheremetyevo', country: 'Russia',
     },
     destinationTo: {
-      city: 'Стамбул', IATA: 'IST', name: 'Ataturk', country: 'Турция',
+      city: 'Istanbul', IATA: 'IST', name: 'Ataturk', country: 'Turkey',
     },
   },
   range: { start: '2023-04-24T22:00:00.000Z', end: '2023-04-28T22:00:00.000Z' },
-  date: '2023-04-27T22:00:00.000Z',
+  date: '2023-04-29T22:00:00.000Z',
   passengers: { adult: 1, child: 1, infant: 1 },
 };
 

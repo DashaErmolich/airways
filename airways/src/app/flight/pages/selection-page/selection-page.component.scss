@@ -1,7 +1,4 @@
 .selection {
-  // &__page {
-  //   width: 100%;
-  // }
 
   &__header {
     width: 100%;
@@ -11,6 +8,7 @@
     gap: 20px;
     align-items: center;
     position: relative;
+    margin-bottom: 40px;
   }
 
   &__directions {
@@ -62,14 +60,19 @@
     background-color: #0090BD;
     border-radius: 50%;
   }
-  &__dates::after{
+
+  &__dates::after {
     left: auto;
     right: -6px;
   }
+
   &__dates_icon {
     display: inline-block;
     width: 14px;
     height: 12px;
     background-image: url('../../../../assets/svg/person.svg');
+  }
+
+  &__btn {
   }
 }

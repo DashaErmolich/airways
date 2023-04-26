@@ -5,8 +5,6 @@ import {
 export enum SearchParamsActionsTypes {
   chooseAllParams = '[SEARCH PARAMS] chooseAllParams',
   chooseDirections = '[SEARCH PARAMS] chooseDirections',
-  // chooseDirectionFrom = '[SEARCH PARAMS] chooseDirectionFrom',
-  // chooseDirectionTo = '[SEARCH PARAMS] chooseDirectionTo',
   chooseRange = '[SEARCH PARAMS] chooseRange',
   chooseDate = '[SEARCH PARAMS] chooseDate',
   choosePassengers = '[SEARCH PARAMS] choosePassengers',
