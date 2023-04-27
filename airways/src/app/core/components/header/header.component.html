@@ -1,5 +1,5 @@
 <header class="header">
-  <div class="container">
+  <div class="container header-container">
     <a mat-button routerLink="">
       <svg class="header__logo">
         <use xlink:href="assets/icons/sprite.svg#logo"></use>
@@ -22,12 +22,12 @@
       </mat-select>
     </mat-form-field>
 
-    <button *ngIf="(isAuth$ | async) === false" mat-raised-button class="header__sign-in-button" (click)="openDialog()">
+    <button *ngIf="(isAuth$ | async) === false" mat-stroked-button class="header__sign-in-button" (click)="openDialog()">
       <mat-icon>account_circle</mat-icon>
       Sign in
     </button>
 
-    <button *ngIf="isAuth$ | async" mat-raised-button class="header__user-account-button" routerLink="/booking/user">
+    <button *ngIf="isAuth$ | async" mat-stroked-button class="header__user-account-button" routerLink="/booking/user">
       <mat-icon>account_circle</mat-icon>
       {{ username$ | async }}
     </button>
@@ -36,6 +36,7 @@
       <mat-icon>shopping_cart</mat-icon>
     </a>
 
+    <!-- Temporary logout button -->
     <button mat-raised-button (click)="logout()" color="warn">LOGOUT</button>
   </div>
 </header>

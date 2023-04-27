@@ -8,6 +8,15 @@
   align-items: center;
 }
 
+.header-container {
+  min-width: $desktop-width;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .header__logo {
   width: 130px;
   height: 40px;
