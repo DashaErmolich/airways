@@ -8,8 +8,8 @@ import {
   Observable, Subscription, debounceTime, startWith, map,
 } from 'rxjs';
 import {
-  chooseAllParamsAction, chooseDateAction,
-  chooseDirectionsAction, choosePassengersAction, chooseRangeAction,
+  chooseDateAction,
+  chooseDirectionsAction, chooseIsRoundTripAction, choosePassengersAction, chooseRangeAction,
 } from 'src/app/redux/actions/app.actions';
 import { selectAllSearchParams } from 'src/app/redux/selectors/app.selectors';
 import { minCountPassengers } from '../../constants/constants';
@@ -53,25 +53,25 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       isRoundTrip: new FormControl(this.searchParams.isRoundTrip),
       directions: new FormGroup({
         departureFrom: new FormControl(
-          this.searchParams.directions.departureFrom,
+          this.searchParams.directions?.departureFrom || '',
           [Validators.required],
         ),
         destinationTo: new FormControl(
-          this.searchParams.directions.destinationTo,
+          this.searchParams.directions?.destinationTo || '',
           [Validators.required],
         ),
       }, { validators: this.sameDirectionsValidator }),
       range: new FormGroup({
         start: new FormControl(
-          new Date(this.searchParams.range.start),
+          new Date(this.searchParams.range?.start || ''),
           Validators.required,
         ),
         end: new FormControl(
-          new Date(this.searchParams.range.end),
+          new Date(this.searchParams.range?.end || ''),
           Validators.required,
         ),
       }),
-      date: new FormControl(new Date(this.searchParams.date), Validators.required),
+      date: new FormControl(new Date(this.searchParams?.date || ''), Validators.required),
       passengers: new FormGroup({
         adult: new FormControl(this.searchParams.passengers.adult),
         child: new FormControl(this.searchParams.passengers.child),
@@ -171,22 +171,28 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       departureFrom: destinationTo,
       destinationTo: departureFrom,
     });
+    this.store$.dispatch(chooseDirectionsAction(this.searchForm.get('directions')?.value));
   }
 
   isFormInvalid() {
     const formValue = this.searchForm.getRawValue();
     if (this.searchForm.get('directions')?.valid
-      && ((formValue.isRoundTrip && formValue.range.start && formValue.range.end)
-    || (!formValue.isRoundTrip && formValue.date))) {
+      && ((formValue.isRoundTrip && this.searchForm.get('range')?.valid)
+    || (!formValue.isRoundTrip && this.searchForm.get('date')?.valid))) {
       return false;
     }
     return true;
   }
 
   submitForm() {
-    const searchParams = this.searchForm.getRawValue();
-    this.store$.dispatch(chooseAllParamsAction(searchParams));
+    // const searchParams = this.searchForm.getRawValue();
+    // this.store$.dispatch(chooseAllParamsAction(searchParams));
     this.router.navigate(['flight', 'selection']);
+  }
+
+  onSelectedIsRoundTrip() {
+    const isRoundTrip = this.searchForm.get('isRoundTrip')?.value;
+    this.store$.dispatch(chooseIsRoundTripAction(isRoundTrip));
   }
 
   onSelectedDirections() {

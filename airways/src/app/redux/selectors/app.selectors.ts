@@ -11,5 +11,5 @@ export const selectAllSearchParams = createSelector(
 
 export const selectDirections = createSelector(
   selectSearchParamsFeature,
-  (state: SearchParams): Directions => state.directions,
+  (state: SearchParams): Directions | null => state.directions,
 );

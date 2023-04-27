@@ -1,0 +1,13 @@
+<owl-carousel-o class="carousel" [options]="customOptions" (initialized)="getData($event)" (translated)="getPassedData($event)"
+  (dragging)="startDragging($event.dragging)">
+  <ng-container *ngFor="let item of foundFlightsWithDate">
+    <ng-template carouselSlide [id]="item.day">
+      <button class="carousel__item" (click)="getFlightDay(item.day)">
+        <div>{{item.day | date : 'dd MMM'}}</div>
+        <div>{{item.day | date : 'EEEE'}}</div>
+        <div *ngIf="item.flights && item.flights.length !== 0">{{item.flights[0].price}}</div>
+        <div *ngIf="item.flights && item.flights.length === 0" class="carousel__notfly"></div>
+      </button>
+    </ng-template>
+  </ng-container>
+</owl-carousel-o>

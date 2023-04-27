@@ -12,9 +12,9 @@ export interface Passengers {
 
 export interface SearchParams {
   isRoundTrip: boolean,
-  directions: Directions,
-  range: Range,
-  date: string,
+  directions: Directions | null,
+  range: Range | null,
+  date: string | null,
   passengers: Passengers,
 }
 

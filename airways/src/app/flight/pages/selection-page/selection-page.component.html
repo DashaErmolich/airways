@@ -1,16 +1,16 @@
 <div class="selection__header">
   <div class="selection__directions">
-    <span>{{searchParams.directions.departureFrom.city + ' '+ searchParams.directions.departureFrom.IATA }}</span>
-    <button class="selection__directions_btn" type="button"></button>
-    <span>{{searchParams.directions.destinationTo.city+ ' '+ searchParams.directions.destinationTo.IATA}}</span>
+    <span>{{searchParams.directions?.departureFrom?.city + ' '+ searchParams.directions?.departureFrom?.IATA }}</span>
+    <button class="selection__directions_btn" type="button" (click)="swapDirections()"></button>
+    <span>{{searchParams.directions?.destinationTo?.city+ ' '+ searchParams.directions?.destinationTo?.IATA}}</span>
   </div>
 
   <div class="selection__dates_block">
     <span>{{searchParams.isRoundTrip ? 'Return' : 'One way'}}</span>
     <div *ngIf="searchParams.isRoundTrip" class="selection__dates">
-      <span>{{searchParams.range.start | date: 'dd MMM' }}</span>
+      <span>{{searchParams.range?.start | date: 'dd MMM' }}</span>
       <span> - </span>
-      <span>{{searchParams.range.end | date: 'dd MMM'}}</span>
+      <span>{{searchParams.range?.end | date: 'dd MMM'}}</span>
     </div>
     <div *ngIf="!searchParams.isRoundTrip" class="selection__dates">
       <span>{{searchParams.date | date: 'dd MMM'}}</span>

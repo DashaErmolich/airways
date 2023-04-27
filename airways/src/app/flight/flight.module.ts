@@ -9,6 +9,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { CarouselModule } from 'ngx-owl-carousel-o';
 import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
@@ -16,6 +17,7 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
 import { DateListComponent } from './components/date-list/date-list.component';
 import { DirectionComponent } from './components/direction/direction.component';
 import { ActiveFlightsComponent } from './components/active-flights/active-flights.component';
+import { CarouselComponent } from './components/carousel/carousel.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,7 @@ import { ActiveFlightsComponent } from './components/active-flights/active-fligh
     DateListComponent,
     DirectionComponent,
     ActiveFlightsComponent,
+    CarouselComponent,
   ],
   imports: [
     CommonModule,
@@ -37,6 +40,7 @@ import { ActiveFlightsComponent } from './components/active-flights/active-fligh
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
+    CarouselModule,
   ],
 })
 export class FlightModule { }

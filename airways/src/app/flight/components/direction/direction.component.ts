@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component, Input, OnInit,
+} from '@angular/core';
 import { FoundFlightsWithDate, SearchParams } from '../../models/flight.models';
 
 @Component({
@@ -14,7 +16,12 @@ export class DirectionComponent implements OnInit {
   activeFlights!: FoundFlightsWithDate | undefined;
 
   ngOnInit() {
-    const activeDate = new Date(this.searchParams.date).toDateString();
-    this.activeFlights = this.foundFlightsWithDate.find((el) => el.day === activeDate);
+    // console.log('active', this.activeFlights);
+    // const activeDate = new Date(this.searchParams.date).toDateString();
+    // this.activeFlights = this.foundFlightsWithDate.find((el) => el.day === activeDate);
+  }
+
+  getActiveFlights(event: FoundFlightsWithDate) {
+    this.activeFlights = event;
   }
 }
