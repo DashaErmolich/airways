@@ -45,23 +45,13 @@ export class SelectionPageComponent implements OnInit {
 
   // eslint-disable-next-line class-methods-use-this
   createDates(currentDay: string): string[] {
-    const date = new Date(currentDay);
     const datesArr = [];
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 6).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 5).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 4).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 2).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1).toDateString());
-    datesArr.push(date.toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 3).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 4).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6).toDateString());
-    datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7).toDateString());
+    const currentDate = new Date(currentDay);
+    for (let i = -7; i <= 7; i += 1) {
+      // eslint-disable-next-line max-len
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + i);
+      datesArr.push(date.toDateString());
+    }
     return datesArr;
   }
 
