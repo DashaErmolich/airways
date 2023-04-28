@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { selectAllSearchParams } from 'src/app/redux/selectors/app.selectors';
-import { chooseDirectionsAction } from 'src/app/redux/actions/app.actions';
+import { chooseDirectionsAction, foundFlightsAction } from 'src/app/redux/actions/app.actions';
 import { Flight, FoundFlightsWithDate, SearchParams } from '../../models/flight.models';
 import { flights } from '../../constants/flights';
 
@@ -28,18 +28,17 @@ export class SelectionPageComponent implements OnInit {
       .subscribe((res) => {
         this.searchParams = res;
         if (!this.searchParams.isRoundTrip) {
-          // const dateFrom = new Date(this.searchParams.date).toDateString();
           this.foundFlights = flights
             .filter((flight) => flight.departureFrom.IATA
               === this.searchParams.directions?.departureFrom.IATA
               && flight.destinationTo.IATA === this.searchParams.directions.destinationTo.IATA);
-          // && new Date(flight.departureDate).toDateString() === dateFrom
           const datesArray = this.createDates(this.searchParams.date || '');
           this.foundFlightsWithDate = datesArray.map((date) => {
             // eslint-disable-next-line max-len
             const el = this.foundFlights?.filter((flight: Flight) => date === new Date(flight.departureDate).toDateString());
             return { day: date, flights: el };
           });
+          this.store$.dispatch(foundFlightsAction(this.foundFlightsWithDate));
         }
       });
   }
@@ -63,7 +62,6 @@ export class SelectionPageComponent implements OnInit {
     datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5).toDateString());
     datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 6).toDateString());
     datesArr.push(new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7).toDateString());
-
     return datesArr;
   }
 

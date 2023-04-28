@@ -1,8 +1,0 @@
-<div class="date__list">
-  <div *ngFor="let item of foundFlightsWithDate" class="date__item">
-    <div>{{item.day | date : 'dd MMM'}}</div>
-    <div>{{item.day | date : 'EEEE'}}</div>
-    <div *ngIf="item.flights && item.flights.length !== 0">{{item.flights[0].price}}</div>
-    <div *ngIf="item.flights && item.flights.length === 0" class="date__notfly"></div>
-  </div>
-</div>

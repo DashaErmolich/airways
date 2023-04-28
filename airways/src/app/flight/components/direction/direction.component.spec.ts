@@ -8,9 +8,9 @@ describe('DirectionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DirectionComponent ]
+      declarations: [DirectionComponent],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(DirectionComponent);
     component = fixture.componentInstance;

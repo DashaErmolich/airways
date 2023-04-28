@@ -8,9 +8,9 @@ describe('ActiveFlightsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ActiveFlightsComponent ]
+      declarations: [ActiveFlightsComponent],
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ActiveFlightsComponent);
     component = fixture.componentInstance;

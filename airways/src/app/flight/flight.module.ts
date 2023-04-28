@@ -14,7 +14,6 @@ import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
-import { DateListComponent } from './components/date-list/date-list.component';
 import { DirectionComponent } from './components/direction/direction.component';
 import { ActiveFlightsComponent } from './components/active-flights/active-flights.component';
 import { CarouselComponent } from './components/carousel/carousel.component';
@@ -24,7 +23,6 @@ import { CarouselComponent } from './components/carousel/carousel.component';
     SearchPageComponent,
     SelectionPageComponent,
     SearchFormComponent,
-    DateListComponent,
     DirectionComponent,
     ActiveFlightsComponent,
     CarouselComponent,

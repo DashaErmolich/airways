@@ -8,8 +8,8 @@ import {
   Observable, Subscription, debounceTime, startWith, map,
 } from 'rxjs';
 import {
-  chooseDateAction,
-  chooseDirectionsAction, chooseIsRoundTripAction, choosePassengersAction, chooseRangeAction,
+  chooseDateAction, chooseDirectionsAction, chooseFlightsByDayAction,
+  chooseIsRoundTripAction, choosePassengersAction, chooseRangeAction,
 } from 'src/app/redux/actions/app.actions';
 import { selectAllSearchParams } from 'src/app/redux/selectors/app.selectors';
 import { minCountPassengers } from '../../constants/constants';
@@ -184,12 +184,6 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  submitForm() {
-    // const searchParams = this.searchForm.getRawValue();
-    // this.store$.dispatch(chooseAllParamsAction(searchParams));
-    this.router.navigate(['flight', 'selection']);
-  }
-
   onSelectedIsRoundTrip() {
     const isRoundTrip = this.searchForm.get('isRoundTrip')?.value;
     this.store$.dispatch(chooseIsRoundTripAction(isRoundTrip));
@@ -206,12 +200,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   onSelectedDate() {
-    const date = this.searchForm.get('date')?.value;
+    const date = this.searchForm.get('date')?.value.toDateString();
     this.store$.dispatch(chooseDateAction(date));
+    this.store$.dispatch(chooseFlightsByDayAction(date));
   }
 
   onSelectedPassengers() {
     const passengers = this.searchForm.get('passengers')?.value;
     this.store$.dispatch(choosePassengersAction(passengers));
+  }
+
+  submitForm() {
+    this.router.navigate(['flight', 'selection']);
   }
 }

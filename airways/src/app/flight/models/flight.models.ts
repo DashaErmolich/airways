@@ -41,6 +41,11 @@ export interface Flight {
 }
 
 export interface FoundFlightsWithDate {
-  day: string;
-  flights: Flight[] | undefined;
+  day: string | null,
+  flights: Flight[] | undefined,
+}
+
+export interface FoundFlights {
+  day: string | null;
+  flightsWithDates: FoundFlightsWithDate[] | null,
 }

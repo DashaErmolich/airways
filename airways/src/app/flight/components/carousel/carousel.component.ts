@@ -1,7 +1,11 @@
 import {
-  Component, EventEmitter, Input, OnInit, Output,
+  Component, OnInit, OnDestroy,
 } from '@angular/core';
 import { OwlOptions, SlidesOutputData } from 'ngx-owl-carousel-o';
+import { Store, select } from '@ngrx/store';
+import { selectFoundFlights } from 'src/app/redux/selectors/app.selectors';
+import { chooseFlightsByDayAction } from 'src/app/redux/actions/app.actions';
+import { Subscription } from 'rxjs';
 import { FoundFlightsWithDate } from '../../models/flight.models';
 
 @Component({
@@ -9,55 +13,7 @@ import { FoundFlightsWithDate } from '../../models/flight.models';
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.scss'],
 })
-export class CarouselComponent implements OnInit {
-  @Input() foundFlightsWithDate!: FoundFlightsWithDate[];
-
-  @Output() flights = new EventEmitter();
-
-  activeSlides?: SlidesOutputData;
-
-  getPassedData(data: SlidesOutputData) {
-    this.activeSlides = data;
-    console.log(this.activeSlides);
-  }
-
-  ngOnInit(): void {
-    console.log(this.foundFlightsWithDate);
-  }
-
-  // dynamicSlides = [
-  //   {
-  //     id: '1',
-  //     src: 'https://via.placeholder.com/200/92c952',
-  //     alt: 'Side 1',
-  //     title: 'Side 1',
-  //   },
-  //   {
-  //     id: '2',
-  //     src: 'https://via.placeholder.com/200/771796',
-  //     alt: 'Side 2',
-  //     title: 'Side 2',
-  //   },
-  //   {
-  //     id: '3',
-  //     src: 'https://via.placeholder.com/200/24f355',
-  //     alt: 'Side 3',
-  //     title: 'Side 3',
-  //   },
-  //   {
-  //     id: '4',
-  //     src: 'https://via.placeholder.com/200/d32776',
-  //     alt: 'Side 4',
-  //     title: 'Side 4',
-  //   },
-  //   {
-  //     id: '5',
-  //     src: 'https://via.placeholder.com/200/f66b97',
-  //     alt: 'Side 5',
-  //     title: 'Side 5',
-  //   },
-  // ];
-
+export class CarouselComponent implements OnInit, OnDestroy {
   customOptions: OwlOptions = {
     loop: false,
     mouseDrag: false,
@@ -88,19 +44,46 @@ export class CarouselComponent implements OnInit {
     nav: true,
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  startDragging(event: boolean) {
-    console.log('startDragging', event);
+  activeSlides?: SlidesOutputData;
+
+  selectedDay!: string | null;
+
+  foundFlightsWithDate!: FoundFlightsWithDate[] | null;
+
+  state$ = new Subscription();
+
+  constructor(private store$: Store) { }
+
+  ngOnInit(): void {
+    this.state$ = this.store$
+      .pipe(select(selectFoundFlights))
+      .subscribe((res) => {
+        this.foundFlightsWithDate = res.flightsWithDates;
+        this.selectedDay = res.day;
+      });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getData(event: SlidesOutputData) {
-    console.log('inicialized', event);
+  ngOnDestroy(): void {
+    this.state$.unsubscribe();
   }
 
-  getFlightDay(day: string) {
-    const flights = this.foundFlightsWithDate.find((el) => el.day === day);
-    this.flights.emit(flights);
-    console.log(flights);
+  getFlightDay(event: Event) {
+    const day = (event.currentTarget as HTMLButtonElement).id;
+    this.store$.dispatch(chooseFlightsByDayAction(day));
   }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // startDragging(event: boolean) {
+  //   console.log('startDragging', event);
+  // }
+
+  // // eslint-disable-next-line class-methods-use-this
+  // getData(event: SlidesOutputData) {
+  //   console.log('inicialized', event);
+  // }
+
+  // getPassedData(data: SlidesOutputData) {
+  //   this.activeSlides = data;
+  //   console.log('getPassedData', this.activeSlides);
+  // }
 }

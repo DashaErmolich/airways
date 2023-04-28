@@ -1,6 +1,7 @@
-<h2 class="direction__title">{{searchParams.directions?.departureFrom?.city + ' '+ searchParams.directions?.departureFrom?.IATA + ' to ' +
-  searchParams.directions?.destinationTo?.city+ ' '+ searchParams.directions?.destinationTo?.IATA}}</h2>
+<h2 class="direction__title">
+  {{searchParams.directions?.departureFrom?.city + ' '+ searchParams.directions?.departureFrom?.IATA + ' to ' +
+  searchParams.directions?.destinationTo?.city+ ' '+ searchParams.directions?.destinationTo?.IATA}}
+</h2>
 
-<!-- <app-date-list [foundFlightsWithDate]="foundFlightsWithDate" ></app-date-list> -->
-<app-carousel [foundFlightsWithDate]="foundFlightsWithDate" (flights)="getActiveFlights($event)"></app-carousel>
-<app-active-flights [activeFlights]="activeFlights"></app-active-flights>
+<app-carousel></app-carousel>
+<app-active-flights></app-active-flights>
