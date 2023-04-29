@@ -1,10 +1,55 @@
 @import './styles/abstracts/variables';
+@import './styles/components/forms';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.page-wrapper {
+  position: relative;
+}
+
+.page-wrapper:before {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  background-image: url(./assets//images/Background.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.page-container {
+  position: relative;
+  min-height: 100vh;
+}
 
 .container {
   max-width: $desktop-width;
-  height: 100%;
   margin: auto;
+}
+
+.content-wrapper {
+  padding-top: $header-height;
+  padding-bottom: $footer-height;
+}
+
+.error-message {
+  color: red;
+  padding-bottom: 1rem;
 }
