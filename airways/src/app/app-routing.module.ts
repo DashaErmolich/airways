@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundPageComponent } from './core/pages/not-found-page/not-found-page.component';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'flight',
+    redirectTo: 'flights',
     pathMatch: 'full',
   },
   {
-    path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
-  },
-  {
-    path: 'flight',
+    path: 'flights',
     loadChildren: () => import('./flight/flight.module').then((m) => m.FlightModule),
   },
   {
     path: 'booking',
     loadChildren: () => import('./booking/booking.module').then((m) => m.BookingModule),
+    canLoad: [
+      AuthGuard,
+    ],
   },
   {
     path: '**',

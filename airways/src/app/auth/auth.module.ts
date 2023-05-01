@@ -1,19 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthPageComponent } from './pages/auth-page/auth-page.component';
+
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
 import { LoginTabComponent } from './components/login-tab/login-tab.component';
 import { SignUpTabComponent } from './components/sign-up-tab/sign-up-tab.component';
-import { AuthRoutingModule } from './auth-routing.module';
+import { SharedModule } from '../shared/shared.module';
+import { reducers } from '../redux/reducers/app.reducers';
+import { AuthEffects } from '../redux/effects/app.effects';
 
 @NgModule({
   declarations: [
-    AuthPageComponent,
+    AuthDialogComponent,
     LoginTabComponent,
     SignUpTabComponent,
   ],
   imports: [
     CommonModule,
-    AuthRoutingModule,
+    SharedModule,
+    StoreModule.forFeature('auth', reducers),
+    EffectsModule.forFeature([AuthEffects]),
   ],
 })
 export class AuthModule { }
