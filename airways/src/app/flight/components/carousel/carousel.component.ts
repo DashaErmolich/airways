@@ -3,8 +3,8 @@ import {
 } from '@angular/core';
 import { OwlOptions, SlidesOutputData } from 'ngx-owl-carousel-o';
 import { Store, select } from '@ngrx/store';
-import { selectFoundFlights } from 'src/app/redux/selectors/app.selectors';
-import { chooseFlightsByDayAction } from 'src/app/redux/actions/app.actions';
+import { selectFoundFlights } from 'src/app/redux/selectors/flights.selectors';
+import { chooseFlightsByDayAction } from 'src/app/redux/actions/flights.actions';
 import { Subscription } from 'rxjs';
 import { FoundFlightsWithDate } from '../../models/flight.models';
 

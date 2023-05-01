@@ -8,7 +8,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
-import { metaReducers, reducers } from './redux/reducers/app.reducers';
+import { metaReducers, reducers } from './redux/reducers/flights.reducers';
 
 @NgModule({
   declarations: [
@@ -21,6 +21,7 @@ import { metaReducers, reducers } from './redux/reducers/app.reducers';
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
+    // StoreModule.forRoot({}, {}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     CoreModule,

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { selectAllSearchParams } from 'src/app/redux/selectors/app.selectors';
-import { chooseDirectionsAction, foundFlightsAction } from 'src/app/redux/actions/app.actions';
+import { selectAllSearchParams } from 'src/app/redux/selectors/flights.selectors';
+import { chooseDirectionsAction, foundFlightsAction } from 'src/app/redux/actions/flights.actions';
 import { Flight, FoundFlightsWithDate, SearchParams } from '../../models/flight.models';
 import { flights } from '../../constants/flights';
 

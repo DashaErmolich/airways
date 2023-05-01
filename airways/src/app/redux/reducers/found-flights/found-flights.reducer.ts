@@ -1,5 +1,5 @@
 import { FoundFlights } from 'src/app/flight/models/flight.models';
-import { FoundFlightsActionsTypes } from '../../actions/app.actions';
+import { FoundFlightsActionsTypes } from '../../actions/flights.actions';
 
 export const foundFlightsNode = 'foundFlights';
 

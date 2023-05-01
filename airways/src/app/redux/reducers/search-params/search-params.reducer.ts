@@ -1,6 +1,6 @@
 import { minCountPassengers } from 'src/app/flight/constants/constants';
 import { SearchParams } from '../../../flight/models/flight.models';
-import { SearchParamsActionsTypes } from '../../actions/app.actions';
+import { SearchParamsActionsTypes } from '../../actions/flights.actions';
 
 export const searchParamsNode = 'searchParams';
 

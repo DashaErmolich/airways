@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { selectFlightsByDay } from 'src/app/redux/selectors/app.selectors';
+import { selectFlightsByDay } from 'src/app/redux/selectors/flights.selectors';
 import { Subscription } from 'rxjs';
 import { FoundFlightsWithDate } from '../../models/flight.models';
 

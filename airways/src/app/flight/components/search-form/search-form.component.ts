@@ -10,8 +10,8 @@ import {
 import {
   chooseDateAction, chooseDirectionsAction, chooseFlightsByDayAction,
   chooseIsRoundTripAction, choosePassengersAction, chooseRangeAction,
-} from 'src/app/redux/actions/app.actions';
-import { selectAllSearchParams } from 'src/app/redux/selectors/app.selectors';
+} from 'src/app/redux/actions/flights.actions';
+import { selectAllSearchParams } from 'src/app/redux/selectors/flights.selectors';
 import { minCountPassengers } from '../../constants/constants';
 import { data } from '../../constants/data';
 import { Airport, SearchParams, Passengers } from '../../models/flight.models';
