@@ -7,7 +7,7 @@ import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.compon
 import { LoginTabComponent } from './components/login-tab/login-tab.component';
 import { SignUpTabComponent } from './components/sign-up-tab/sign-up-tab.component';
 import { SharedModule } from '../shared/shared.module';
-import { reducers } from '../redux/reducers/app.reducers';
+import { reducers } from '../redux/reducers/auth.reducers';
 import { AuthEffects } from '../redux/effects/app.effects';
 
 @NgModule({

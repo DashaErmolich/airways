@@ -1,29 +1,17 @@
-<div class="selection__header">
-  <div class="selection__directions">
-    <span>{{searchParams.directions?.departureFrom?.city + ' '+ searchParams.directions?.departureFrom?.IATA }}</span>
-    <button class="selection__directions_btn" type="button" (click)="swapDirections()"></button>
-    <span>{{searchParams.directions?.destinationTo?.city+ ' '+ searchParams.directions?.destinationTo?.IATA}}</span>
-  </div>
+<p>From: {{ data.from?.city }}</p>
 
-  <div class="selection__dates_block">
-    <span>{{searchParams.isRoundTrip ? 'Return' : 'One way'}}</span>
-    <div *ngIf="searchParams.isRoundTrip" class="selection__dates">
-      <span>{{searchParams.range?.start | date: 'dd MMM' }}</span>
-      <span> - </span>
-      <span>{{searchParams.range?.end | date: 'dd MMM'}}</span>
-    </div>
-    <div *ngIf="!searchParams.isRoundTrip" class="selection__dates">
-      <span>{{searchParams.date | date: 'dd MMM'}}</span>
-    </div>
-    <span>{{searchParams.passengers.adult+searchParams.passengers.child+searchParams.passengers.infant}}<span
-        class="selection__dates_icon"></span></span>
-  </div>
-  <button mat-button color="primary" (click)="isVisibleSearchForm = !isVisibleSearchForm">Edit</button>
-  <app-search-form *ngIf="isVisibleSearchForm"></app-search-form>
+<p>To: {{ data.to?.city }}</p>
+
+<p>Return: {{ data.startTripDate | date }}</p>
+
+<p>Passengers: {{ getPassengersQty()}}</p>
+
+<app-search-form *ngIf="isSearchFormVisible"></app-search-form>
+
+<div class="">
+  <button mat-raised-button color="primary" (click)="toggleSearchFormVisibility()">Edit</button>
 </div>
 
-<app-direction [searchParams]="searchParams"></app-direction>
-
-<div>
-  <button class="selection__btn" mat-button color="primary" [routerLink]="['/']">Back</button>
-</div>
+<button mat-mini-fab color="primary" class="back-button" (click)="goBack()">
+  <mat-icon>keyboard_arrow_left</mat-icon>
+</button>

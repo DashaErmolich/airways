@@ -1,4 +1,4 @@
-export const flights = [
+export const flightsOld = [
   {
     departureFrom: {
       city: 'Moscow',

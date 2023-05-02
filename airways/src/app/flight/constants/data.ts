@@ -1,4 +1,4 @@
-export const data = [
+export const dataOld = [
   {
     city: 'Moscow',
     IATA: 'SVO',

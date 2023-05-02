@@ -8,13 +8,15 @@ import {
   Observable, Subscription, debounceTime, startWith, map,
 } from 'rxjs';
 import {
-  chooseDateAction, chooseDirectionsAction, chooseFlightsByDayAction,
-  chooseIsRoundTripAction, choosePassengersAction, chooseRangeAction,
+  // eslint-disable-next-line max-len
+  chooseIsRoundTripAction, choosePassengersAction, chooseDirectionsAction, chooseRangeAction, chooseDateAction, chooseFlightsByDayAction,
 } from 'src/app/redux/actions/flights.actions';
-import { selectAllSearchParams } from 'src/app/redux/selectors/flights.selectors';
 import { minCountPassengers } from '../../constants/constants';
-import { data } from '../../constants/data';
+import { dataOld } from '../../constants/data';
 import { Airport, SearchParams, Passengers } from '../../models/flight.models';
+
+import * as FlightsActions from '../../../redux/actions/new-flights.actions';
+import { selectAllSearchParams } from '../../../redux/selectors/flights.selectors';
 
 @Component({
   selector: 'app-search-form',
@@ -111,7 +113,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line class-methods-use-this
   filter(searchValue: string) {
     const value = typeof searchValue === 'string' ? searchValue.toLowerCase().trim() : '';
-    return data.filter((airport) => Object.values(airport)
+    return dataOld.filter((airport) => Object.values(airport)
       .find((el) => el.toLowerCase().includes(value)));
   }
 
@@ -211,6 +213,20 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   submitForm() {
-    this.router.navigate(['flight', 'selection']);
+    this.store$.dispatch(FlightsActions.searchFormSubmit({
+      flightsState: {
+        isRoundTrip: this.searchForm.value.isRoundTrip,
+        isOneWayTrip: !this.searchForm.value.isRoundTrip,
+        from: this.searchForm.value.directions.departureFrom,
+        to: this.searchForm.value.directions.destinationTo,
+        startTripDate: this.searchForm.value.date,
+        rangeTripDates: {
+          start: this.searchForm.value.range.start,
+          end: this.searchForm.value.range.end,
+        },
+        passengers: this.searchForm.value.passengers,
+      },
+    }));
+    this.router.navigate(['flights', 'selection']);
   }
 }

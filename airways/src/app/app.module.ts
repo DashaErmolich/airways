@@ -8,8 +8,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
-import { metaReducers, reducers } from './redux/reducers/flights.reducers';
 import { AuthModule } from './auth/auth.module';
+import { metaReducers, reducers } from './redux/reducers/flights.reducers';
 
 @NgModule({
   declarations: [

@@ -13,7 +13,7 @@ export interface Passengers {
 export interface SearchParams {
   isRoundTrip: boolean,
   directions: Directions | null,
-  range: Range | null,
+  range: DatesRange | null,
   date: string | null,
   passengers: Passengers,
 }
@@ -23,7 +23,7 @@ export interface Directions {
   destinationTo: Airport,
 }
 
-export interface Range {
+export interface DatesRange {
   start: string,
   end: string,
 }
@@ -48,4 +48,35 @@ export interface FoundFlightsWithDate {
 export interface FoundFlights {
   day: string | null;
   flightsWithDates: FoundFlightsWithDate[] | null,
+}
+
+export interface SearchFlightsNew {
+  fromKey: string | undefined;
+  toKey: string | undefined;
+  forwardDate: string | null;
+  backDate: string | null;
+}
+
+export interface AirportNew {
+  key:string;
+  country: string;
+  city: string;
+  name:string;
+}
+
+export interface PriceNew {
+  eur: number;
+  usd: number;
+  rub: number;
+  pln: number;
+}
+
+export interface FlightNew {
+  form: AirportNew;
+  to: AirportNew;
+  takeoffDate: string;
+  landingDate: string;
+  timeMins: string;
+  avaible: number
+  price: PriceNew;
 }

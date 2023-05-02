@@ -8,6 +8,7 @@ import { ActiveUser } from 'src/app/shared/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import * as AuthActions from '../actions/app.actions';
+import * as FlightsActions from '../actions/new-flights.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -51,6 +52,16 @@ export class AuthEffects {
     () => this.actions$.pipe(
       ofType(AuthActions.logout),
       tap(() => this.authService.logout()),
+    ),
+    { dispatch: false },
+  );
+
+  setFlightState$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(FlightsActions.searchFormSubmit),
+      tap(({ flightsState }) => {
+        localStorage.setItem(LocalStorageKeysEnum.Flights, JSON.stringify(flightsState));
+      }),
     ),
     { dispatch: false },
   );

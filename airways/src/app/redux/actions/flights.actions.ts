@@ -1,5 +1,5 @@
 import {
-  Directions, FoundFlightsWithDate, Passengers, Range,
+  Directions, FoundFlightsWithDate, Passengers,
 } from 'src/app/flight/models/flight.models';
 
 export enum SearchParamsActionsTypes {

@@ -1,6 +1,6 @@
 <form [formGroup]="searchForm" [ngClass]="isSearchPage ? 'search__form' : 'selection__form'" (ngSubmit)="submitForm()">
 
-  <div *ngIf="isSearchPage" class="form__control">
+  <div class="form__control">
     <mat-radio-group aria-label="Select an option" formControlName="isRoundTrip" (change)="onSelectedIsRoundTrip()">
       <mat-radio-button color="primary" [value]="true">Round Trip</mat-radio-button>
       <mat-radio-button color="primary" [value]="false">One Way</mat-radio-button>

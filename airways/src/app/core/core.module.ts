@@ -8,7 +8,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NotFoundPageComponent } from './pages/not-found-page/not-found-page.component';
 import { SharedModule } from '../shared/shared.module';
-import { reducers } from '../redux/reducers/app.reducers';
+import { reducers } from '../redux/reducers/auth.reducers';
 import { AuthEffects } from '../redux/effects/app.effects';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 
