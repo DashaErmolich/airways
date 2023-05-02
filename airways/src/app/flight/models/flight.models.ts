@@ -53,7 +53,7 @@ export interface FoundFlights {
 export interface SearchFlightsNew {
   fromKey: string | undefined;
   toKey: string | undefined;
-  forwardDate: string | null;
+  forwardDate: string | null | undefined;
   backDate: string | null;
 }
 
@@ -79,4 +79,5 @@ export interface FlightNew {
   timeMins: string;
   avaible: number
   price: PriceNew;
+  flightNumber: string;
 }

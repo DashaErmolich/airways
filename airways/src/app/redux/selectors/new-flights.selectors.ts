@@ -10,3 +10,8 @@ export const selectFlights = createSelector(
   selectFlightsFeature,
   (state) => state,
 );
+
+export const select = createSelector(
+  selectFlightsFeature,
+  (state) => state,
+);

@@ -1,7 +1,8 @@
 @import './styles/abstracts/variables';
+@import './styles/components/forms';
+
 @import 'ngx-owl-carousel-o/lib/styles/scss/owl.carousel';
 @import 'ngx-owl-carousel-o/lib/styles/scss/owl.theme.default';
-@import './styles/components/forms';
 
 html,
 body {

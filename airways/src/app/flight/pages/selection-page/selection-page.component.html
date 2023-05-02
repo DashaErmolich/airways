@@ -12,6 +12,16 @@
   <button mat-raised-button color="primary" (click)="toggleSearchFormVisibility()">Edit</button>
 </div>
 
-<button mat-mini-fab color="primary" class="back-button" (click)="goBack()">
-  <mat-icon>keyboard_arrow_left</mat-icon>
-</button>
+<div class="">
+  <button mat-raised-button (click)="goBack()">
+    Back
+  </button>
+</div>
+
+<div class="">
+  <button mat-raised-button color="primary" routerLink="/booking">
+    Continue
+  </button>
+</div>
+
+<app-flight-selection [data]="data"></app-flight-selection>

@@ -11,12 +11,13 @@ import {
   // eslint-disable-next-line max-len
   chooseIsRoundTripAction, choosePassengersAction, chooseDirectionsAction, chooseRangeAction, chooseDateAction, chooseFlightsByDayAction,
 } from 'src/app/redux/actions/flights.actions';
+import { selectFlights } from 'src/app/redux/selectors/new-flights.selectors';
+import { FlightsState } from 'src/app/redux/state.models';
 import { minCountPassengers } from '../../constants/constants';
 import { dataOld } from '../../constants/data';
 import { Airport, SearchParams, Passengers } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/new-flights.actions';
-import { selectAllSearchParams } from '../../../redux/selectors/flights.selectors';
 
 @Component({
   selector: 'app-search-form',
@@ -36,6 +37,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   searchParams$ = new Subscription();
 
+  data!: FlightsState;
+
   isSearchPage = true;
 
   constructor(
@@ -48,36 +51,36 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.isSearchPage = this.route.snapshot.routeConfig?.path !== 'selection';
 
     this.store$
-      .pipe(select(selectAllSearchParams))
-      .subscribe((res) => { this.searchParams = res; });
+      .pipe(select(selectFlights))
+      .subscribe((res) => { this.data = res; });
 
     this.searchForm = new FormGroup({
-      isRoundTrip: new FormControl(this.searchParams.isRoundTrip),
+      isRoundTrip: new FormControl(this.data.isRoundTrip),
       directions: new FormGroup({
         departureFrom: new FormControl(
-          this.searchParams.directions?.departureFrom || '',
+          this.data.from || '',
           [Validators.required],
         ),
         destinationTo: new FormControl(
-          this.searchParams.directions?.destinationTo || '',
+          this.data.to || '',
           [Validators.required],
         ),
       }, { validators: this.sameDirectionsValidator }),
       range: new FormGroup({
         start: new FormControl(
-          new Date(this.searchParams.range?.start || ''),
+          new Date(this.data.rangeTripDates?.start || ''),
           Validators.required,
         ),
         end: new FormControl(
-          new Date(this.searchParams.range?.end || ''),
+          new Date(this.data.rangeTripDates?.end || ''),
           Validators.required,
         ),
       }),
-      date: new FormControl(new Date(this.searchParams?.date || ''), Validators.required),
+      date: new FormControl(new Date(this.data.startTripDate || ''), Validators.required),
       passengers: new FormGroup({
-        adult: new FormControl(this.searchParams.passengers.adult),
-        child: new FormControl(this.searchParams.passengers.child),
-        infant: new FormControl(this.searchParams.passengers.infant),
+        adult: new FormControl(this.data.passengers?.adult),
+        child: new FormControl(this.data.passengers?.child),
+        infant: new FormControl(this.data.passengers?.infant),
       }),
     });
 
@@ -141,6 +144,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
     const passengers = this.searchForm.get('passengers')?.value;
     this.store$.dispatch(choosePassengersAction(passengers));
+    this.saveCurrentState();
   }
 
   increment(typePassenger: keyof Passengers) {
@@ -149,6 +153,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
     const passengers = this.searchForm.get('passengers')?.value;
     this.store$.dispatch(choosePassengersAction(passengers));
+    this.saveCurrentState();
   }
 
   getCountPassengers() {
@@ -174,6 +179,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       destinationTo: departureFrom,
     });
     this.store$.dispatch(chooseDirectionsAction(this.searchForm.get('directions')?.value));
+    this.saveCurrentState();
   }
 
   isFormInvalid() {
@@ -189,30 +195,40 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   onSelectedIsRoundTrip() {
     const isRoundTrip = this.searchForm.get('isRoundTrip')?.value;
     this.store$.dispatch(chooseIsRoundTripAction(isRoundTrip));
+    this.saveCurrentState();
   }
 
   onSelectedDirections() {
     const directions = this.searchForm.get('directions')?.value;
     this.store$.dispatch(chooseDirectionsAction(directions));
+    this.saveCurrentState();
   }
 
   onSelectedRange() {
     const range = this.searchForm.get('range')?.value;
     this.store$.dispatch(chooseRangeAction(range));
+    this.saveCurrentState();
   }
 
   onSelectedDate() {
     const date = this.searchForm.get('date')?.value.toDateString();
     this.store$.dispatch(chooseDateAction(date));
     this.store$.dispatch(chooseFlightsByDayAction(date));
+    this.saveCurrentState();
   }
 
   onSelectedPassengers() {
     const passengers = this.searchForm.get('passengers')?.value;
     this.store$.dispatch(choosePassengersAction(passengers));
+    this.saveCurrentState();
   }
 
   submitForm() {
+    this.saveCurrentState();
+    this.router.navigate(['flights', 'selection']);
+  }
+
+  saveCurrentState() {
     this.store$.dispatch(FlightsActions.searchFormSubmit({
       flightsState: {
         isRoundTrip: this.searchForm.value.isRoundTrip,
@@ -227,6 +243,5 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         passengers: this.searchForm.value.passengers,
       },
     }));
-    this.router.navigate(['flights', 'selection']);
   }
 }

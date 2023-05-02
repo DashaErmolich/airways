@@ -10,13 +10,13 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-import { EffectsModule } from '@ngrx/effects';
 import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { ActiveFlightsComponent } from './components/active-flights/active-flights.component';
-import { AuthEffects } from '../redux/effects/app.effects';
+import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
+import { CarouselHolderComponent } from './components/calendar-carousel/carousel-holder.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +24,8 @@ import { AuthEffects } from '../redux/effects/app.effects';
     SelectionPageComponent,
     SearchFormComponent,
     ActiveFlightsComponent,
+    FlightSelectionComponent,
+    CarouselHolderComponent,
   ],
   imports: [
     CommonModule,
