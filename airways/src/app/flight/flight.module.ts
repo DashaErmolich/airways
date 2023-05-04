@@ -16,6 +16,7 @@ import { SelectionPageComponent } from './pages/selection-page/selection-page.co
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
 import { CalendarCarouselComponent } from './components/calendar-carousel/calendar-carousel.component';
+import { FlightAvailableSeatsDirective } from './directives/flight-available-seats.directive';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CalendarCarouselComponent } from './components/calendar-carousel/calend
     SearchFormComponent,
     FlightSelectionComponent,
     CalendarCarouselComponent,
+    FlightAvailableSeatsDirective,
   ],
   imports: [
     CommonModule,

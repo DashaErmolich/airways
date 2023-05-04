@@ -1,13 +1,24 @@
-<h2 *ngIf="responseIndex === 0">From {{(searchData$ | async)?.from?.city}} to {{ (searchData$ | async)?.to?.city }}</h2>
-<h2 *ngIf="responseIndex === 1">From {{(searchData$ | async)?.to?.city}} to {{ (searchData$ | async)?.from?.city }}</h2>
+<div *ngIf="flight">
+  <h2>{{ getFlightTitle() }}</h2>
 
-<app-calendar-carousel *ngIf="responseIndex === 0" (selectDepartureDateEvent)="searchAvailableFlights($event)" [departureDate]="(this.searchData$ | async)?.startTripDate || (this.searchData$ | async)?.rangeTripDates?.start"></app-calendar-carousel>
-<app-calendar-carousel *ngIf="responseIndex === 1" (selectDepartureDateEvent)="searchAvailableFlights($event)" [departureDate]="(this.searchData$ | async)?.startTripDate || (this.searchData$ | async)?.rangeTripDates?.start"></app-calendar-carousel>
+  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [flight]="flight"></app-calendar-carousel>
 
-<div class="" >
-  <p>Flight Number {{ availableFlights[responseIndex]?.flightNumber }}</p>
-  <p>Seats: {{ availableFlights[responseIndex]?.avaible }}</p>
-  <p>Price: {{ availableFlights[responseIndex]?.price?.eur }} EUR</p>
+  <div class="flight__container">
+    <p>From: {{ searchData.from?.country }} {{ searchData.from?.name }}</p>
+    <p>Take off: {{ flight.takeoffDate }}</p>
 
-<button mat-raised-button color="primary">Select</button>
+    <p>Minutes: {{ flight.timeMins }}</p>
+
+    <p>To: {{ searchData.to?.country }} {{ searchData.to?.name }}</p>
+    <p>Landing: {{ flight.landingDate }}</p>
+
+    <p>Flight Number: {{ flight.flightNumber }}</p>
+
+    <p [appFlightAvailableSeats]="flight.avaible">Seats available: {{ flight.avaible }}</p>
+
+    <p>Price: {{ flight.price.eur }} EUR</p>
+
+    <button mat-raised-button color="primary">Select</button>
+  </div>
 </div>
+

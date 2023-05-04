@@ -2,7 +2,12 @@
   <ng-container *ngFor="let date of datesArr">
     <ng-template carouselSlide>
       <div class="carousel__item" (click)="changeDepartureDate(date)">
-        {{ date | date }}
+        <p>
+          {{ date | date }}
+        </p>
+        <p>
+          {{ flight.price.eur }} EUR
+        </p>
       </div>
     </ng-template>
   </ng-container>

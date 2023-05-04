@@ -1,5 +1,5 @@
 import {
-  Component, EventEmitter, Input, Output,
+  Component, EventEmitter, Input, OnInit, Output,
 } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { FlightSearchState } from 'src/app/redux/state.models';
@@ -12,8 +12,8 @@ import { AvailableFlight } from '../../models/flight.models';
   templateUrl: './calendar-carousel.component.html',
   styleUrls: ['./calendar-carousel.component.scss'],
 })
-export class CalendarCarouselComponent {
-  @Input() departureDate!: string | undefined | null;
+export class CalendarCarouselComponent implements OnInit {
+  @Input() flight!: AvailableFlight;
 
   @Output() selectDepartureDateEvent = new EventEmitter<string>();
 
@@ -49,8 +49,8 @@ export class CalendarCarouselComponent {
   datesArr!: (string | null | undefined)[];
 
   ngOnInit(): void {
-    this.datesArr = this.getDatesArr(this.departureDate);
-    console.log(this.datesArr);
+    console.log(this.flight);
+    this.datesArr = this.getDatesArr(this.flight.takeoffDate);
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -61,7 +61,7 @@ export class CalendarCarouselComponent {
       const date = moment(chosenDate);
       const today = moment();
 
-      let startDate = today.toISOString();
+      let startDate = date.toISOString();
 
       if (date.diff(today) <= 2) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

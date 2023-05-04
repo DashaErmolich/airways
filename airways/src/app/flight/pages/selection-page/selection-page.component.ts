@@ -1,40 +1,54 @@
 /* eslint-disable max-len */
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
+import { Observable, Subscription } from 'rxjs';
+import { selectAvailableFlightsError, selectAvailableFlightsIsLoading, selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { AvailableFlight } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
+import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
 
 @Component({
   selector: 'app-selection-page',
   templateUrl: './selection-page.component.html',
   styleUrls: ['./selection-page.component.scss'],
 })
-export class SelectionPageComponent implements OnInit {
+export class SelectionPageComponent implements OnInit, OnDestroy {
   isSearchFormVisible = false;
-
-  flightsSearchData$!: Observable<FlightSearchState>;
 
   flightsSearchData!: FlightSearchState;
 
   availableFlights!: AvailableFlight[];
 
+  public flightsResponseIndexes = FlightsAPIResponseIndexesEnum;
+
+  private subscriptions: Subscription[] = [];
+
+  isLoading$!: Observable<boolean>;
+
+  error$!: Observable<string | null>;
+
   constructor(
     private store$: Store<AppState>,
     private location: Location,
   ) {
-    this.flightsSearchData$ = this.store$.pipe(select(selectFlightSearchData));
+    this.isLoading$ = this.store$.pipe(select(selectAvailableFlightsIsLoading));
+    this.error$ = this.store$.pipe(select(selectAvailableFlightsError));
   }
 
   ngOnInit(): void {
-    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
+    const flightsSearchDataSubscription = this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
       this.flightsSearchData = res;
     });
     this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.flightsSearchData }));
+
+    this.subscriptions.push(flightsSearchDataSubscription);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   toggleSearchFormVisibility(): void {

@@ -1,13 +1,12 @@
+/* eslint-disable no-debugger */
+/* eslint-disable consistent-return */
 import {
   Component, Input, OnDestroy, OnInit,
 } from '@angular/core';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import {
-  selectAvailableFlights, selectAvailableFlightsError,
-  selectAvailableFlightsIsLoading, selectFlightSearchData,
-} from 'src/app/redux/selectors/flights.selectors';
+import { Subscription } from 'rxjs';
+import { selectAvailableFlights } from 'src/app/redux/selectors/flights.selectors';
 import { AvailableFlight } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
@@ -20,39 +19,21 @@ import * as FlightsActions from '../../../redux/actions/flights.actions';
 export class FlightSelectionComponent implements OnInit, OnDestroy {
   @Input() responseIndex!: number;
 
-  availableFlights$!: Observable<AvailableFlight[]>;
-
-  isLoading$!: Observable<boolean>;
-
-  error$!: Observable<string | null>;
-
-  searchData$!: Observable<FlightSearchState>;
-
-  availableFlights!: AvailableFlight[];
+  @Input() searchData!: FlightSearchState;
 
   private subscriptions: Subscription[] = [];
 
-  searchData!: FlightSearchState;
+  flight!: AvailableFlight;
 
   constructor(
     private store$: Store<AppState>,
-  ) {
-    this.availableFlights$ = this.store$.pipe(select(selectAvailableFlights));
-    this.isLoading$ = this.store$.pipe(select(selectAvailableFlightsIsLoading));
-    this.error$ = this.store$.pipe(select(selectAvailableFlightsError));
-    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
-  }
+  ) { }
 
   ngOnInit(): void {
-    const availableFlightsSubscription = this.availableFlights$.subscribe((res) => {
-      this.availableFlights = res;
+    const availableFlightsSubscription = this.store$.pipe(select(selectAvailableFlights)).subscribe((res: AvailableFlight[]) => {
+      this.flight = res[this.responseIndex];
     });
-    // eslint-disable-next-line max-len
-    const searchDataSubscription = this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
-      this.searchData = res;
-    });
-    // eslint-disable-next-line max-len
-    this.subscriptions = [...this.subscriptions, availableFlightsSubscription, searchDataSubscription];
+    this.subscriptions = [...this.subscriptions, availableFlightsSubscription];
   }
 
   ngOnDestroy(): void {
@@ -61,7 +42,14 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   searchAvailableFlights(departureDate: string) {
     this.store$.dispatch(FlightsActions.setDate({ startTripDate: departureDate }));
-    // eslint-disable-next-line max-len
     this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.searchData }));
+  }
+
+  getFlightTitle() {
+    let title = `From ${this.searchData.from?.city} to ${this.searchData.to?.city}`;
+    if (this.responseIndex === 1) {
+      title = `From ${this.searchData.to?.city} to ${this.searchData.from?.city}`;
+    }
+    return title;
   }
 }
