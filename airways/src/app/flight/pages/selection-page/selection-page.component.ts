@@ -3,8 +3,11 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectFlights } from 'src/app/redux/selectors/new-flights.selectors';
-import { AppState, FlightsState } from 'src/app/redux/state.models';
+import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
+import { AppState, FlightSearchState } from 'src/app/redux/state.models';
+import { AvailableFlight } from '../../models/flight.models';
+
+import * as FlightsActions from '../../../redux/actions/flights.actions';
 
 @Component({
   selector: 'app-selection-page',
@@ -14,21 +17,24 @@ import { AppState, FlightsState } from 'src/app/redux/state.models';
 export class SelectionPageComponent implements OnInit {
   isSearchFormVisible = false;
 
-  data$!: Observable<FlightsState>;
+  flightsSearchData$!: Observable<FlightSearchState>;
 
-  data!: FlightsState;
+  flightsSearchData!: FlightSearchState;
+
+  availableFlights!: AvailableFlight[];
 
   constructor(
     private store$: Store<AppState>,
     private location: Location,
   ) {
-    this.data$ = this.store$.pipe(select(selectFlights));
+    this.flightsSearchData$ = this.store$.pipe(select(selectFlightSearchData));
   }
 
   ngOnInit(): void {
-    this.store$.pipe(select(selectFlights)).subscribe((res) => {
-      this.data = res;
+    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
+      this.flightsSearchData = res;
     });
+    this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.flightsSearchData }));
   }
 
   toggleSearchFormVisibility(): void {
@@ -36,8 +42,8 @@ export class SelectionPageComponent implements OnInit {
   }
 
   getPassengersQty() {
-    return this.data.passengers
-      ? this.data.passengers.adult + this.data.passengers.child + this.data.passengers.infant
+    return this.flightsSearchData.passengers
+      ? this.flightsSearchData.passengers.adult + this.flightsSearchData.passengers.child + this.flightsSearchData.passengers.infant
       : '';
   }
 

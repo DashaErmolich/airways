@@ -3,7 +3,7 @@ import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { CurrenciesEnum } from 'src/app/core/constants/currency.enum';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { AuthState } from '../state.models';
-import * as AuthActions from '../actions/app.actions';
+import * as AuthActions from '../actions/auth.actions';
 import { User } from '../../shared/models/user.model';
 
 function getUser(): User | null {

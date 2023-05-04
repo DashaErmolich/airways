@@ -10,7 +10,7 @@ export interface Passengers {
   infant: number;
 }
 
-export interface SearchParams {
+export interface SearchFormState {
   isRoundTrip: boolean,
   directions: Directions | null,
   range: DatesRange | null,
@@ -40,44 +40,41 @@ export interface Flight {
   price: number,
 }
 
-export interface FoundFlightsWithDate {
-  day: string | null,
-  flights: Flight[] | undefined,
-}
-
-export interface FoundFlights {
-  day: string | null;
-  flightsWithDates: FoundFlightsWithDate[] | null,
-}
-
-export interface SearchFlightsNew {
+export interface SearchFlightsAPIRequest {
   fromKey: string | undefined;
   toKey: string | undefined;
   forwardDate: string | null | undefined;
-  backDate: string | null;
+  backDate: string | null | undefined;
 }
 
-export interface AirportNew {
+export interface AirportAPIResponse {
   key:string;
   country: string;
   city: string;
   name:string;
 }
 
-export interface PriceNew {
+export interface PriceAPIResponse {
   eur: number;
   usd: number;
   rub: number;
   pln: number;
 }
 
-export interface FlightNew {
-  form: AirportNew;
-  to: AirportNew;
+export interface AvailableFlight {
+  form: AirportAPIResponse;
+  to: AirportAPIResponse;
   takeoffDate: string;
   landingDate: string;
   timeMins: string;
   avaible: number
-  price: PriceNew;
+  price: PriceAPIResponse;
   flightNumber: string;
+  prices: {
+    '0': PriceAPIResponse,
+    '1': PriceAPIResponse,
+    '2': PriceAPIResponse,
+    '-2': PriceAPIResponse,
+    '-1': PriceAPIResponse,
+  }
 }

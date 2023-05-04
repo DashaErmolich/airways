@@ -1,0 +1,9 @@
+<owl-carousel-o [options]="customOptions">
+  <ng-container *ngFor="let date of datesArr">
+    <ng-template carouselSlide>
+      <div class="carousel__item" (click)="changeDepartureDate(date)">
+        {{ date | date }}
+      </div>
+    </ng-template>
+  </ng-container>
+</owl-carousel-o>

@@ -14,18 +14,16 @@ import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
-import { ActiveFlightsComponent } from './components/active-flights/active-flights.component';
 import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
-import { CarouselHolderComponent } from './components/calendar-carousel/carousel-holder.component';
+import { CalendarCarouselComponent } from './components/calendar-carousel/calendar-carousel.component';
 
 @NgModule({
   declarations: [
     SearchPageComponent,
     SelectionPageComponent,
     SearchFormComponent,
-    ActiveFlightsComponent,
     FlightSelectionComponent,
-    CarouselHolderComponent,
+    CalendarCarouselComponent,
   ],
   imports: [
     CommonModule,

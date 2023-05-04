@@ -1,44 +1,76 @@
+import { createAction, props } from '@ngrx/store';
 import {
-  Directions, FoundFlightsWithDate, Passengers,
+  Airport, DatesRange, AvailableFlight, Passengers,
 } from 'src/app/flight/models/flight.models';
+import { FlightSearchState } from '../state.models';
 
-export enum SearchParamsActionsTypes {
-  chooseIsRoundTrip = '[SEARCH PARAMS] chooseIsRoundTrip',
-  chooseDirections = '[SEARCH PARAMS] chooseDirections',
-  chooseRange = '[SEARCH PARAMS] chooseRange',
-  chooseDate = '[SEARCH PARAMS] chooseDate',
-  choosePassengers = '[SEARCH PARAMS] choosePassengers',
+const enum FlightsActionsTypes {
+  FLIGHTS_SET_STATE = '[Flights] Set State',
+  FLIGHTS_SET_STATE_SUCCESS = '[Flights] Set State Success',
+  FLIGHTS_SET_STATE_FAILURE = '[Flights] Set State Failure',
+
+  FLIGHTS_GET_AVAILABLE = '[Flights] Get Available',
+  FLIGHTS_GET_AVAILABLE_SUCCESS = '[Flights] Get Available Success',
+  FLIGHTS_GET_AVAILABLE_FAILURE = '[Flights] Get Available Failure',
+
+  FLIGHTS_SET_PASSENGERS = '[Flights] Set Passengers',
+  FLIGHTS_SET_FROM = '[Flights] Set From',
+  FLIGHTS_SET_TO = '[Flights] Set To',
+  FLIGHTS_SET_DATE = '[Flights] Set Date',
+  FLIGHTS_SET_RANGE = '[Flights] Set Range',
 }
 
-export enum FoundFlightsActionsTypes {
-  foundFlights = '[FOUND FLIGHTS] foundFlights',
-  chooseFlightsByDay = '[FOUND FLIGHTS] chooseFlightsByDay',
-}
+export const searchFormSubmit = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_STATE,
+  props<{ flightsSearchData: FlightSearchState }>(),
+);
 
-export function chooseIsRoundTripAction(isRoundTrip: boolean) {
-  return { type: SearchParamsActionsTypes.chooseIsRoundTrip, preload: isRoundTrip };
-}
+export const searchFormSubmitSuccess = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_STATE_SUCCESS,
+  props<{ availableFlights: AvailableFlight[] }>(),
+);
 
-export function chooseDirectionsAction(directions: Directions) {
-  return { type: SearchParamsActionsTypes.chooseDirections, preload: directions };
-}
+export const searchFormSubmitFailure = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_STATE_FAILURE,
+  props<{ error: string }>(),
+);
 
-export function chooseRangeAction(range: Range) {
-  return { type: SearchParamsActionsTypes.chooseRange, preload: range };
-}
+export const getAvailableFlights = createAction(
+  FlightsActionsTypes.FLIGHTS_GET_AVAILABLE,
+  props<{ flightsSearchData: FlightSearchState }>(),
+);
 
-export function chooseDateAction(date: string) {
-  return { type: SearchParamsActionsTypes.chooseDate, preload: date };
-}
+export const getAvailableFlightsSuccess = createAction(
+  FlightsActionsTypes.FLIGHTS_GET_AVAILABLE_SUCCESS,
+  props<{ availableFlights: AvailableFlight[] }>(),
+);
 
-export function choosePassengersAction(passengers: Passengers) {
-  return { type: SearchParamsActionsTypes.choosePassengers, preload: passengers };
-}
+export const getAvailableFlightsFailure = createAction(
+  FlightsActionsTypes.FLIGHTS_GET_AVAILABLE_FAILURE,
+  props<{ error: string }>(),
+);
 
-export function foundFlightsAction(foundFlightsWithDate: FoundFlightsWithDate[]) {
-  return { type: FoundFlightsActionsTypes.foundFlights, preload: foundFlightsWithDate };
-}
+export const setPassengers = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_PASSENGERS,
+  props<{ passengers: Passengers }>(),
+);
 
-export function chooseFlightsByDayAction(day: string) {
-  return { type: FoundFlightsActionsTypes.chooseFlightsByDay, preload: day };
-}
+export const setFrom = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_FROM,
+  props<{ from: Airport }>(),
+);
+
+export const setTo = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_TO,
+  props<{ to: Airport }>(),
+);
+
+export const setRange = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_RANGE,
+  props<{ range: DatesRange }>(),
+);
+
+export const setDate = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_DATE,
+  props<{ startTripDate: string }>(),
+);

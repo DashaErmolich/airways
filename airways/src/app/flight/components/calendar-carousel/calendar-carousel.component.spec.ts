@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CarouselHolderComponent } from './carousel-holder.component';
+import { CalendarCarouselComponent } from './calendar-carousel.component';
 
 describe('CarouselHolderComponent', () => {
-  let component: CarouselHolderComponent;
-  let fixture: ComponentFixture<CarouselHolderComponent>;
+  let component: CalendarCarouselComponent;
+  let fixture: ComponentFixture<CalendarCarouselComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CarouselHolderComponent],
+      declarations: [CalendarCarouselComponent],
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(CarouselHolderComponent);
+    fixture = TestBed.createComponent(CalendarCarouselComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

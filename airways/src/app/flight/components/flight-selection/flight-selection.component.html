@@ -1,2 +1,13 @@
-<header>Direction</header>
-<app-carousel-holder [data]="dataNew"></app-carousel-holder>
+<h2 *ngIf="responseIndex === 0">From {{(searchData$ | async)?.from?.city}} to {{ (searchData$ | async)?.to?.city }}</h2>
+<h2 *ngIf="responseIndex === 1">From {{(searchData$ | async)?.to?.city}} to {{ (searchData$ | async)?.from?.city }}</h2>
+
+<app-calendar-carousel *ngIf="responseIndex === 0" (selectDepartureDateEvent)="searchAvailableFlights($event)" [departureDate]="(this.searchData$ | async)?.startTripDate || (this.searchData$ | async)?.rangeTripDates?.start"></app-calendar-carousel>
+<app-calendar-carousel *ngIf="responseIndex === 1" (selectDepartureDateEvent)="searchAvailableFlights($event)" [departureDate]="(this.searchData$ | async)?.startTripDate || (this.searchData$ | async)?.rangeTripDates?.start"></app-calendar-carousel>
+
+<div class="" >
+  <p>Flight Number {{ availableFlights[responseIndex]?.flightNumber }}</p>
+  <p>Seats: {{ availableFlights[responseIndex]?.avaible }}</p>
+  <p>Price: {{ availableFlights[responseIndex]?.price?.eur }} EUR</p>
+
+<button mat-raised-button color="primary">Select</button>
+</div>

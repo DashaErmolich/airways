@@ -1,25 +1,10 @@
 import { minCountPassengers } from 'src/app/flight/constants/constants';
-import { SearchParams } from '../../../flight/models/flight.models';
-import { SearchParamsActionsTypes } from '../../actions/flights.actions';
+import { SearchFormState } from '../../flight/models/flight.models';
+import { SearchParamsActionsTypes } from '../actions/flights-search-form.actions';
 
-export const searchParamsNode = 'searchParams';
+export const searchParamsNode = 'flights-search-form';
 
-// const initialState: SearchParams = {
-//   isRoundTrip: false,
-//   directions: {
-//     departureFrom: {
-//       city: 'Moscow', IATA: 'SVO', name: 'Sheremetyevo', country: 'Russia',
-//     },
-//     destinationTo: {
-//       city: 'Istanbul', IATA: 'IST', name: 'Ataturk', country: 'Turkey',
-//     },
-//   },
-//   range: null,
-//   date: 'Sat Apr 29 2023',
-//   passengers: { adult: 1, child: 1, infant: 1 },
-// };
-
-const initialState: SearchParams = {
+const initialState: SearchFormState = {
   isRoundTrip: false,
   directions: null,
   range: null,
@@ -28,7 +13,7 @@ const initialState: SearchParams = {
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
-export const searchParamsReducer = (state = initialState, action: any) => {
+export const flightsSearchFormReducers = (state = initialState, action: any) => {
   switch (action.type) {
     case SearchParamsActionsTypes.chooseIsRoundTrip:
       return {

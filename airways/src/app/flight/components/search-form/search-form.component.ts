@@ -10,14 +10,14 @@ import {
 import {
   // eslint-disable-next-line max-len
   chooseIsRoundTripAction, choosePassengersAction, chooseDirectionsAction, chooseRangeAction, chooseDateAction, chooseFlightsByDayAction,
-} from 'src/app/redux/actions/flights.actions';
-import { selectFlights } from 'src/app/redux/selectors/new-flights.selectors';
-import { FlightsState } from 'src/app/redux/state.models';
+} from 'src/app/redux/actions/flights-search-form.actions';
+import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
+import { FlightSearchState } from 'src/app/redux/state.models';
 import { minCountPassengers } from '../../constants/constants';
 import { dataOld } from '../../constants/data';
-import { Airport, SearchParams, Passengers } from '../../models/flight.models';
+import { Airport, SearchFormState, Passengers } from '../../models/flight.models';
 
-import * as FlightsActions from '../../../redux/actions/new-flights.actions';
+import * as FlightsActions from '../../../redux/actions/flights.actions';
 
 @Component({
   selector: 'app-search-form',
@@ -33,16 +33,16 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   filteredAirportsTo!: Observable<Airport[]>;
 
-  searchParams!: SearchParams;
+  searchParams!: SearchFormState;
 
   searchParams$ = new Subscription();
 
-  data!: FlightsState;
+  data!: FlightSearchState;
 
   isSearchPage = true;
 
   constructor(
-    private store$: Store<SearchParams>,
+    private store$: Store<SearchFormState>,
     private router: Router,
     private route: ActivatedRoute,
   ) {}
@@ -51,7 +51,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.isSearchPage = this.route.snapshot.routeConfig?.path !== 'selection';
 
     this.store$
-      .pipe(select(selectFlights))
+      .pipe(select(selectFlightSearchData))
       .subscribe((res) => { this.data = res; });
 
     this.searchForm = new FormGroup({
@@ -230,7 +230,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   saveCurrentState() {
     this.store$.dispatch(FlightsActions.searchFormSubmit({
-      flightsState: {
+      flightsSearchData: {
         isRoundTrip: this.searchForm.value.isRoundTrip,
         isOneWayTrip: !this.searchForm.value.isRoundTrip,
         from: this.searchForm.value.directions.departureFrom,

@@ -7,8 +7,9 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import { ActiveUser } from 'src/app/shared/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
-import * as AuthActions from '../actions/app.actions';
-import * as FlightsActions from '../actions/new-flights.actions';
+import { FlightsService } from 'src/app/flight/services/flights.service';
+import * as AuthActions from '../actions/auth.actions';
+import * as FlightsActions from '../actions/flights.actions';
 
 @Injectable()
 export class AuthEffects {
@@ -59,16 +60,27 @@ export class AuthEffects {
   setFlightState$ = createEffect(
     () => this.actions$.pipe(
       ofType(FlightsActions.searchFormSubmit),
-      tap(({ flightsState }) => {
+      tap(({ flightsSearchData: flightsState }) => {
         localStorage.setItem(LocalStorageKeysEnum.Flights, JSON.stringify(flightsState));
       }),
     ),
     { dispatch: false },
   );
 
+  getAvailableFlights$ = createEffect(() => this.actions$.pipe(
+    ofType(FlightsActions.getAvailableFlights),
+    // eslint-disable-next-line max-len
+    mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchFlights(flightsState).pipe(
+      map((res) => FlightsActions.getAvailableFlightsSuccess({ availableFlights: res })),
+      // eslint-disable-next-line max-len
+      catchError(async (error) => FlightsActions.getAvailableFlightsFailure({ error: error.message })),
+    )),
+  ));
+
   constructor(
     private actions$: Actions,
     private authService: AuthService,
     private dialog: MatDialog,
+    private flightsService: FlightsService,
   ) { }
 }

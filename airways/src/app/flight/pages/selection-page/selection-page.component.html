@@ -1,27 +1,24 @@
-<p>From: {{ data.from?.city }}</p>
-
-<p>To: {{ data.to?.city }}</p>
-
-<p>Return: {{ data.startTripDate | date }}</p>
-
+<p>From: {{ flightsSearchData.from?.city }}</p>
+<p>To: {{ flightsSearchData.to?.city }}</p>
+<p *ngIf="flightsSearchData.startTripDate">Start trip date: {{ flightsSearchData.startTripDate | date }}</p>
+<p *ngIf="flightsSearchData.rangeTripDates?.start">Start trip date: {{ flightsSearchData.rangeTripDates?.start | date }}</p>
+<p *ngIf="flightsSearchData.rangeTripDates?.end">End trip date: {{ flightsSearchData.rangeTripDates?.end | date }}</p>
 <p>Passengers: {{ getPassengersQty()}}</p>
 
 <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
 
 <div class="">
-  <button mat-raised-button color="primary" (click)="toggleSearchFormVisibility()">Edit</button>
+  <button mat-raised-button color="warn" (click)="toggleSearchFormVisibility()">Edit</button>
 </div>
+
+<app-flight-selection [responseIndex]="0"></app-flight-selection>
+<app-flight-selection *ngIf="flightsSearchData.isRoundTrip" [responseIndex]="1"></app-flight-selection>
 
 <div class="">
   <button mat-raised-button (click)="goBack()">
     Back
   </button>
-</div>
-
-<div class="">
   <button mat-raised-button color="primary" routerLink="/booking">
     Continue
   </button>
 </div>
-
-<app-flight-selection [data]="data"></app-flight-selection>

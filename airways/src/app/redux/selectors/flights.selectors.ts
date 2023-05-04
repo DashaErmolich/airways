@@ -1,46 +1,34 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import {
-  Directions, FoundFlights, FoundFlightsWithDate, SearchParams,
-} from 'src/app/flight/models/flight.models';
-import { searchParamsNode } from '../reducers/search-params/search-params.reducer';
-import { foundFlightsNode } from '../reducers/found-flights/found-flights.reducer';
+import { AvailableFlightsState, FlightSearchState } from '../state.models';
+import { flightsReducersNode } from '../reducers/flights.reducers';
+import { availableFlightsReducersNode } from '../reducers/available-flights.reducers';
 
-export const selectSearchParamsFeature = createFeatureSelector<SearchParams>(searchParamsNode);
+export const selectFlightsFeature = createFeatureSelector<FlightSearchState>(flightsReducersNode);
 
-export const selectFoundFlightsFeature = createFeatureSelector<FoundFlights>(foundFlightsNode);
+// eslint-disable-next-line max-len
+export const selectAvailableFlightsFeature = createFeatureSelector<AvailableFlightsState>(availableFlightsReducersNode);
 
-export const selectAllSearchParams = createSelector(
-  selectSearchParamsFeature,
-  (state: SearchParams): SearchParams => state,
+export const selectFlightSearchData = createSelector(
+  selectFlightsFeature,
+  (state) => state,
 );
 
-export const selectDirections = createSelector(
-  selectSearchParamsFeature,
-  (state: SearchParams): Directions | null => state.directions,
+export const selectIsOneWayTrip = createSelector(
+  selectFlightsFeature,
+  (state) => state.isOneWayTrip,
 );
 
-export const selectDate = createSelector(
-  selectSearchParamsFeature,
-  (state: SearchParams): string | null => state.date,
+export const selectAvailableFlights = createSelector(
+  selectAvailableFlightsFeature,
+  (state) => state.availableFlights,
 );
 
-export const selectFoundFlights = createSelector(
-  selectFoundFlightsFeature,
-  (state: FoundFlights): FoundFlights => state,
+export const selectAvailableFlightsIsLoading = createSelector(
+  selectAvailableFlightsFeature,
+  (state) => state.isLoading,
 );
 
-export const selectFoundFlightsWithDate = createSelector(
-  selectFoundFlightsFeature,
-  (state: FoundFlights): FoundFlightsWithDate[] | null => state.flightsWithDates,
-);
-
-export const selectDay = createSelector(
-  selectFoundFlightsFeature,
-  (state: FoundFlights): string | null => state.day,
-);
-
-export const selectFlightsByDay = createSelector(
-  selectFoundFlightsFeature,
-  // eslint-disable-next-line max-len
-  (state: FoundFlights): FoundFlightsWithDate | undefined => state.flightsWithDates?.find((el) => el.day === state.day),
+export const selectAvailableFlightsError = createSelector(
+  selectAvailableFlightsFeature,
+  (state) => state.error,
 );

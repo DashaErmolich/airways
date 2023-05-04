@@ -7,12 +7,12 @@ import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
 import { Observable } from 'rxjs';
-import { selectError } from 'src/app/redux/selectors/app.selectors';
+import { selectError } from 'src/app/redux/selectors/auth.selectors';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
-import * as AuthActions from '../../../redux/actions/app.actions';
+import * as AuthActions from '../../../redux/actions/auth.actions';
 
 @Component({
   selector: 'app-sign-up-tab',

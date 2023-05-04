@@ -6,8 +6,8 @@ import { FormValidatorService } from 'src/app/core/services/form-validator.servi
 import { AppState } from 'src/app/redux/state.models';
 import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
 import { Observable } from 'rxjs';
-import { selectError } from 'src/app/redux/selectors/app.selectors';
-import * as AuthActions from '../../../redux/actions/app.actions';
+import { selectError } from 'src/app/redux/selectors/auth.selectors';
+import * as AuthActions from '../../../redux/actions/auth.actions';
 
 @Component({
   selector: 'app-login-tab',
