@@ -2,10 +2,18 @@ import {
   Component, EventEmitter, Input, OnInit, Output,
 } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-import { FlightSearchState } from 'src/app/redux/state.models';
+import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import moment from 'moment';
+import { Store, select } from '@ngrx/store';
+import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import { AvailableFlight } from '../../models/flight.models';
+import { FlightsService } from '../../services/flights.service';
+
+interface Slide {
+  date: string,
+  price: number,
+}
 
 @Component({
   selector: 'app-calendar-carousel',
@@ -36,7 +44,7 @@ export class CalendarCarouselComponent implements OnInit {
         items: 3,
       },
       940: {
-        items: 4,
+        items: 5,
       },
     },
     nav: true,
@@ -48,33 +56,52 @@ export class CalendarCarouselComponent implements OnInit {
 
   datesArr!: (string | null | undefined)[];
 
+  searchData!: FlightSearchState;
+
+  slides: Slide[] = [];
+
+  constructor(
+    private store$: Store<AppState>,
+    private flightsService: FlightsService,
+  ) { }
+
   ngOnInit(): void {
     console.log(this.flight);
-    this.datesArr = this.getDatesArr(this.flight.takeoffDate);
+    this.slides = this.getDatesArr(this.flight.takeoffDate);
+
+    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
+      this.searchData = res;
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getDatesArr(chosenDate: string | null | undefined) {
-    const result: string[] = [];
-    if (typeof chosenDate === 'string') {
-      // let date = moment(chosenDate).subtract(2, 'days').toISOString();
-      const date = moment(chosenDate);
-      const today = moment();
+  getDatesArr(chosenDate: string) {
+    const result: Slide[] = [];
 
-      let startDate = date.toISOString();
+    const activeDate = moment(chosenDate);
+    const today = moment(new Date());
 
-      if (date.diff(today) <= 2) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        startDate = moment(chosenDate).subtract(2, 'days').toISOString();
-      }
+    let startDate = today.toLocaleString();
 
-      for (let i = 0; i < 1000; i += 1) {
-        if (i === 0) {
-          result.push(startDate);
-        } else {
-          startDate = moment(startDate).add(1, 'days').toISOString();
-          result.push(startDate);
-        }
+    console.log(activeDate.diff(today, 'days'));
+
+    if (activeDate.diff(today, 'days') <= 2) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      startDate = activeDate.subtract(1, 'days').toLocaleString();
+    }
+
+    for (let i = 0; i <= 7; i += 1) {
+      if (i === 0) {
+        result.push({
+          date: startDate,
+          price: 1,
+        });
+      } else {
+        startDate = moment(startDate).add(1, 'days').toLocaleString();
+        result.push({
+          date: startDate,
+          price: 2,
+        });
       }
     }
     return result;
@@ -84,5 +111,20 @@ export class CalendarCarouselComponent implements OnInit {
     if (typeof date === 'string') {
       this.selectDepartureDateEvent.emit(date);
     }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  isInvalidDate(date: string | null | undefined) {
+    let result = false;
+
+    const now = new Date().getTime();
+
+    const chosen = new Date(String(date)).getTime();
+
+    if ((chosen - now) < 0) {
+      result = true;
+    }
+
+    return result;
   }
 }

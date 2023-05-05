@@ -1,16 +1,16 @@
 <div *ngIf="flight">
   <h2>{{ getFlightTitle() }}</h2>
 
-  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [flight]="flight"></app-calendar-carousel>
+  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [flight]="flight" ></app-calendar-carousel>
 
   <div class="flight__container">
     <p>From: {{ searchData.from?.country }} {{ searchData.from?.name }}</p>
-    <p>Take off: {{ flight.takeoffDate }}</p>
+    <p>Take off: {{ flight.takeoffDate | date }}</p>
 
     <p>Minutes: {{ flight.timeMins }}</p>
 
     <p>To: {{ searchData.to?.country }} {{ searchData.to?.name }}</p>
-    <p>Landing: {{ flight.landingDate }}</p>
+    <p>Landing: {{ flight.landingDate | date }}</p>
 
     <p>Flight Number: {{ flight.flightNumber }}</p>
 

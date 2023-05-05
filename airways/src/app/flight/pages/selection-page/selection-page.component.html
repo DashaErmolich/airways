@@ -17,8 +17,8 @@
     <button mat-raised-button color="warn" (click)="toggleSearchFormVisibility()">Edit</button>
   </div>
 
-  <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex" [searchData]="flightsSearchData"></app-flight-selection>
-  <app-flight-selection *ngIf="flightsSearchData.isRoundTrip" [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex" [searchData]="flightsSearchData"></app-flight-selection>
+  <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex"></app-flight-selection>
+  <app-flight-selection *ngIf="flightsSearchData.isRoundTrip" [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex"></app-flight-selection>
 
   <div class="">
     <button mat-raised-button (click)="goBack()">

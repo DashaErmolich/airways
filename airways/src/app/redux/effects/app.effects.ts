@@ -77,6 +77,16 @@ export class AuthEffects {
     )),
   ));
 
+  // getAllAvailableFlights$ = createEffect(() => this.actions$.pipe(
+  //   ofType(FlightsActions.getAvailableFlights),
+  //   // eslint-disable-next-line max-len
+  //   mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchMultipleFlights(flightsState).pipe(
+  //     map((res) => FlightsActions.getAvailableFlightsSuccess({ availableFlights: res })),
+  //     // eslint-disable-next-line max-len
+  //     catchError(async (error) => FlightsActions.getAvailableFlightsFailure({ error: error.message })),
+  //   )),
+  // ));
+
   constructor(
     private actions$: Actions,
     private authService: AuthService,

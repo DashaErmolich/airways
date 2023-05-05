@@ -6,10 +6,13 @@ import {
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { selectAvailableFlights } from 'src/app/redux/selectors/flights.selectors';
-import { AvailableFlight } from '../../models/flight.models';
+import { selectAvailableFlights, selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import moment from 'moment';
+import { AvailableFlight, DatesRange } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
+import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
 
 @Component({
   selector: 'app-flight-selection',
@@ -19,11 +22,11 @@ import * as FlightsActions from '../../../redux/actions/flights.actions';
 export class FlightSelectionComponent implements OnInit, OnDestroy {
   @Input() responseIndex!: number;
 
-  @Input() searchData!: FlightSearchState;
-
-  private subscriptions: Subscription[] = [];
+  searchData!: FlightSearchState;
 
   flight!: AvailableFlight;
+
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private store$: Store<AppState>,
@@ -33,15 +36,43 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     const availableFlightsSubscription = this.store$.pipe(select(selectAvailableFlights)).subscribe((res: AvailableFlight[]) => {
       this.flight = res[this.responseIndex];
     });
-    this.subscriptions = [...this.subscriptions, availableFlightsSubscription];
+
+    const flightsSearchDataSubscription = this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
+      this.searchData = res;
+    });
+    this.subscriptions = [...this.subscriptions, availableFlightsSubscription, flightsSearchDataSubscription];
   }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
-  searchAvailableFlights(departureDate: string) {
-    this.store$.dispatch(FlightsActions.setDate({ startTripDate: departureDate }));
+  searchAvailableFlights(date: string) {
+    if (this.searchData.isOneWayTrip) {
+      this.store$.dispatch(FlightsActions.setDate({ startTripDate: date }));
+    }
+
+    if (this.searchData.isRoundTrip) {
+      const newRange: DatesRange = {
+        start: this.searchData.rangeTripDates!.start,
+        end: this.searchData.rangeTripDates!.end,
+      };
+
+      if (this.responseIndex === FlightsAPIResponseIndexesEnum.OneWayFlightResponseIndex) {
+        newRange.start = date;
+
+        if (moment(newRange.start).diff(moment(newRange.end)) > 0) {
+          newRange.end = newRange.start;
+        }
+      }
+
+      if (this.responseIndex === FlightsAPIResponseIndexesEnum.ReturnFlightResponseIndex) {
+        newRange.end = date;
+      }
+
+      this.store$.dispatch(FlightsActions.setRange({ range: newRange }));
+    }
+
     this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.searchData }));
   }
 

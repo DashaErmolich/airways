@@ -9,6 +9,7 @@ import { AvailableFlight } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
+import { FlightsService } from '../../services/flights.service';
 
 @Component({
   selector: 'app-selection-page',
@@ -33,6 +34,7 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
   constructor(
     private store$: Store<AppState>,
     private location: Location,
+    private flightsService: FlightsService,
   ) {
     this.isLoading$ = this.store$.pipe(select(selectAvailableFlightsIsLoading));
     this.error$ = this.store$.pipe(select(selectAvailableFlightsError));
@@ -41,6 +43,13 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const flightsSearchDataSubscription = this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
       this.flightsSearchData = res;
+      this.flightsService.searchMultipleFlights(res).subscribe((ress) => {
+        console.log(ress);
+        this.flightsService.resetFoundFlights().subscribe((res2) => console.log(res2));
+        this.flightsService.saveFoundFlights(ress).subscribe((res1) => {
+          console.log(res1);
+        });
+      });
     });
     this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.flightsSearchData }));
 
