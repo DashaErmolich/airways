@@ -8,6 +8,8 @@ export const initialState: AvailableFlightsState = {
   isLoading: false,
   availableFlights: [],
   error: null,
+  activeFlights: [],
+  slides: [],
 };
 
 export const availableFlightsReducers = createReducer(
@@ -33,6 +35,20 @@ export const availableFlightsReducers = createReducer(
       ...state,
       isLoading: false,
       error: action.error,
+    }),
+  ),
+  on(
+    FlightsActions.setActiveFlights,
+    (state, action) => ({
+      ...state,
+      activeFlights: action.activeFlights,
+    }),
+  ),
+  on(
+    FlightsActions.setSlides,
+    (state, action) => ({
+      ...state,
+      slides: action.slides,
     }),
   ),
 );

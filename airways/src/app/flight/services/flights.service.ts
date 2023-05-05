@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, forkJoin } from 'rxjs';
+import {
+  Observable, forkJoin,
+} from 'rxjs';
 import { FlightSearchState } from 'src/app/redux/state.models';
 import moment from 'moment';
 import { AirportAPIResponse, AvailableFlight, SearchFlightsAPIRequest } from '../models/flight.models';
@@ -42,19 +44,8 @@ export class FlightsService {
 
   public searchMultipleFlights(
     searchFlightsData: FlightSearchState,
+    arr: string[],
   ): Observable<AvailableFlight[][]> {
-    const today = moment();
-
-    let arr: string[] = [];
-
-    for (let i = 0; i < 10; i += 1) {
-      if (i === 0) {
-        arr = [...arr, today.toLocaleString()];
-      } else {
-        arr = [...arr, today.add(1, 'day').toLocaleString()];
-      }
-    }
-
     // eslint-disable-next-line prefer-const
     const arr$: Observable<AvailableFlight[]>[] = [];
 
@@ -67,12 +58,28 @@ export class FlightsService {
   }
 
   resetFoundFlights() {
-    return this.http.post(`${this.BASE_URL_FAKE}/reset`, {
+    return this.http.post(`${this.BASE_URL_FAKE}/merge`, {
       flights: [],
     });
   }
 
-  saveFoundFlights(data: AvailableFlight[][]): Observable<AvailableFlight[][]> {
+  saveFoundFlights(data: AvailableFlight[][]) {
+    // return this.resetFoundFlights().pipe(
+    //   concatMap(() => this.http.post<AvailableFlight[][]>(`${this.BASE_URL_FAKE}/flights`, data)),
+    // );
+
+    // return forkJoin([
+    //   this.resetFoundFlights(),
+    //   this.http.post<AvailableFlight[][]>(`${this.BASE_URL_FAKE}/flights`, data),
+    // ]);
     return this.http.post<AvailableFlight[][]>(`${this.BASE_URL_FAKE}/flights`, data);
+  }
+
+  getChosenFlight(date: string): Observable<AvailableFlight> {
+    return this.http.get<AvailableFlight>(`${this.BASE_URL_FAKE}/flights`, {
+      params: {
+        takeoffDate: date,
+      },
+    });
   }
 }

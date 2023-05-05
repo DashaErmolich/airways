@@ -1,18 +1,16 @@
+/* eslint-disable class-methods-use-this */
 import {
   Component, EventEmitter, Input, OnInit, Output,
 } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
-import { AppState, FlightSearchState } from 'src/app/redux/state.models';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import moment from 'moment';
+import { AppState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
-import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
+import { selectSlides } from 'src/app/redux/selectors/flights.selectors';
 import { AvailableFlight } from '../../models/flight.models';
-import { FlightsService } from '../../services/flights.service';
 
-interface Slide {
-  date: string,
-  price: number,
+export interface Slide {
+  flightDate: string,
+  data: AvailableFlight,
 }
 
 @Component({
@@ -21,18 +19,20 @@ interface Slide {
   styleUrls: ['./calendar-carousel.component.scss'],
 })
 export class CalendarCarouselComponent implements OnInit {
-  @Input() flight!: AvailableFlight;
+  @Input() responseIndex!: number;
 
   @Output() selectDepartureDateEvent = new EventEmitter<string>();
 
+  activeFlight!: AvailableFlight;
+
   customOptions: OwlOptions = {
-    loop: false,
+    loop: true,
     mouseDrag: false,
     touchDrag: false,
     pullDrag: false,
     dots: false,
     navSpeed: 700,
-    navText: ['<span>&ShortLeftArrow;</span>', '<span>&ShortRightArrow;</span>'],
+    // navText: ['<span>&ShortLeftArrow;</span>', '<span>&ShortRightArrow;</span>'],
     responsive: {
       0: {
         items: 1,
@@ -47,74 +47,25 @@ export class CalendarCarouselComponent implements OnInit {
         items: 5,
       },
     },
-    nav: true,
   };
-
-  flightData!: FlightSearchState;
-
-  dataNew!: AvailableFlight[];
-
-  datesArr!: (string | null | undefined)[];
-
-  searchData!: FlightSearchState;
 
   slides: Slide[] = [];
 
   constructor(
     private store$: Store<AppState>,
-    private flightsService: FlightsService,
   ) { }
 
   ngOnInit(): void {
-    console.log(this.flight);
-    this.slides = this.getDatesArr(this.flight.takeoffDate);
-
-    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
-      this.searchData = res;
+    this.store$.pipe(select(selectSlides)).subscribe((res) => {
+      this.slides = res;
     });
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  getDatesArr(chosenDate: string) {
-    const result: Slide[] = [];
-
-    const activeDate = moment(chosenDate);
-    const today = moment(new Date());
-
-    let startDate = today.toLocaleString();
-
-    console.log(activeDate.diff(today, 'days'));
-
-    if (activeDate.diff(today, 'days') <= 2) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      startDate = activeDate.subtract(1, 'days').toLocaleString();
-    }
-
-    for (let i = 0; i <= 7; i += 1) {
-      if (i === 0) {
-        result.push({
-          date: startDate,
-          price: 1,
-        });
-      } else {
-        startDate = moment(startDate).add(1, 'days').toLocaleString();
-        result.push({
-          date: startDate,
-          price: 2,
-        });
-      }
-    }
-    return result;
+  changeDepartureDate(date: string) {
+    this.selectDepartureDateEvent.emit(date);
   }
 
-  changeDepartureDate(date: string | null | undefined) {
-    if (typeof date === 'string') {
-      this.selectDepartureDateEvent.emit(date);
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  isInvalidDate(date: string | null | undefined) {
+  isInvalidDate(date: string) {
     let result = false;
 
     const now = new Date().getTime();
@@ -126,5 +77,9 @@ export class CalendarCarouselComponent implements OnInit {
     }
 
     return result;
+  }
+
+  getPassedData() {
+    console.log('next');
   }
 }

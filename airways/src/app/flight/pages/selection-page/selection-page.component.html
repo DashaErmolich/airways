@@ -24,7 +24,7 @@
     <button mat-raised-button (click)="goBack()">
       Back
     </button>
-    <button mat-raised-button color="primary" routerLink="/booking">
+    <button mat-raised-button color="primary" routerLink="/booking" *ngIf="isAuth$ | async">
       Continue
     </button>
   </div>

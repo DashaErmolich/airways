@@ -1,63 +1,76 @@
-/* eslint-disable max-len */
+/* eslint-disable no-plusplus */
+/* eslint-disable class-methods-use-this */
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component, OnInit,
+} from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { selectAvailableFlightsError, selectAvailableFlightsIsLoading, selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
+import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
+import moment from 'moment';
+import { SlidesOutputData } from 'ngx-owl-carousel-o';
 import { AvailableFlight } from '../../models/flight.models';
-
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
 import { FlightsService } from '../../services/flights.service';
+import { Slide } from '../../components/calendar-carousel/calendar-carousel.component';
 
 @Component({
   selector: 'app-selection-page',
   templateUrl: './selection-page.component.html',
   styleUrls: ['./selection-page.component.scss'],
 })
-export class SelectionPageComponent implements OnInit, OnDestroy {
+export class SelectionPageComponent implements OnInit {
   isSearchFormVisible = false;
 
   flightsSearchData!: FlightSearchState;
 
-  availableFlights!: AvailableFlight[];
-
   public flightsResponseIndexes = FlightsAPIResponseIndexesEnum;
-
-  private subscriptions: Subscription[] = [];
 
   isLoading$!: Observable<boolean>;
 
   error$!: Observable<string | null>;
 
+  public isAuth$: Observable<boolean>;
+
+  slides: Slide[] = [];
+
+  activeSlides!: SlidesOutputData;
+
+  datesArr: string[] = [];
+
+  allSlides: Slide[] = [];
+
+  allFlights: AvailableFlight[][] = [];
+
   constructor(
     private store$: Store<AppState>,
     private location: Location,
-    private flightsService: FlightsService,
+    private fl: FlightsService,
   ) {
     this.isLoading$ = this.store$.pipe(select(selectAvailableFlightsIsLoading));
     this.error$ = this.store$.pipe(select(selectAvailableFlightsError));
+    this.isAuth$ = this.store$.pipe(select(selectIsAuth));
   }
 
   ngOnInit(): void {
-    const flightsSearchDataSubscription = this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
-      this.flightsSearchData = res;
-      this.flightsService.searchMultipleFlights(res).subscribe((ress) => {
-        console.log(ress);
-        this.flightsService.resetFoundFlights().subscribe((res2) => console.log(res2));
-        this.flightsService.saveFoundFlights(ress).subscribe((res1) => {
-          console.log(res1);
+    this.store$.pipe(select(selectFlightSearchData)).subscribe((searchState) => {
+      this.flightsSearchData = searchState;
+      this.datesArr = this.getDatesArr(this.flightsSearchData.startTripDate!);
+      this.fl.searchMultipleFlights(this.flightsSearchData, this.datesArr).subscribe((res2) => {
+        this.allFlights = res2;
+        this.allFlights.forEach((item, i) => {
+          this.allSlides.push({
+            flightDate: this.datesArr[i],
+            data: item[0],
+          });
         });
+        this.store$.dispatch(FlightsActions.setActiveFlights({ activeFlights: [this.allSlides[3].data] }));
+        this.store$.dispatch(FlightsActions.setSlides({ slides: this.allSlides }));
       });
     });
-    this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.flightsSearchData }));
-
-    this.subscriptions.push(flightsSearchDataSubscription);
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   toggleSearchFormVisibility(): void {
@@ -72,5 +85,27 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.location.back();
+  }
+
+  getDatesArr(activeDate: string) {
+    const result = [];
+
+    console.log(activeDate);
+
+    for (let i = -3; i < 3; i++) {
+      if (i < 0) {
+        result.push(moment(activeDate).subtract(Math.abs(i), 'days').toLocaleString());
+      }
+
+      if (i === 0) {
+        result.push(moment(activeDate).toLocaleString());
+      }
+
+      if (i > 0) {
+        result.push(moment(activeDate).add(i, 'days').toLocaleString());
+      }
+    }
+
+    return result;
   }
 }

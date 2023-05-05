@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import {
   Airport, DatesRange, AvailableFlight, Passengers,
 } from 'src/app/flight/models/flight.models';
+import { Slide } from 'src/app/flight/components/calendar-carousel/calendar-carousel.component';
 import { FlightSearchState } from '../state.models';
 
 const enum FlightsActionsTypes {
@@ -12,6 +13,9 @@ const enum FlightsActionsTypes {
   FLIGHTS_GET_AVAILABLE = '[Flights] Get Available',
   FLIGHTS_GET_AVAILABLE_SUCCESS = '[Flights] Get Available Success',
   FLIGHTS_GET_AVAILABLE_FAILURE = '[Flights] Get Available Failure',
+
+  FLIGHTS_SET_ACTIVE_FLIGHT = '[Flights] Set Active Flight',
+  FLIGHTS_SET_SLIDES = '[Flights] Set Slides',
 
   FLIGHTS_SET_PASSENGERS = '[Flights] Set Passengers',
   FLIGHTS_SET_FROM = '[Flights] Set From',
@@ -73,4 +77,14 @@ export const setRange = createAction(
 export const setDate = createAction(
   FlightsActionsTypes.FLIGHTS_SET_DATE,
   props<{ startTripDate: string }>(),
+);
+
+export const setActiveFlights = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_ACTIVE_FLIGHT,
+  props<{ activeFlights: AvailableFlight[] }>(),
+);
+
+export const setSlides = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_SLIDES,
+  props<{ slides: Slide[] }>(),
 );

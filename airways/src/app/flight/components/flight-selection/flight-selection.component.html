@@ -1,10 +1,10 @@
-<div *ngIf="flight">
+<div *ngIf="flight" >
   <h2>{{ getFlightTitle() }}</h2>
 
-  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [flight]="flight" ></app-calendar-carousel>
+  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [responseIndex]="responseIndex"></app-calendar-carousel>
 
   <div class="flight__container">
-    <p>From: {{ searchData.from?.country }} {{ searchData.from?.name }}</p>
+    <p>From: {{ responseIndex === 0 ? searchData.from?.country : searchData.to?.country }} {{ responseIndex === 0 ? searchData.from?.name : searchData.to?.name }}</p>
     <p>Take off: {{ flight.takeoffDate | date }}</p>
 
     <p>Minutes: {{ flight.timeMins }}</p>
@@ -18,7 +18,9 @@
 
     <p>Price: {{ flight.price.eur }} EUR</p>
 
-    <button mat-raised-button color="primary">Select</button>
+    <button mat-raised-button color="primary" routerLink="/booking" [disabled]="(isAuth$ | async) === false">Select</button>
+
+    <span *ngIf="(isAuth$ | async) === false" style="color: red;">You must be signed in the app to continue</span>
   </div>
 </div>
 

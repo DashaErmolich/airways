@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "db": "json-server db.json -m ./node_modules/json-server-auth ./node_modules/json-server-reset"
+    "db": "json-server db.json -m ./node_modules/json-server-auth --middlewares ./node_modules/json-server-reset --middlewares ./node_modules/json-server-reset/src/merge"
   },
   "private": true,
   "dependencies": {

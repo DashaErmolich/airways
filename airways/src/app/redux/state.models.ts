@@ -1,3 +1,4 @@
+import { Slide } from '../flight/components/calendar-carousel/calendar-carousel.component';
 import {
   Passengers, DatesRange, Airport, AvailableFlight,
 } from '../flight/models/flight.models';
@@ -26,6 +27,8 @@ export interface AvailableFlightsState {
   isLoading: boolean;
   availableFlights: AvailableFlight[];
   error: string | null;
+  activeFlights: AvailableFlight[],
+  slides: Slide[],
 }
 
 export interface AppState {

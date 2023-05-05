@@ -32,3 +32,13 @@ export const selectAvailableFlightsError = createSelector(
   selectAvailableFlightsFeature,
   (state) => state.error,
 );
+
+export const selectActiveFlights = createSelector(
+  selectAvailableFlightsFeature,
+  (state) => state.activeFlights,
+);
+
+export const selectSlides = createSelector(
+  selectAvailableFlightsFeature,
+  (state) => state.slides,
+);

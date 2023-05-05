@@ -1,16 +1,21 @@
-<owl-carousel-o [options]="customOptions">
-  <ng-container *ngFor="let slide of slides">
+<owl-carousel-o [options]="customOptions" #owlCar (translated)="getPassedData()">
+  <ng-container *ngFor="let slide of slides, index as i">
     <ng-template carouselSlide let-owlItem>
       {{ owlItem.id }}
-      <button class="carousel__item" (click)="changeDepartureDate(slide.date)" [disabled]="isInvalidDate(slide.date)">
+      <button class="carousel__item" [disabled]="isInvalidDate(slide.flightDate)">
         <p>
-          {{ slide.date | date }}
+          {{ slide.flightDate | date }}
         </p>
         <p>
-          {{ flight.price.eur }} EUR
+          {{ slide.data.price.eur }} EUR
         </p>
       </button>
     </ng-template>
   </ng-container>
 </owl-carousel-o>
+
+<p>
+  <button mat-raised-button color="primary" (click)="owlCar.prev()">prev</button>
+  <button mat-raised-button color="primary" (click)="owlCar.next()">next</button>
+</p>
 

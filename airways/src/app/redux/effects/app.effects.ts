@@ -67,25 +67,21 @@ export class AuthEffects {
     { dispatch: false },
   );
 
-  getAvailableFlights$ = createEffect(() => this.actions$.pipe(
-    ofType(FlightsActions.getAvailableFlights),
-    // eslint-disable-next-line max-len
-    mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchFlights(flightsState).pipe(
-      map((res) => FlightsActions.getAvailableFlightsSuccess({ availableFlights: res })),
-      // eslint-disable-next-line max-len
-      catchError(async (error) => FlightsActions.getAvailableFlightsFailure({ error: error.message })),
-    )),
-  ));
-
-  // getAllAvailableFlights$ = createEffect(() => this.actions$.pipe(
+  // getAvailableFlights$ = createEffect(() => this.actions$.pipe(
   //   ofType(FlightsActions.getAvailableFlights),
-  //   // eslint-disable-next-line max-len
-  //   mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchMultipleFlights(flightsState).pipe(
+  //   mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchFlights(flightsState).pipe(
   //     map((res) => FlightsActions.getAvailableFlightsSuccess({ availableFlights: res })),
-  //     // eslint-disable-next-line max-len
   //     catchError(async (error) => FlightsActions.getAvailableFlightsFailure({ error: error.message })),
   //   )),
   // ));
+
+  getAvailableFlights$ = createEffect(() => this.actions$.pipe(
+    ofType(FlightsActions.getAvailableFlights),
+    mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchFlights(flightsState).pipe(
+      map((res) => FlightsActions.getAvailableFlightsSuccess({ availableFlights: res })),
+      catchError(async (error) => FlightsActions.getAvailableFlightsFailure({ error: error.message })),
+    )),
+  ));
 
   constructor(
     private actions$: Actions,
