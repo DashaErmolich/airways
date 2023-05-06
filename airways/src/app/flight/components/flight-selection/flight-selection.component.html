@@ -1,4 +1,4 @@
-<div *ngIf="flight" >
+<div *ngIf="flight && !newFlight" >
   <h2>{{ getFlightTitle() }}</h2>
 
   <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [responseIndex]="responseIndex"></app-calendar-carousel>
@@ -17,6 +17,32 @@
     <p [appFlightAvailableSeats]="flight.avaible">Seats available: {{ flight.avaible }}</p>
 
     <p>Price: {{ flight.price.eur }} EUR</p>
+
+    <button mat-raised-button color="primary" routerLink="/booking" [disabled]="(isAuth$ | async) === false">Select</button>
+
+    <span *ngIf="(isAuth$ | async) === false" style="color: red;">You must be signed in the app to continue</span>
+  </div>
+</div>
+
+<div *ngIf="newFlight" >
+  <h2>{{ getFlightTitle() }}</h2>
+
+  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [responseIndex]="responseIndex"></app-calendar-carousel>
+
+  <div class="flight__container">
+    <p>From: {{ responseIndex === 0 ? searchData.from?.country : searchData.to?.country }} {{ responseIndex === 0 ? searchData.from?.name : searchData.to?.name }}</p>
+    <p>Take off: {{ newFlight.takeoffDate | date }}</p>
+
+    <p>Minutes: {{ newFlight.timeMins }}</p>
+
+    <p>To: {{ searchData.to?.country }} {{ searchData.to?.name }}</p>
+    <p>Landing: {{ newFlight.landingDate | date }}</p>
+
+    <p>Flight Number: {{ newFlight.flightNumber }}</p>
+
+    <p [appFlightAvailableSeats]="newFlight.avaible">Seats available: {{ newFlight.avaible }}</p>
+
+    <p>Price: {{ newFlight.price.eur }} EUR</p>
 
     <button mat-raised-button color="primary" routerLink="/booking" [disabled]="(isAuth$ | async) === false">Select</button>
 

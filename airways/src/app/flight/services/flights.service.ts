@@ -12,7 +12,9 @@ import { AirportAPIResponse, AvailableFlight, SearchFlightsAPIRequest } from '..
   providedIn: 'root',
 })
 export class FlightsService {
-  private BASE_URL = 'https://api.air-ways.online';
+  // private BASE_URL = 'https://api.air-ways.online';
+
+  private BASE_URL = 'http://localhost:3001';
 
   private BASE_URL_FAKE = 'http://localhost:3000';
 
@@ -49,7 +51,7 @@ export class FlightsService {
     arr.forEach((item) => {
       arr$.push(this.searchFlights({ ...searchFlightsData, startTripDate: item, rangeTripDates: { start: item, end: '' } }));
     });
-
+    console.log(arr$);
     return forkJoin(arr$);
   }
 

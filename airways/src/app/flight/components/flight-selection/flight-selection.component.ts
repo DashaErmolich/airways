@@ -8,6 +8,7 @@ import { selectActiveFlights, selectFlightSearchData } from 'src/app/redux/selec
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import moment from 'moment';
 import { selectCurrency, selectDateFormat, selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
+import { StateService } from 'src/app/core/services/state.service';
 import { AvailableFlight, DatesRange } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
@@ -32,9 +33,12 @@ export class FlightSelectionComponent implements OnInit {
 
   public currency$: Observable<string>;
 
+  newFlight!: AvailableFlight;
+
   constructor(
     private store$: Store<AppState>,
     private fl: FlightsService,
+    private stateService: StateService,
   ) {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
@@ -48,6 +52,10 @@ export class FlightSelectionComponent implements OnInit {
 
     this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
       this.searchData = res;
+    });
+
+    this.stateService.flight$.subscribe((res) => {
+      this.newFlight = res!;
     });
   }
 

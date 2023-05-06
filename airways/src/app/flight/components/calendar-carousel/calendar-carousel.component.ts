@@ -2,14 +2,17 @@
 import {
   Component, EventEmitter, Input, OnInit, Output,
 } from '@angular/core';
-import { OwlOptions, SlidesOutputData } from 'ngx-owl-carousel-o';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
-import { selectFlightSearchData, selectSlides } from 'src/app/redux/selectors/flights.selectors';
-import { AvailableFlight } from '../../models/flight.models';
+import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import moment from 'moment';
+import { StateService } from 'src/app/core/services/state.service';
+import { BehaviorSubject } from 'rxjs';
+import { AvailableFlight } from '../../models/flight.models';
 import { FlightsService } from '../../services/flights.service';
-import * as FlightsActions from '../../../redux/actions/flights.actions';
+
+import * as FlightActions from '../../../redux/actions/flights.actions';
 
 export interface Slide {
   flightDate: string,
@@ -26,16 +29,14 @@ export class CalendarCarouselComponent implements OnInit {
 
   @Output() selectDepartureDateEvent = new EventEmitter<string>();
 
-  activeFlight!: AvailableFlight;
-
-  customOptions: OwlOptions = {
+  public customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
     touchDrag: false,
     pullDrag: false,
     dots: false,
     navSpeed: 700,
-    // navText: ['<span>&ShortLeftArrow;</span>', '<span>&ShortRightArrow;</span>'],
+    startPosition: 1,
     responsive: {
       0: {
         items: 1,
@@ -52,31 +53,58 @@ export class CalendarCarouselComponent implements OnInit {
     },
   };
 
-  slides: Slide[] = [];
+  public slides: Slide[] = [];
 
-  private activeSlides!: SlidesOutputData;
+  public isControlsDisabled = false;
 
-  isNextClicked = false;
+  private isNextClicked = false;
 
-  isPrevClicked = false;
+  private isPrevClicked = false;
 
-  searchData!: FlightSearchState;
+  private searchData!: FlightSearchState;
 
-  datesArr: string[] = [];
+  private newDate = new BehaviorSubject<string | null>(null);
+
+  private newSlide: Slide | null = null;
 
   constructor(
     private store$: Store<AppState>,
-    private fl: FlightsService,
+    private flightsService: FlightsService,
+    private stateService: StateService,
   ) { }
 
   ngOnInit(): void {
-    this.store$.pipe(select(selectSlides)).subscribe((res) => {
+    this.stateService.slides$.subscribe((res) => {
       this.slides = res;
+    });
+
+    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
+      this.searchData = res;
+    });
+
+    this.newDate.subscribe((date) => {
+      this.flightsService.searchFlights({ ...this.searchData, startTripDate: date }).subscribe((res: AvailableFlight[]) => {
+        // debugger;
+        this.newSlide = {
+          flightDate: date!,
+          data: res[0],
+        };
+        if (date) {
+          if (this.isNextClicked) {
+            this.stateService.addNextSlide(this.newSlide!);
+          }
+          if (this.isPrevClicked) {
+            this.stateService.addPrevSlide(this.newSlide!);
+          }
+        }
+      });
     });
   }
 
   changeDepartureDate(date: string) {
-    this.selectDepartureDateEvent.emit(date);
+    const slide = this.slides.find((item: Slide) => item.flightDate === date);
+    this.stateService.setFlight(slide!.data);
+    console.log(slide);
   }
 
   isInvalidDate(date: string) {
@@ -93,50 +121,25 @@ export class CalendarCarouselComponent implements OnInit {
     return result;
   }
 
-  getPassedData(data: SlidesOutputData) {
-    console.log(data);
-    console.log('--- translated', this.activeSlides);
-    // this.slides.shift();
-    // this.slides = [...this.slides, {
-    //   flightDate: (new Date('1972')).toString(),
-    //   data: this.slides[0].data,
-    // }];
-    // console.log(this.slides);
-  }
-
-  getData(data: SlidesOutputData) {
-    this.activeSlides = data;
-    console.log('--- change', this.activeSlides);
+  updateSlides() {
+    if (this.isNextClicked) {
+      this.newDate.next(moment(this.slides[this.slides.length - 1].flightDate).add(1, 'days').toLocaleString());
+    }
+    if (this.isPrevClicked) {
+      this.newDate.next(moment(this.slides[0].flightDate).subtract(1, 'days').toLocaleString());
+    }
+    this.isControlsDisabled = false;
   }
 
   onPrev() {
     this.isPrevClicked = true;
     this.isNextClicked = false;
+    this.isControlsDisabled = true;
   }
 
   onNext() {
     this.isPrevClicked = false;
     this.isNextClicked = true;
-  }
-
-
-  getDatesArr(activeDate: string) {
-    const result = [];
-
-    for (let i = -3; i < 3; i++) {
-      if (i < 0) {
-        result.push(moment(activeDate).subtract(Math.abs(i), 'days').toLocaleString());
-      }
-
-      if (i === 0) {
-        result.push(moment(activeDate).toLocaleString());
-      }
-
-      if (i > 0) {
-        result.push(moment(activeDate).add(i, 'days').toLocaleString());
-      }
-    }
-
-    return result;
+    this.isControlsDisabled = true;
   }
 }
