@@ -1,5 +1,5 @@
 export const passengerResponse = {
-  adults: 2,
-  child: 2,
+  adults: 1,
+  child: 1,
   infant: 1,
 };

@@ -1,9 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormArray, FormBuilder, FormControl, FormGroup, Validators,
+  FormArray, FormBuilder, FormGroup, Validators,
 } from '@angular/forms';
 
+import { CountryInfo } from 'src/app/auth/models/country-code.model';
+import { FormValidatorService } from 'src/app/core/services/form-validator.service';
+import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
+import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { passengerResponse } from '../../../shared/mocked/passengers-response';
+import countryInfo from '../../../../assets/country-codes.json';
 
 @Component({
   selector: 'app-booking-page',
@@ -13,78 +21,123 @@ import { passengerResponse } from '../../../shared/mocked/passengers-response';
 export class BookingPageComponent implements OnInit {
   passengerForm!: FormGroup;
 
+  COUNTRY_INFO: CountryInfo[] = countryInfo;
+
+  errorMessages = formValidationErrorsMessages;
+
+  customErrors = CustomFormValidatorErrorsEnum;
+
   constructor(
     private fb: FormBuilder,
-  ) {}
+    private formValidatorService: FormValidatorService,
+    private matIconRegistry: MatIconRegistry,
+    private domSanitizer: DomSanitizer,
+    private router: Router,
+  ) {
+    this.matIconRegistry.addSvgIcon(
+      'pass-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-icon.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'pass-details',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-details.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'pass-assistance',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-assistance.svg'),
+    );
+  }
 
   ngOnInit(): void {
     this.passengerForm = this.fb.group({
       adult: this.fb.array([]),
-      child: this.createChildGroup(),
-      infant: this.createInfantGroup(),
+      child: this.fb.array([]),
+      infant: this.fb.array([]),
       contactDetails: this.fb.group({
         countryCode: ['', Validators.required],
-        mobileNumber: ['', Validators.required],
-        email: ['', Validators.required],
+        phoneNumber: [
+          '',
+          [
+            Validators.required,
+            Validators.pattern('[0-9]+'),
+          ],
+        ],
+        email: [
+          '',
+          [
+            Validators.required,
+            Validators.email,
+          ],
+        ],
       }),
     });
-    this.createAdultGroup();
-    // this.passengerForm = new FormGroup({
-    //   adult: new FormArray([]),
-    //   child: this.createChildGroup(),
-    //   infant: this.createInfantGroup(),
-    //   contactDetails: new FormGroup({
-    //     countryCode: new FormControl('', Validators.required),
-    //     mobileNumber: new FormControl('', Validators.required),
-    //     email: new FormControl('', Validators.required),
-    //   }),
-    // });
+    this.setupForm();
   }
 
   get adult() {
     return this.passengerForm.controls['adult'] as FormArray;
   }
 
-  private createAdultGroup() {
-    const adultArray = this.passengerForm.get('adult') as FormArray;
-    for (let i = 0; i < passengerResponse.adults; i + 1) {
-      adultArray.push(this.createPassenger());
+  get child() {
+    return this.passengerForm.controls['child'] as FormArray;
+  }
+
+  get infant() {
+    return this.passengerForm.controls['infant'] as FormArray;
+  }
+
+  get contactDetails() {
+    return this.passengerForm.controls['contactDetails'] as FormGroup;
+  }
+
+  private setupForm() {
+    for (let i = 0; i < passengerResponse.adults; i += 1) {
+      const item = this.createPassenger();
+      this.adult.push(item);
+    }
+    for (let i = 0; i < passengerResponse.child; i += 1) {
+      const item = this.createPassenger();
+      this.child.push(item);
+    }
+    for (let i = 0; i < passengerResponse.infant; i += 1) {
+      const item = this.createPassenger();
+      this.infant.push(item);
     }
   }
 
-  private createChildGroup() {
-    const childArray: any = new FormArray([]);
-    for (let i = 0; i < passengerResponse.child; i + 1) {
-      childArray.push(this.createPassenger());
-    }
-    return childArray;
-  }
-
-  private createInfantGroup() {
-    const infantArray: any = new FormArray([]);
-    for (let i = 0; i < passengerResponse.infant; i + 1) {
-      infantArray.push(this.createPassenger());
-    }
-    return infantArray;
-  }
-
-  // private createPassenger() {
-  //   return this.fb.group({
-  //     firstName: ['', Validators.required],
-  //     lastName: ['', Validators.required],
-  //     sex: ['', Validators.required],
-  //     dateOfBirth: ['', Validators.required],
-  //     isNeedAssistance: [false, Validators.required],
-  //   });
-  // }
-  // eslint-disable-next-line class-methods-use-this
   private createPassenger() {
-    return new FormGroup({
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
-      sex: new FormControl('', Validators.required),
-      dateOfBirth: new FormControl('', Validators.required),
-      isNeedAssistance: new FormControl('', Validators.required),
+    return this.fb.group({
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z]+$'),
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[a-zA-Z]+$'),
+        ],
+      ],
+      gender: ['Male', Validators.required],
+      dateOfBirth: [
+        '',
+        [
+          Validators.required,
+          this.formValidatorService.dateValidator(),
+        ],
+      ],
+      isNeedAssistance: [false, Validators.required],
     });
+  }
+
+  onSubmit() {
+    console.log(this.passengerForm.value);
+  }
+
+  goBack() {
+    this.router.navigate(['/flights/selection']);
   }
 }
