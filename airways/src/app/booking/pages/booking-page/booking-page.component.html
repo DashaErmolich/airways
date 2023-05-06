@@ -1,1 +1,13 @@
-<p>booking-page works!</p>
+<form [formGroup]="passengerForm">
+  <h2>Passengers</h2>
+  <p>Enter the passenger's names as they appear on document (passport or ID).</p>
+  <div formArrayName="adult" *ngFor="let item of adult.controls;let i=index">
+    
+  </div>
+  <h2>Contact details</h2>
+  <p>We need contact details to be able to deliver the latest information regarding your flight.</p>
+  <div class="booking-btns-wrapper">
+    <button mat-button>Back</button>
+    <button mat-raised-button color="primary">Continue</button>
+  </div>
+</form>
