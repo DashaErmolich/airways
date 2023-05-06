@@ -4,7 +4,6 @@ import {
   Observable, forkJoin,
 } from 'rxjs';
 import { FlightSearchState } from 'src/app/redux/state.models';
-import moment from 'moment';
 import { AirportAPIResponse, AvailableFlight, SearchFlightsAPIRequest } from '../models/flight.models';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -46,11 +45,8 @@ export class FlightsService {
     searchFlightsData: FlightSearchState,
     arr: string[],
   ): Observable<AvailableFlight[][]> {
-    // eslint-disable-next-line prefer-const
     const arr$: Observable<AvailableFlight[]>[] = [];
-
     arr.forEach((item) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       arr$.push(this.searchFlights({ ...searchFlightsData, startTripDate: item, rangeTripDates: { start: item, end: '' } }));
     });
 

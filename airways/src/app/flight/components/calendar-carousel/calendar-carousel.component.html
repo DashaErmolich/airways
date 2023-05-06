@@ -1,4 +1,4 @@
-<owl-carousel-o [options]="customOptions" #owlCar (translated)="getPassedData()">
+<owl-carousel-o [options]="customOptions" #owlCar (translated)="getPassedData($event)" (change)="getData($event)">
   <ng-container *ngFor="let slide of slides, index as i">
     <ng-template carouselSlide let-owlItem>
       {{ owlItem.id }}
@@ -15,7 +15,7 @@
 </owl-carousel-o>
 
 <p>
-  <button mat-raised-button color="primary" (click)="owlCar.prev()">prev</button>
-  <button mat-raised-button color="primary" (click)="owlCar.next()">next</button>
+  <button mat-raised-button color="primary" (click)="owlCar.prev(); onPrev()">prev</button>
+  <button mat-raised-button color="primary" (click)="owlCar.next(); onNext()">next</button>
 </p>
 

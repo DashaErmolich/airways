@@ -11,7 +11,6 @@ import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
 import moment from 'moment';
 import { SlidesOutputData } from 'ngx-owl-carousel-o';
-import { AvailableFlight } from '../../models/flight.models';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
 import { FlightsService } from '../../services/flights.service';
@@ -43,7 +42,7 @@ export class SelectionPageComponent implements OnInit {
 
   allSlides: Slide[] = [];
 
-  allFlights: AvailableFlight[][] = [];
+  // allFlights: AvailableFlight[][] = [];
 
   constructor(
     private store$: Store<AppState>,
@@ -59,13 +58,13 @@ export class SelectionPageComponent implements OnInit {
     this.store$.pipe(select(selectFlightSearchData)).subscribe((searchState) => {
       this.flightsSearchData = searchState;
       this.datesArr = this.getDatesArr(this.flightsSearchData.startTripDate!);
-      this.fl.searchMultipleFlights(this.flightsSearchData, this.datesArr).subscribe((res2) => {
-        this.allFlights = res2;
-        this.allFlights.forEach((item, i) => {
-          this.allSlides.push({
+      this.fl.searchMultipleFlights(this.flightsSearchData, this.datesArr).subscribe((allFlights) => {
+        this.allSlides = [];
+        allFlights.forEach((item, i) => {
+          this.allSlides = [...this.allSlides, {
             flightDate: this.datesArr[i],
             data: item[0],
-          });
+          }];
         });
         this.store$.dispatch(FlightsActions.setActiveFlights({ activeFlights: [this.allSlides[3].data] }));
         this.store$.dispatch(FlightsActions.setSlides({ slides: this.allSlides }));
@@ -89,8 +88,6 @@ export class SelectionPageComponent implements OnInit {
 
   getDatesArr(activeDate: string) {
     const result = [];
-
-    console.log(activeDate);
 
     for (let i = -3; i < 3; i++) {
       if (i < 0) {

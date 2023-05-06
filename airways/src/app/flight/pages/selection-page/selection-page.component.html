@@ -7,8 +7,8 @@
   <p>From: {{ flightsSearchData.from?.city }}</p>
   <p>To: {{ flightsSearchData.to?.city }}</p>
   <p *ngIf="flightsSearchData.startTripDate">Start trip date: {{ flightsSearchData.startTripDate | date }}</p>
-  <p *ngIf="flightsSearchData.rangeTripDates?.start">Start trip date: {{ flightsSearchData.rangeTripDates?.start | date }}</p>
-  <p *ngIf="flightsSearchData.rangeTripDates?.end">End trip date: {{ flightsSearchData.rangeTripDates?.end | date }}</p>
+  <!-- <p *ngIf="flightsSearchData.rangeTripDates?.start">Start trip date: {{ flightsSearchData.rangeTripDates?.start | date }}</p> -->
+  <!-- <p *ngIf="flightsSearchData.rangeTripDates?.end">End trip date: {{ flightsSearchData.rangeTripDates?.end | date }}</p> -->
   <p>Passengers: {{ getPassengersQty()}}</p>
 
   <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
