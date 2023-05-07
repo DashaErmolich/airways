@@ -5,11 +5,11 @@
   </div>
   <p class="pass-form-description">Enter the passenger's names as they appear on document (passport or ID).</p>
 
-  <div class="pass-form-item-container" formArrayName="adult" *ngFor="let item of adult.controls; let i = index">
+  <div class="pass-form-item-container" *ngIf="adult.controls.length">
     <div class="pass-form-item">
-      <h3 class="pass-form-item-title">1. Adult</h3>
-      <div class="pass-form-item-content" [formGroupName]="i">
-        <div class="passenger-form-upper">
+      <h3 class="pass-form-item-title">Adult</h3>
+      <div class="pass-form-item-content" formArrayName="adult" *ngFor="let item of adult.controls; let i = index">
+        <div class="passenger-form-upper" [formGroupName]="i">
           <mat-form-field class="first-name-field">
             <mat-label>First name</mat-label>
             <input matInput type="text" formControlName="firstName">
@@ -62,11 +62,11 @@
     </div>
   </div>
 
-  <div class="pass-form-item-container" formArrayName="child" *ngFor="let item of child.controls; let i = index">
+  <div class="pass-form-item-container" *ngIf="child.controls.length">
     <div class="pass-form-item">
-      <h3 class="pass-form-item-title">2. Child</h3>
-    <div class="pass-form-item-content" [formGroupName]="i">
-      <div class="passenger-form-upper">
+      <h3 class="pass-form-item-title">Child</h3>
+    <div class="pass-form-item-content" formArrayName="child" *ngFor="let item of child.controls; let i = index">
+      <div class="passenger-form-upper"[formGroupName]="i">
         <mat-form-field class="first-name-field">
           <mat-label>First name</mat-label>
           <input matInput type="text" formControlName="firstName">
@@ -119,11 +119,11 @@
     </div>
   </div>
 
-  <div class="pass-form-item-container" formArrayName="infant" *ngFor="let item of infant.controls; let i = index">
+  <div class="pass-form-item-container" *ngIf="infant.controls.length">
     <div class="pass-form-item">
-      <h3 class="pass-form-item-title">3. Infant</h3>
-      <div class="pass-form-item-content" [formGroupName]="i">
-        <div class="passenger-form-upper">
+      <h3 class="pass-form-item-title">Infant</h3>
+      <div class="pass-form-item-content" formArrayName="infant" *ngFor="let item of infant.controls; let i = index">
+        <div class="passenger-form-upper" [formGroupName]="i">
           <mat-form-field class="first-name-field">
             <mat-label>First name</mat-label>
             <input matInput type="text" formControlName="firstName">

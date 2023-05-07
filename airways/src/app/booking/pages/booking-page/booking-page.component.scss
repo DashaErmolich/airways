@@ -45,12 +45,16 @@
 .pass-form-item {
   margin: 32px 45px 43px 45px;
 }
+.pass-form-item-content {
+  margin-top: 25px;
+}
 .pass-form-item-title {
   color: $color-primary-deep-blue;
   font-weight: bold;
   font-size: 24px;
   line-height: 28px;
   line-height: 100%;
+  margin: 0;
 }
 
 .passenger-form-lower {
