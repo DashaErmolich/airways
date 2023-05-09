@@ -62,4 +62,9 @@ export const formValidationErrorsMessages = {
       validDate: 'The date is invalid',
     },
   },
+  passengersForm: {
+    firstName: {
+      pattern: 'Must not contain numbers',
+    },
+  },
 };
