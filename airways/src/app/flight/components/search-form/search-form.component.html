@@ -13,7 +13,7 @@
       <input matInput placeholder="From" formControlName="departureFrom" [matAutocomplete]="from" type="text" >
       <mat-autocomplete #from="matAutocomplete" [displayWith]="displayAirport" (optionSelected)="onSelectedDirections()">
         <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom">
-          <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.IATA}})</span> </div>
+          <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.key}})</span> </div>
           <div class="airport__subinfo"><span>{{airportFrom.name}}</span><span> {{airportFrom.country}}</span></div>
         </mat-option>
       </mat-autocomplete>
@@ -27,7 +27,7 @@
       <input matInput placeholder="To" formControlName="destinationTo" [matAutocomplete]="to" type="text">
       <mat-autocomplete #to="matAutocomplete" [displayWith]="displayAirport" (optionSelected)="onSelectedDirections()">
         <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo">
-          <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.IATA}})</span> </div>
+          <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.key}})</span> </div>
           <div class="airport__subinfo"><span>{{airportTo.name}}</span><span> {{airportTo.country}}</span></div>
         </mat-option>
       </mat-autocomplete>

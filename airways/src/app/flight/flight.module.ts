@@ -17,6 +17,10 @@ import { SearchFormComponent } from './components/search-form/search-form.compon
 import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
 import { CalendarCarouselComponent } from './components/calendar-carousel/calendar-carousel.component';
 import { FlightAvailableSeatsDirective } from './directives/flight-available-seats.directive';
+import { ActiveFlightDirective } from './directives/active-flight.directive';
+import { FlightInfoComponent } from './components/flight-info/flight-info.component';
+import { CurrencyValuePipe } from './pipes/currency-value.pipe';
+import { FlightTimePipe } from './pipes/flight-time.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +30,10 @@ import { FlightAvailableSeatsDirective } from './directives/flight-available-sea
     FlightSelectionComponent,
     CalendarCarouselComponent,
     FlightAvailableSeatsDirective,
+    ActiveFlightDirective,
+    FlightInfoComponent,
+    CurrencyValuePipe,
+    FlightTimePipe,
   ],
   imports: [
     CommonModule,

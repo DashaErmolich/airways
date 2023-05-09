@@ -7,8 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
 import { Observable } from 'rxjs';
 import { selectError } from 'src/app/redux/selectors/auth.selectors';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconService } from 'src/app/shared/services/icon.service';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
 import * as AuthActions from '../../../redux/actions/auth.actions';
@@ -36,19 +35,10 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private formValidatorService: FormValidatorService,
     private store$: Store<AppState>,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
     private authService: AuthService,
+    private matIconService: MatIconService,
   ) {
     this.error$ = this.store$.pipe(select(selectError));
-    this.matIconRegistry.addSvgIcon(
-      'google',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'),
-    );
-    this.matIconRegistry.addSvgIcon(
-      'facebook',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'),
-    );
   }
 
   ngOnInit() {

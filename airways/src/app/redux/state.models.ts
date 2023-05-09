@@ -1,6 +1,5 @@
-import { Slide } from '../flight/components/calendar-carousel/calendar-carousel.component';
 import {
-  Passengers, DatesRange, Airport, AvailableFlight,
+  Passengers, DatesRange, Airport, Flight,
 } from '../flight/models/flight.models';
 import { User } from '../shared/models/user.model';
 
@@ -14,25 +13,29 @@ export interface AuthState {
 }
 
 export interface FlightSearchState {
-  isRoundTrip: boolean | undefined;
-  isOneWayTrip: boolean | undefined;
-  from: Airport | null | undefined;
-  to: Airport | null | undefined;
-  startTripDate: string | null | undefined;
-  rangeTripDates: DatesRange | null | undefined;
-  passengers: Passengers | null | undefined;
+  isRoundTrip: boolean;
+  isOneWayTrip: boolean;
+  from: Airport | null;
+  to: Airport | null;
+  startTripDate: string | null;
+  rangeTripDates: DatesRange | null;
+  passengers: Passengers;
 }
 
-export interface AvailableFlightsState {
+export interface FlightsState {
   isLoading: boolean;
-  availableFlights: AvailableFlight[];
   error: string | null;
-  activeFlights: AvailableFlight[],
-  slides: Slide[],
+  flights: Flight[][],
+}
+
+export interface BookingState {
+  passengers: Passengers | null;
+  flights: Flight[];
 }
 
 export interface AppState {
   auth: AuthState;
   flightsSearch: FlightSearchState;
-  availableFlights: AvailableFlightsState;
+  flights: FlightsState;
+  booking: BookingState;
 }

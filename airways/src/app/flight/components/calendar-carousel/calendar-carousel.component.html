@@ -1,14 +1,13 @@
 <owl-carousel-o [options]="customOptions" #owlCar (translated)="updateSlides()">
-  <ng-container *ngFor="let slide of slides, index as i">
-    <ng-template carouselSlide let-owlItem>
-      {{ owlItem.id }}
-      <button class="carousel__item" [disabled]="isInvalidDate(slide.flightDate)" (click)="changeDepartureDate(slide.flightDate)">
-        <p>
-          {{ slide.flightDate | date }}
-        </p>
-        <p>
-          {{ slide.data.price.eur }} EUR
-        </p>
+  <ng-container *ngFor="let slide of slides">
+    <ng-template carouselSlide>
+      <!-- <button class="carousel__item" [disabled]="isValidDate(slide.flightDate)" (click)="changeDepartureDate(slide.flightDate)" [class.carousel__item_active]="slide.data.flightNumber === activeFlight?.flightNumber"> -->
+      <!-- <button class="carousel__item" [disabled]="isInvalidDate(slide.flightDate)" (click)="changeDepartureDate(slide.flightDate)" [appFlightAvailableSeats]="slide.data.flightNumber === activeFlight?.flightNumber ? slide.data.seats : null"> -->
+      <button class="carousel__item" [disabled]="isValidDate(slide.flightDate)" (click)="changeDepartureDate(slide.flightDate)">
+        <p>{{ slide.flightDate | date:'d MMM' }}</p>
+        <p>{{ slide.flightDate | date:'EEEE' }}</p>
+        <p *ngIf="!isValidDate(slide.flightDate)">{{ slide.data.price| currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</p>
+        <mat-icon svgIcon="no-flight" *ngIf="isValidDate(slide.flightDate)"></mat-icon>
       </button>
     </ng-template>
   </ng-container>

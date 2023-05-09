@@ -1,4 +1,4 @@
-import { minCountPassengers } from 'src/app/flight/constants/constants';
+import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/constants';
 import { SearchFormState } from '../../flight/models/flight.models';
 import { SearchParamsActionsTypes } from '../actions/flights-search-form.actions';
 
@@ -9,7 +9,7 @@ const initialState: SearchFormState = {
   directions: null,
   range: null,
   date: null,
-  passengers: minCountPassengers,
+  passengers: PASSENGERS_DEFAULT,
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -27,13 +27,13 @@ export const flightsSearchFormReducers = (state = initialState, action: any) => 
         directions: {
           departureFrom: {
             city: action.preload.departureFrom.city,
-            IATA: action.preload.departureFrom.IATA,
+            key: action.preload.departureFrom.key,
             name: action.preload.departureFrom.name,
             country: action.preload.departureFrom.country,
           },
           destinationTo: {
             city: action.preload.destinationTo.city,
-            IATA: action.preload.destinationTo.IATA,
+            key: action.preload.destinationTo.key,
             name: action.preload.destinationTo.name,
             country: action.preload.destinationTo.country,
           },

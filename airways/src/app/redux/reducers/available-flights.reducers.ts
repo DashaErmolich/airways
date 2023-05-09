@@ -1,36 +1,34 @@
 import { createReducer, on } from '@ngrx/store';
-import { AvailableFlightsState } from '../state.models';
+import { FlightsState } from '../state.models';
 import * as FlightsActions from '../actions/flights.actions';
 
-export const availableFlightsReducersNode = 'available-flights';
+export const flightsReducersNode = 'available-flights';
 
-export const initialState: AvailableFlightsState = {
+export const initialState: FlightsState = {
   isLoading: false,
-  availableFlights: [],
   error: null,
-  activeFlights: [],
-  slides: [],
+  flights: [],
 };
 
-export const availableFlightsReducers = createReducer(
+export const flightsReducers = createReducer(
   initialState,
   on(
-    FlightsActions.getAvailableFlights,
+    FlightsActions.searchFlights,
     (state) => ({
       ...state,
       isLoading: true,
     }),
   ),
   on(
-    FlightsActions.getAvailableFlightsSuccess,
+    FlightsActions.getFlightsDataSuccess,
     (state, action) => ({
       ...state,
       isLoading: false,
-      availableFlights: action.availableFlights,
+      flights: action.flights,
     }),
   ),
   on(
-    FlightsActions.getAvailableFlightsFailure,
+    FlightsActions.getFlightsDataFailure,
     (state, action) => ({
       ...state,
       isLoading: false,
@@ -38,17 +36,10 @@ export const availableFlightsReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setActiveFlights,
+    FlightsActions.setSelectedFlight,
     (state, action) => ({
       ...state,
-      activeFlights: action.activeFlights,
-    }),
-  ),
-  on(
-    FlightsActions.setSlides,
-    (state, action) => ({
-      ...state,
-      slides: action.slides,
+      flights: action.flights,
     }),
   ),
 );

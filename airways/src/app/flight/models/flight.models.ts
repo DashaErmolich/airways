@@ -1,6 +1,6 @@
 export interface Airport {
   city: string,
-  IATA: string,
+  key: string,
   name: string,
   country: string,
 }
@@ -28,53 +28,44 @@ export interface DatesRange {
   end: string,
 }
 
-export interface Flight {
-  departureFrom: Airport,
-  departureDate: string,
-  destinationTo: Airport,
-  destinationDate: string,
-  duration: string,
-  flightNumber: string,
-  countPlaces: number,
-  countAvailablePlaces: number,
-  price: number,
-}
-
-export interface SearchFlightsAPIRequest {
+export interface FlightSearchData {
   fromKey: string | undefined;
   toKey: string | undefined;
   forwardDate: string | null | undefined;
   backDate: string | null | undefined;
 }
 
-export interface AirportAPIResponse {
-  key:string;
-  country: string;
-  city: string;
-  name:string;
-}
-
-export interface PriceAPIResponse {
+export interface FlightPrices {
   eur: number;
   usd: number;
   rub: number;
   pln: number;
 }
 
-export interface AvailableFlight {
-  form: AirportAPIResponse;
-  to: AirportAPIResponse;
+export interface Flight {
+  form: Airport;
+  to: Airport;
   takeoffDate: string;
   landingDate: string;
   timeMins: string;
-  avaible: number
-  price: PriceAPIResponse;
-  flightNumber: string;
-  prices: {
-    '0': PriceAPIResponse,
-    '1': PriceAPIResponse,
-    '2': PriceAPIResponse,
-    '-2': PriceAPIResponse,
-    '-1': PriceAPIResponse,
+  seats: FlightSeats;
+  price: FlightPrices;
+  otherFlights: {
+    '1': Flight;
+    '2': Flight;
+    '3': Flight;
+    '4': Flight;
+    '5': Flight;
+    '-5': Flight;
+    '-4': Flight;
+    '-3': Flight;
+    '-2': Flight;
+    '-1': Flight;
   }
+  flightNumber: string;
+}
+
+export interface FlightSeats {
+  avaible: number;
+  total: number;
 }

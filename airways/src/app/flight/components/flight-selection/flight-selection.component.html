@@ -1,52 +1,49 @@
-<div *ngIf="flight && !newFlight" >
-  <h2>{{ getFlightTitle() }}</h2>
-
-  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [responseIndex]="responseIndex"></app-calendar-carousel>
-
-  <div class="flight__container">
-    <p>From: {{ responseIndex === 0 ? searchData.from?.country : searchData.to?.country }} {{ responseIndex === 0 ? searchData.from?.name : searchData.to?.name }}</p>
-    <p>Take off: {{ flight.takeoffDate | date }}</p>
-
-    <p>Minutes: {{ flight.timeMins }}</p>
-
-    <p>To: {{ searchData.to?.country }} {{ searchData.to?.name }}</p>
-    <p>Landing: {{ flight.landingDate | date }}</p>
-
-    <p>Flight Number: {{ flight.flightNumber }}</p>
-
-    <p [appFlightAvailableSeats]="flight.avaible">Seats available: {{ flight.avaible }}</p>
-
-    <p>Price: {{ flight.price.eur }} EUR</p>
-
-    <button mat-raised-button color="primary" routerLink="/booking" [disabled]="(isAuth$ | async) === false">Select</button>
-
-    <span *ngIf="(isAuth$ | async) === false" style="color: red;">You must be signed in the app to continue</span>
+<div class="flight-selection-container">
+  <div class="flight-selection__title">
+    <mat-icon svgIcon="plane" [ngClass]="{'icon_rotate-180': responseIndex === 1}"></mat-icon>
+    <h2>{{ getFlightTitle() }}</h2>
   </div>
-</div>
 
-<div *ngIf="newFlight" >
-  <h2>{{ getFlightTitle() }}</h2>
+  <app-calendar-carousel [responseIndex]="responseIndex" *ngIf="!flightSelected"></app-calendar-carousel>
 
-  <app-calendar-carousel (selectDepartureDateEvent)="searchAvailableFlights($event)" [responseIndex]="responseIndex"></app-calendar-carousel>
+  <div class="flight-selection__info info">
+    <div class="info__flight flight">
+      <span class="flight__date">{{ flight.takeoffDate | date:'E, d MMM y' }}</span>
+      <div class="flight__time-container">
+        <span class="flight__time">{{ flight.takeoffDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
+        <span class="flight__zone">{{ flight.takeoffDate | date:'z' }}</span>
+      </div>
+      <span class="flight__city">{{ flight.form.city }}</span>
+    </div>
 
-  <div class="flight__container">
-    <p>From: {{ responseIndex === 0 ? searchData.from?.country : searchData.to?.country }} {{ responseIndex === 0 ? searchData.from?.name : searchData.to?.name }}</p>
-    <p>Take off: {{ newFlight.takeoffDate | date }}</p>
+    <div class="info__duration">
+      <span>{{ flight.timeMins | flightTime }}</span>
+      <span class="line-outside">
+        <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': responseIndex === 1}"></mat-icon>
+      </span>
+      <span>Direct</span>
+    </div>
 
-    <p>Minutes: {{ newFlight.timeMins }}</p>
+    <div class="info__flight info__flight_right flight">
+      <span class="flight__date">{{ flight.landingDate | date:'E, d MMM y' }}</span>
+      <div class="flight__time-container flight__time-container_reverse">
+        <span class="flight__time">{{ flight.landingDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
+        <span class="flight__zone">{{ flight.landingDate | date:'z' }}</span>
+      </div>
+      <span class="flight__city">{{ flight.to.city }}</span>
+    </div>
 
-    <p>To: {{ searchData.to?.country }} {{ searchData.to?.name }}</p>
-    <p>Landing: {{ newFlight.landingDate | date }}</p>
 
-    <p>Flight Number: {{ newFlight.flightNumber }}</p>
+    <span><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
 
-    <p [appFlightAvailableSeats]="newFlight.avaible">Seats available: {{ newFlight.avaible }}</p>
+    <div class="flight-price-container">
+      <span [appFlightAvailableSeats]="flight.seats">{{ flight.seats.avaible }} seats <br> available</span>
+      <span class="color-gray">Price</span>
+      <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
+    </div>
 
-    <p>Price: {{ newFlight.price.eur }} EUR</p>
-
-    <button mat-raised-button color="primary" routerLink="/booking" [disabled]="(isAuth$ | async) === false">Select</button>
-
-    <span *ngIf="(isAuth$ | async) === false" style="color: red;">You must be signed in the app to continue</span>
+    <button mat-raised-button color="primary" [disabled]="(isAuth$ | async) === false" *ngIf="!flightSelected" (click)="toggleFlightSelection()">Select</button>
+    <button mat-button color="primary" *ngIf="flightSelected" (click)="toggleFlightSelection()">Edit</button>
   </div>
 </div>
 

@@ -4,16 +4,15 @@ import {
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectActiveFlights, selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import moment from 'moment';
 import { selectCurrency, selectDateFormat, selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { StateService } from 'src/app/core/services/state.service';
-import { AvailableFlight, DatesRange } from '../../models/flight.models';
+import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
+import { MatIconService } from 'src/app/shared/services/icon.service';
+import { Flight, DatesRange } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
-import { FlightsService } from '../../services/flights.service';
 
 @Component({
   selector: 'app-flight-selection',
@@ -25,20 +24,20 @@ export class FlightSelectionComponent implements OnInit {
 
   searchData!: FlightSearchState;
 
-  flight!: AvailableFlight;
+  flight!: Flight;
 
-  public isAuth$: Observable<boolean>;
+  isAuth$: Observable<boolean>;
 
-  public dateFormat$: Observable<string>;
+  dateFormat$: Observable<string>;
 
-  public currency$: Observable<string>;
+  currency$: Observable<string>;
 
-  newFlight!: AvailableFlight;
+  flightSelected = false;
 
   constructor(
     private store$: Store<AppState>,
-    private fl: FlightsService,
-    private stateService: StateService,
+    private sliderService: CalendarCarouselService,
+    private matIconService: MatIconService,
   ) {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
@@ -46,22 +45,18 @@ export class FlightSelectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store$.pipe(select(selectActiveFlights)).subscribe((res: AvailableFlight[]) => {
-      this.flight = res[this.responseIndex];
-    });
-
     this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
       this.searchData = res;
     });
 
-    this.stateService.flight$.subscribe((res) => {
-      this.newFlight = res!;
+    this.sliderService.flight$.subscribe((res) => {
+      this.flight = res!;
     });
   }
 
   searchAvailableFlights(date: string) {
     if (this.searchData.isOneWayTrip) {
-      this.store$.dispatch(FlightsActions.setDate({ startTripDate: date }));
+      this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: date }));
     }
 
     if (this.searchData.isRoundTrip) {
@@ -86,10 +81,8 @@ export class FlightSelectionComponent implements OnInit {
         }
       }
 
-      this.store$.dispatch(FlightsActions.setRange({ range: newRange }));
+      this.store$.dispatch(FlightsActions.setDatesRange({ range: newRange }));
     }
-
-    // this.store$.dispatch(FlightsActions.getAvailableFlights({ flightsSearchData: this.searchData }));
   }
 
   getFlightTitle() {
@@ -98,5 +91,9 @@ export class FlightSelectionComponent implements OnInit {
       title = `From ${this.searchData.to?.city} to ${this.searchData.from?.city}`;
     }
     return title;
+  }
+
+  toggleFlightSelection() {
+    this.flightSelected = !this.flightSelected;
   }
 }

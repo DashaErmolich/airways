@@ -13,8 +13,8 @@ import {
 } from 'src/app/redux/actions/flights-search-form.actions';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import { FlightSearchState } from 'src/app/redux/state.models';
-import { minCountPassengers } from '../../constants/constants';
-import { dataOld } from '../../constants/data';
+import { PASSENGERS_DEFAULT } from '../../constants/constants';
+import { AIRPORTS } from '../../constants/data';
 import { Airport, SearchFormState, Passengers } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
@@ -107,7 +107,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   sameDirectionsValidator(group: AbstractControl): ValidationErrors | null {
     const departureFrom = group.get('departureFrom')?.value;
     const destinationTo = group.get('destinationTo')?.value;
-    if (departureFrom.IATA && destinationTo.IATA && departureFrom.IATA === destinationTo.IATA) {
+    if (departureFrom.key && destinationTo.key && departureFrom.key === destinationTo.key) {
       return { sameDirectionsValidator: true };
     }
     return null;
@@ -116,13 +116,13 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   // eslint-disable-next-line class-methods-use-this
   filter(searchValue: string) {
     const value = typeof searchValue === 'string' ? searchValue.toLowerCase().trim() : '';
-    return dataOld.filter((airport) => Object.values(airport)
+    return AIRPORTS.filter((airport) => Object.values(airport)
       .find((el) => el.toLowerCase().includes(value)));
   }
 
   // eslint-disable-next-line class-methods-use-this
   displayAirport(airport: Airport): string {
-    return airport ? `${airport.city} ${airport.IATA}` : '';
+    return airport ? `${airport.city} ${airport.key}` : '';
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -136,8 +136,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   decrement(typePassenger: keyof Passengers) {
     let countPassengers = Number(this.searchForm.get('passengers')?.get(typePassenger)?.value);
-    if (countPassengers === minCountPassengers[typePassenger]) {
-      countPassengers = minCountPassengers[typePassenger];
+    if (countPassengers === PASSENGERS_DEFAULT[typePassenger]) {
+      countPassengers = PASSENGERS_DEFAULT[typePassenger];
     } else {
       countPassengers -= 1;
     }

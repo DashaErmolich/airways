@@ -2,14 +2,14 @@ export const flightsOld = [
   {
     departureFrom: {
       city: 'Moscow',
-      IATA: 'SVO',
+      key: 'SVO',
       name: 'Sheremetyevo',
       country: 'Russia',
     },
     departureDate: 'Tue Apr 29 2023 11:00:00 GMT+0200 (Центральная Европа, летнее время)',
     destinationTo: {
       city: 'Стамбул',
-      IATA: 'IST',
+      key: 'IST',
       name: 'Ataturk',
       country: 'Turkey',
     },
@@ -23,14 +23,14 @@ export const flightsOld = [
   {
     departureFrom: {
       city: 'Moscow',
-      IATA: 'SVO',
+      key: 'SVO',
       name: 'Sheremetyevo',
       country: 'Russia',
     },
     departureDate: 'Tue Apr 30 2023 11:00:00 GMT+0200 (Центральная Европа, летнее время)',
     destinationTo: {
       city: 'Стамбул',
-      IATA: 'IST',
+      key: 'IST',
       name: 'Ataturk',
       country: 'Turkey',
     },
@@ -44,14 +44,14 @@ export const flightsOld = [
   {
     departureFrom: {
       city: 'Moscow',
-      IATA: 'SVO',
+      key: 'SVO',
       name: 'Sheremetyevo',
       country: 'Russia',
     },
     departureDate: 'Tue Apr 30 2023 11:00:00 GMT+0200 (Центральная Европа, летнее время)',
     destinationTo: {
       city: 'Лондон',
-      IATA: 'LCY',
+      key: 'LCY',
       name: 'London City Airport',
       country: 'Великобритания',
     },

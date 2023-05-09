@@ -78,3 +78,42 @@ body {
   color: red;
   padding-bottom: 1rem;
 }
+
+.line-outside {
+	display: flex;
+	flex-basis: 100%;
+	align-items: center;
+	color: black;
+  font-size: 12px;
+  margin: 2rem 0;
+}
+
+.line-outside::before,
+.line-outside::after {
+	content: "";
+	flex-grow: 1;
+	background: black;
+	height: 1px;
+	font-size: 0px;
+	line-height: 0px;
+	margin: 0px 8px;
+}
+
+.icon_rotate-180 {
+  transform: rotate(180deg);
+}
+
+.icon_rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.color-gray {
+  color: $color-gray;
+}
+
+.flight-price_active {
+  color: $color-primary-blue;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+}

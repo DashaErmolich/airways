@@ -7,7 +7,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthDialogComponent } from 'src/app/auth/components/auth-dialog/auth-dialog.component';
 import * as AuthActions from '../../../redux/actions/auth.actions';
-import { CurrenciesEnum } from '../../constants/currency.enum';
+import { CurrencyEnum } from '../../constants/currency.enum';
 import { DateFormatEnum } from '../../constants/date-format.enum';
 import { selectDateFormat } from '../../../redux/selectors/auth.selectors';
 
@@ -19,7 +19,7 @@ import { selectDateFormat } from '../../../redux/selectors/auth.selectors';
 export class HeaderComponent {
   public dateFormats = Object.values(DateFormatEnum);
 
-  public currencies = Object.values(CurrenciesEnum);
+  public currencies = Object.values(CurrencyEnum);
 
   public isAuth$: Observable<boolean>;
 

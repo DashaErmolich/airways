@@ -1,32 +1,25 @@
-<span *ngIf="isLoading$ | async">Loading...</span>
+<app-flight-info (toggleSearchFormVisibilityEvent)="toggleSearchFormVisibility($event)"></app-flight-info>
 
-<span *ngIf="error$ | async"></span>
+<div class="container">
+  <span *ngIf="isLoading$ | async">Loading...</span>
 
-<div *ngIf="(isLoading$ | async) === false">
+  <span *ngIf="error$ | async"></span>
 
-  <p>From: {{ flightsSearchData.from?.city }}</p>
-  <p>To: {{ flightsSearchData.to?.city }}</p>
-  <p *ngIf="flightsSearchData.startTripDate && !newFlight">Start trip date: {{ flightsSearchData.startTripDate | date }}</p>
-  <p *ngIf="newFlight">Start trip date: {{ newFlight.takeoffDate | date }}</p>
-  <!-- <p *ngIf="flightsSearchData.rangeTripDates?.start">Start trip date: {{ flightsSearchData.rangeTripDates?.start | date }}</p> -->
-  <!-- <p *ngIf="flightsSearchData.rangeTripDates?.end">End trip date: {{ flightsSearchData.rangeTripDates?.end | date }}</p> -->
-  <p>Passengers: {{ getPassengersQty()}}</p>
+  <div *ngIf="(isLoading$ | async) === false">
+    <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
 
-  <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
+    <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex"></app-flight-selection>
+    <app-flight-selection *ngIf="(searchData$ | async)!.isRoundTrip" [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex"></app-flight-selection>
 
-  <div class="">
-    <button mat-raised-button color="warn" (click)="toggleSearchFormVisibility()">Edit</button>
+    <div class="">
+      <button mat-raised-button (click)="goBack()">
+        Back
+      </button>
+      <span *ngIf="(isAuth$ | async) === false" class="error-message">You must be signed in the app to continue</span>
+      <button mat-raised-button color="primary" routerLink="/booking" *ngIf="isAuth$ | async">
+        Continue
+      </button>
+    </div>
   </div>
 
-  <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex"></app-flight-selection>
-  <app-flight-selection *ngIf="flightsSearchData.isRoundTrip" [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex"></app-flight-selection>
-
-  <div class="">
-    <button mat-raised-button (click)="goBack()">
-      Back
-    </button>
-    <button mat-raised-button color="primary" routerLink="/booking" *ngIf="isAuth$ | async">
-      Continue
-    </button>
-  </div>
 </div>

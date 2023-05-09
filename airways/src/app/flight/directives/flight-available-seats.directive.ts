@@ -1,17 +1,14 @@
 import {
-  Directive, ElementRef, Input, OnInit, Renderer2,
+  Directive, ElementRef, Input, OnChanges, OnInit, Renderer2,
 } from '@angular/core';
 import { AvailableSeatsStateColorsEnum } from '../constants/available-seats-state.enum';
-
-const MAX_SEATS_AVAILABLE = 300;
+import { FlightSeats } from '../models/flight.models';
 
 @Directive({
   selector: '[appFlightAvailableSeats]',
 })
-export class FlightAvailableSeatsDirective implements OnInit {
-  @Input() appFlightAvailableSeats!: number;
-
-  isStateCaseMatch = false;
+export class FlightAvailableSeatsDirective implements OnInit, OnChanges {
+  @Input() appFlightAvailableSeats!: FlightSeats;
 
   constructor(
     private element: ElementRef,
@@ -19,6 +16,10 @@ export class FlightAvailableSeatsDirective implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.changeBorderColor();
+  }
+
+  ngOnChanges(): void {
     this.changeBorderColor();
   }
 
@@ -33,13 +34,12 @@ export class FlightAvailableSeatsDirective implements OnInit {
   }
 
   private getColor(): string {
-    let bgColor: string;
-
+    let bgColor: string = '';
     switch (true) {
-      case this.appFlightAvailableSeats >= MAX_SEATS_AVAILABLE / 2:
+      case this.appFlightAvailableSeats.avaible >= this.appFlightAvailableSeats.total / 2:
         bgColor = AvailableSeatsStateColorsEnum.MoreThanHalf;
         break;
-      case this.appFlightAvailableSeats < MAX_SEATS_AVAILABLE / 2 && this.appFlightAvailableSeats >= 10:
+      case this.appFlightAvailableSeats.avaible < this.appFlightAvailableSeats.total / 2 && this.appFlightAvailableSeats.avaible >= 10:
         bgColor = AvailableSeatsStateColorsEnum.LessThanHalf;
         break;
       default:

@@ -1,44 +1,38 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { AvailableFlightsState, FlightSearchState } from '../state.models';
-import { flightsReducersNode } from '../reducers/flights.reducers';
-import { availableFlightsReducersNode } from '../reducers/available-flights.reducers';
+import { FlightsState, FlightSearchState } from '../state.models';
+import { flightsSearchReducersNode } from '../reducers/flights.reducers';
+import { flightsReducersNode } from '../reducers/available-flights.reducers';
 
-export const selectFlightsFeature = createFeatureSelector<FlightSearchState>(flightsReducersNode);
+export const selectFlightsSearchFeature = createFeatureSelector<FlightSearchState>(flightsSearchReducersNode);
 
-// eslint-disable-next-line max-len
-export const selectAvailableFlightsFeature = createFeatureSelector<AvailableFlightsState>(availableFlightsReducersNode);
+export const selectFlightsFeature = createFeatureSelector<FlightsState>(flightsReducersNode);
 
 export const selectFlightSearchData = createSelector(
-  selectFlightsFeature,
+  selectFlightsSearchFeature,
   (state) => state,
 );
 
 export const selectIsOneWayTrip = createSelector(
-  selectFlightsFeature,
+  selectFlightsSearchFeature,
   (state) => state.isOneWayTrip,
 );
 
-export const selectAvailableFlights = createSelector(
-  selectAvailableFlightsFeature,
-  (state) => state.availableFlights,
+export const selectPassengersQty = createSelector(
+  selectFlightsSearchFeature,
+  (state) => state.passengers.adult + state.passengers.child + state.passengers.infant,
 );
 
-export const selectAvailableFlightsIsLoading = createSelector(
-  selectAvailableFlightsFeature,
+export const selectSelectedFlight = createSelector(
+  selectFlightsFeature,
+  (state) => state.flights,
+);
+
+export const selectSelectedFlightIsLoading = createSelector(
+  selectFlightsFeature,
   (state) => state.isLoading,
 );
 
-export const selectAvailableFlightsError = createSelector(
-  selectAvailableFlightsFeature,
+export const selectSelectedFlightError = createSelector(
+  selectFlightsFeature,
   (state) => state.error,
-);
-
-export const selectActiveFlights = createSelector(
-  selectAvailableFlightsFeature,
-  (state) => state.activeFlights,
-);
-
-export const selectSlides = createSelector(
-  selectAvailableFlightsFeature,
-  (state) => state.slides,
 );

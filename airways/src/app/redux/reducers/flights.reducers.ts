@@ -1,27 +1,22 @@
 import { createReducer, on } from '@ngrx/store';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
+import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/constants';
+import { AIRPORTS } from 'src/app/flight/constants/data';
 import { FlightSearchState } from '../state.models';
 import * as FlightsActions from '../actions/flights.actions';
 
-function getData() {
-  const data = localStorage.getItem(LocalStorageKeysEnum.Flights);
-
-  return data ? (JSON.parse(data) as FlightSearchState) : null;
-}
-
-export const flightsReducersNode = 'flights';
+export const flightsSearchReducersNode = 'flights';
 
 export const initialState: FlightSearchState = {
-  isRoundTrip: getData()?.isRoundTrip,
-  isOneWayTrip: getData()?.isOneWayTrip,
-  from: getData()?.from,
-  to: getData()?.to,
-  startTripDate: getData()?.startTripDate,
-  rangeTripDates: getData()?.rangeTripDates,
-  passengers: getData()?.passengers,
+  isRoundTrip: false,
+  isOneWayTrip: true,
+  from: AIRPORTS[0],
+  to: AIRPORTS[1],
+  startTripDate: (new Date()).toDateString(),
+  rangeTripDates: null,
+  passengers: PASSENGERS_DEFAULT,
 };
 
-export const flightsReducers = createReducer(
+export const flightsSearchReducers = createReducer(
   initialState,
   on(
     FlightsActions.searchFormSubmit,
@@ -44,7 +39,7 @@ export const flightsReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setDate,
+    FlightsActions.setDepartureDate,
     (state, action) => ({
       ...state,
       startTripDate: action.startTripDate,
@@ -52,7 +47,7 @@ export const flightsReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setRange,
+    FlightsActions.setDatesRange,
     (state, action) => ({
       ...state,
       rangeTripDates: action.range,
@@ -60,14 +55,14 @@ export const flightsReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setFrom,
+    FlightsActions.setFromAirport,
     (state, action) => ({
       ...state,
       from: action.from,
     }),
   ),
   on(
-    FlightsActions.setTo,
+    FlightsActions.setToAirport,
     (state, action) => ({
       ...state,
       from: action.to,

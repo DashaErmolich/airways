@@ -6,17 +6,18 @@ import {
 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectAvailableFlightsError, selectAvailableFlightsIsLoading, selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
+import {
+  selectFlightSearchData, selectSelectedFlight, selectSelectedFlightError, selectSelectedFlightIsLoading,
+} from 'src/app/redux/selectors/flights.selectors';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import moment from 'moment';
 import { SlidesOutputData } from 'ngx-owl-carousel-o';
-import { StateService } from 'src/app/core/services/state.service';
+import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
+import moment from 'moment';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
-import { FlightsService } from '../../services/flights.service';
 import { Slide } from '../../components/calendar-carousel/calendar-carousel.component';
-import { AvailableFlight } from '../../models/flight.models';
+import { Flight } from '../../models/flight.models';
 
 @Component({
   selector: 'app-selection-page',
@@ -26,92 +27,66 @@ import { AvailableFlight } from '../../models/flight.models';
 export class SelectionPageComponent implements OnInit {
   isSearchFormVisible = false;
 
-  flightsSearchData!: FlightSearchState;
+  searchData!: FlightSearchState;
 
-  public flightsResponseIndexes = FlightsAPIResponseIndexesEnum;
+  flightsResponseIndexes = FlightsAPIResponseIndexesEnum;
 
   isLoading$!: Observable<boolean>;
 
   error$!: Observable<string | null>;
 
-  public isAuth$: Observable<boolean>;
+  searchData$!: Observable<FlightSearchState>;
+
+  isAuth$: Observable<boolean>;
 
   slides: Slide[] = [];
 
   activeSlides!: SlidesOutputData;
 
-  datesArr: string[] = [];
+  flight!: Flight;
 
-  allSlides: Slide[] = [];
-
-  newFlight!: AvailableFlight;
+  flights$: Observable<Flight[][]>;
 
   constructor(
     private store$: Store<AppState>,
     private location: Location,
-    private fl: FlightsService,
-    private stateService: StateService,
+    private sliderService: CalendarCarouselService,
   ) {
-    this.isLoading$ = this.store$.pipe(select(selectAvailableFlightsIsLoading));
-    this.error$ = this.store$.pipe(select(selectAvailableFlightsError));
+    this.isLoading$ = this.store$.pipe(select(selectSelectedFlightIsLoading));
+    this.error$ = this.store$.pipe(select(selectSelectedFlightError));
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
+
+    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
+    this.flights$ = this.store$.pipe(select(selectSelectedFlight));
   }
 
   ngOnInit(): void {
-    this.stateService.flight$.subscribe((res) => {
-      this.newFlight = res!;
+    this.store$.dispatch(FlightsActions.searchFlights());
+
+    this.sliderService.flight$.subscribe((res) => {
+      this.flight = res!;
     });
 
-    this.store$.pipe(select(selectFlightSearchData)).subscribe((searchState) => {
-      this.flightsSearchData = searchState;
-      this.datesArr = this.getDatesArr(this.flightsSearchData.startTripDate!);
-      console.log(this.flightsSearchData, this.datesArr);
-      this.fl.searchMultipleFlights(this.flightsSearchData, this.datesArr).subscribe((allFlights) => {
-        this.allSlides = [];
-        console.log(allFlights);
-        allFlights.forEach((item, i) => {
-          this.allSlides = [...this.allSlides, {
-            flightDate: this.datesArr[i],
-            data: item[0],
-          }];
-        });
-        this.store$.dispatch(FlightsActions.setActiveFlights({ activeFlights: [this.allSlides[3].data] }));
-        this.stateService.setSlides(this.allSlides);
-      });
+    this.searchData$.subscribe((res) => {
+      this.searchData = res;
+    });
+
+    this.flights$.subscribe((res) => {
+      this.sliderService.setSlides(res.map((item: Flight[]) => ({ flightDate: moment(item[0].takeoffDate).format('LL'), data: item[0] })));
     });
   }
 
-  toggleSearchFormVisibility(): void {
-    this.isSearchFormVisible = !this.isSearchFormVisible;
+  toggleSearchFormVisibility(event: boolean): void {
+    this.isSearchFormVisible = event;
   }
 
   getPassengersQty() {
-    return this.flightsSearchData.passengers
-      ? this.flightsSearchData.passengers.adult + this.flightsSearchData.passengers.child + this.flightsSearchData.passengers.infant
+    return this.searchData.passengers
+      ? this.searchData.passengers.adult + this.searchData.passengers.child + this.searchData.passengers.infant
       : '';
   }
 
   goBack(): void {
     this.location.back();
-  }
-
-  getDatesArr(activeDate: string) {
-    const result = [];
-
-    for (let i = -3; i < 4; i++) {
-      if (i < 0) {
-        result.push(moment(activeDate).subtract(Math.abs(i), 'days').toLocaleString());
-      }
-
-      if (i === 0) {
-        result.push(moment(activeDate).toLocaleString());
-      }
-
-      if (i > 0) {
-        result.push(moment(activeDate).add(i, 'days').toLocaleString());
-      }
-    }
-
-    return result;
   }
 }

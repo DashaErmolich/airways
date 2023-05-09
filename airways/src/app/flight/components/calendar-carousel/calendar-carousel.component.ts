@@ -1,22 +1,22 @@
 /* eslint-disable class-methods-use-this */
 import {
-  Component, EventEmitter, Input, OnInit, Output,
+  Component, Input, OnInit,
 } from '@angular/core';
 import { OwlOptions } from 'ngx-owl-carousel-o';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import moment from 'moment';
-import { StateService } from 'src/app/core/services/state.service';
-import { BehaviorSubject } from 'rxjs';
-import { AvailableFlight } from '../../models/flight.models';
+import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { selectCurrency } from 'src/app/redux/selectors/auth.selectors';
+import { MatIconService } from 'src/app/shared/services/icon.service';
+import { Flight } from '../../models/flight.models';
 import { FlightsService } from '../../services/flights.service';
-
-import * as FlightActions from '../../../redux/actions/flights.actions';
 
 export interface Slide {
   flightDate: string,
-  data: AvailableFlight,
+  data: Flight,
 }
 
 @Component({
@@ -26,8 +26,6 @@ export interface Slide {
 })
 export class CalendarCarouselComponent implements OnInit {
   @Input() responseIndex!: number;
-
-  @Output() selectDepartureDateEvent = new EventEmitter<string>();
 
   public customOptions: OwlOptions = {
     loop: true,
@@ -53,9 +51,7 @@ export class CalendarCarouselComponent implements OnInit {
     },
   };
 
-  public slides: Slide[] = [];
-
-  public isControlsDisabled = false;
+  private allSlides: Slide[] = [];
 
   private isNextClicked = false;
 
@@ -67,15 +63,34 @@ export class CalendarCarouselComponent implements OnInit {
 
   private newSlide: Slide | null = null;
 
+  slides: Slide[] = [];
+
+  isControlsDisabled = false;
+
+  activeFlight: Flight | null = null;
+
+  currency$: Observable<string>;
+
   constructor(
     private store$: Store<AppState>,
     private flightsService: FlightsService,
-    private stateService: StateService,
-  ) { }
+    private sliderService: CalendarCarouselService,
+    private matIconService: MatIconService,
+  ) {
+    this.currency$ = this.store$.pipe(select(selectCurrency));
+  }
 
   ngOnInit(): void {
-    this.stateService.slides$.subscribe((res) => {
+    this.sliderService.visibleSlides$.subscribe((res) => {
       this.slides = res;
+    });
+
+    this.sliderService.allSlides$.subscribe((res) => {
+      this.allSlides = res;
+    });
+
+    this.sliderService.flight$.subscribe((res) => {
+      this.activeFlight = res;
     });
 
     this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
@@ -83,18 +98,17 @@ export class CalendarCarouselComponent implements OnInit {
     });
 
     this.newDate.subscribe((date) => {
-      this.flightsService.searchFlights({ ...this.searchData, startTripDate: date }).subscribe((res: AvailableFlight[]) => {
-        // debugger;
+      this.flightsService.searchFlights({ ...this.searchData, startTripDate: date }).subscribe((res: Flight[]) => {
         this.newSlide = {
-          flightDate: date!,
+          flightDate: moment(date).format('LL'),
           data: res[0],
         };
         if (date) {
           if (this.isNextClicked) {
-            this.stateService.addNextSlide(this.newSlide!);
+            this.sliderService.addNextSlide(this.newSlide!);
           }
           if (this.isPrevClicked) {
-            this.stateService.addPrevSlide(this.newSlide!);
+            this.sliderService.addPrevSlide(this.newSlide!);
           }
         }
       });
@@ -103,16 +117,15 @@ export class CalendarCarouselComponent implements OnInit {
 
   changeDepartureDate(date: string) {
     const slide = this.slides.find((item: Slide) => item.flightDate === date);
-    this.stateService.setFlight(slide!.data);
-    console.log(slide);
+    this.sliderService.setFlight(slide!.data);
   }
 
-  isInvalidDate(date: string) {
+  isValidDate(date: string) {
     let result = false;
 
     const now = new Date().getTime();
 
-    const chosen = new Date(String(date)).getTime();
+    const chosen = new Date(date).getTime();
 
     if ((chosen - now) < 0) {
       result = true;
@@ -123,10 +136,10 @@ export class CalendarCarouselComponent implements OnInit {
 
   updateSlides() {
     if (this.isNextClicked) {
-      this.newDate.next(moment(this.slides[this.slides.length - 1].flightDate).add(1, 'days').toLocaleString());
+      this.newDate.next(moment(this.allSlides[this.allSlides.length - 1].flightDate).add(1, 'days').toJSON());
     }
     if (this.isPrevClicked) {
-      this.newDate.next(moment(this.slides[0].flightDate).subtract(1, 'days').toLocaleString());
+      this.newDate.next(moment(this.allSlides[0].flightDate).subtract(1, 'days').toJSON());
     }
     this.isControlsDisabled = false;
   }
