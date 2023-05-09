@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnInit,
+  Component, Input, OnInit, Output, EventEmitter,
 } from '@angular/core';
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
@@ -21,6 +21,8 @@ import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-
 })
 export class FlightSelectionComponent implements OnInit {
   @Input() responseIndex!: number;
+
+  @Output() flightSelectedEvent = new EventEmitter<boolean>();
 
   searchData!: FlightSearchState;
 
@@ -95,5 +97,6 @@ export class FlightSelectionComponent implements OnInit {
 
   toggleFlightSelection() {
     this.flightSelected = !this.flightSelected;
+    this.flightSelectedEvent.emit(this.flightSelected);
   }
 }

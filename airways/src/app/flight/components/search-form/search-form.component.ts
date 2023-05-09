@@ -235,7 +235,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         isOneWayTrip: !this.searchForm.value.isRoundTrip,
         from: this.searchForm.value.directions.departureFrom,
         to: this.searchForm.value.directions.destinationTo,
-        startTripDate: this.searchForm.value.date,
+        startTripDate: this.searchForm.value.date.toDateString(),
         rangeTripDates: {
           start: this.searchForm.value.range.start,
           end: this.searchForm.value.range.end,

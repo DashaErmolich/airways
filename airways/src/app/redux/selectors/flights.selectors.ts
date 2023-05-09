@@ -22,6 +22,11 @@ export const selectPassengersQty = createSelector(
   (state) => state.passengers.adult + state.passengers.child + state.passengers.infant,
 );
 
+export const selectPassengers = createSelector(
+  selectFlightsSearchFeature,
+  (state) => state.passengers,
+);
+
 export const selectSelectedFlight = createSelector(
   selectFlightsFeature,
   (state) => state.flights,

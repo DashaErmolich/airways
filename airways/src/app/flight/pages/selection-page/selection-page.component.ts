@@ -15,6 +15,7 @@ import { SlidesOutputData } from 'ngx-owl-carousel-o';
 import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
 import moment from 'moment';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
+import * as BookingActions from '../../../redux/actions/booking.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
 import { Slide } from '../../components/calendar-carousel/calendar-carousel.component';
 import { Flight } from '../../models/flight.models';
@@ -46,6 +47,8 @@ export class SelectionPageComponent implements OnInit {
   flight!: Flight;
 
   flights$: Observable<Flight[][]>;
+
+  isFlightsSelected = false;
 
   constructor(
     private store$: Store<AppState>,
@@ -88,5 +91,13 @@ export class SelectionPageComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  submitFlights(): void {
+    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.flight], forwardFlights: [this.flight] }));
+  }
+
+  toggleFlightSelection(event: boolean) {
+    this.isFlightsSelected = event;
   }
 }

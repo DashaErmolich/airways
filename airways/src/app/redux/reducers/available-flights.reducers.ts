@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { FlightsState } from '../state.models';
 import * as FlightsActions from '../actions/flights.actions';
 
-export const flightsReducersNode = 'available-flights';
+export const flightsReducersNode = 'flights-search-results';
 
 export const initialState: FlightsState = {
   isLoading: false,

@@ -42,7 +42,7 @@
       <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
     </div>
 
-    <button mat-raised-button color="primary" [disabled]="(isAuth$ | async) === false" *ngIf="!flightSelected" (click)="toggleFlightSelection()">Select</button>
+    <button mat-raised-button color="primary" *ngIf="!flightSelected" (click)="toggleFlightSelection()">Select</button>
     <button mat-button color="primary" *ngIf="flightSelected" (click)="toggleFlightSelection()">Edit</button>
   </div>
 </div>

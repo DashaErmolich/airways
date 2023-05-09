@@ -12,8 +12,9 @@ import { Store } from '@ngrx/store';
 import { UtilsService } from 'src/app/core/services/utils.service';
 import * as AuthActions from '../actions/auth.actions';
 import * as FlightsActions from '../actions/flights.actions';
+import * as BookingActions from '../actions/booking.actions';
 import { AppState } from '../state.models';
-import { selectFlightSearchData } from '../selectors/flights.selectors';
+import { selectFlightSearchData, selectPassengers } from '../selectors/flights.selectors';
 
 @Injectable()
 export class AuthEffects {
@@ -61,13 +62,14 @@ export class AuthEffects {
     { dispatch: false },
   );
 
-  // getFlightsData$ = createEffect(() => this.actions$.pipe(
-  //   ofType(FlightsActions.getFlightsData),
-  //   mergeMap(({ flightsSearchData: flightsState }) => this.flightsService.searchFlights(flightsState).pipe(
-  //     map((res) => FlightsActions.getFlightsDataSuccess({ flights: res })),
-  //     catchError(async (error) => FlightsActions.getFlightsDataFailure({ error: error.message })),
-  //   )),
-  // ));
+  searchFormSubmit$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(FlightsActions.searchFormSubmit),
+      tap(({ flightsSearchData }) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify(flightsSearchData))),
+      map(() => FlightsActions.searchFlights()),
+    ),
+    // { dispatch: false },
+  );
 
   searchFlights$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchFlights),
@@ -79,21 +81,14 @@ export class AuthEffects {
     )),
   ));
 
-  // this.store$.pipe(select(selectFlightSearchData)).subscribe((searchState) => {
-  //   this.flightsSearchData = searchState;
-  //   this.datesArr = this.getDatesArr(this.flightsSearchData.startTripDate!);
-  //   this.flightsService.searchMultipleFlights(this.flightsSearchData, this.datesArr).subscribe((allFlights) => {
-  //     this.allSlides = [];
-  //     allFlights.forEach((item, i) => {
-  //       this.allSlides = [...this.allSlides, {
-  //         flightDate: this.datesArr[i],
-  //         data: item[0],
-  //       }];
-  //     });
-  //     this.store$.dispatch(FlightsActions.setSelectedFlight({ flights: [this.allSlides[3].data] }));
-  //     this.stateService.setSlides(this.allSlides);
-  //   });
-  // });
+  setFlights$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(BookingActions.setFlights),
+      withLatestFrom(this.store$.select(selectPassengers)),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      map(([_, passengers]) => BookingActions.setPassengers({ passengers })),
+    ),
+  );
 
   constructor(
     private actions$: Actions,

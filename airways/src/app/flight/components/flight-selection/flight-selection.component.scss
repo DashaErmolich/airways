@@ -1,5 +1,9 @@
 @import '../../../../styles/abstracts/variables';
 
+.flight-selection-container {
+  margin-bottom: 2rem;
+}
+
 .flight-selection__title {
   color: $color-primary-blue;
   display: flex;

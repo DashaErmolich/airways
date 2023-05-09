@@ -9,7 +9,7 @@ export class UtilsService {
   getDatesArr(activeDate: string) {
     const result = [];
 
-    for (let i = -3; i < 4; i += 1) {
+    for (let i = -3; i <= 3; i += 1) {
       if (i < 0) {
         result.push(moment(activeDate).subtract(Math.abs(i), 'days').toLocaleString());
       }

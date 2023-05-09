@@ -8,17 +8,19 @@
   <div *ngIf="(isLoading$ | async) === false">
     <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
 
-    <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex"></app-flight-selection>
+    <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex" (flightSelectedEvent)="toggleFlightSelection($event)"></app-flight-selection>
     <app-flight-selection *ngIf="(searchData$ | async)!.isRoundTrip" [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex"></app-flight-selection>
 
     <div class="">
       <button mat-raised-button (click)="goBack()">
         Back
       </button>
-      <span *ngIf="(isAuth$ | async) === false" class="error-message">You must be signed in the app to continue</span>
-      <button mat-raised-button color="primary" routerLink="/booking" *ngIf="isAuth$ | async">
+      <button mat-raised-button color="primary" routerLink="/booking" *ngIf="isAuth$ | async" (click)="submitFlights()" [disabled]="!isFlightsSelected">
         Continue
       </button>
+      
+      <p *ngIf="(isAuth$ | async) === false" class="error-message">You must be signed in the app to continue</p>
+      <p *ngIf="!isFlightsSelected" class="error-message">You must must select flights to continue</p>
     </div>
   </div>
 

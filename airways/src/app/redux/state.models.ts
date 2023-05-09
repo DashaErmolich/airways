@@ -30,7 +30,8 @@ export interface FlightsState {
 
 export interface BookingState {
   passengers: Passengers | null;
-  flights: Flight[];
+  directFlights: Flight[],
+  forwardFlights: Flight[] | null,
 }
 
 export interface AppState {

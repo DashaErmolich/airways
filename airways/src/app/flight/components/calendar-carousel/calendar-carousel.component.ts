@@ -13,6 +13,7 @@ import { selectCurrency } from 'src/app/redux/selectors/auth.selectors';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Flight } from '../../models/flight.models';
 import { FlightsService } from '../../services/flights.service';
+import * as FlightsActions from '../../../redux/actions/flights.actions';
 
 export interface Slide {
   flightDate: string,
@@ -118,9 +119,11 @@ export class CalendarCarouselComponent implements OnInit {
   changeDepartureDate(date: string) {
     const slide = this.slides.find((item: Slide) => item.flightDate === date);
     this.sliderService.setFlight(slide!.data);
+    this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: moment(slide!.flightDate).toString() }));
   }
 
   isValidDate(date: string) {
+    // debugger;
     let result = false;
 
     const now = new Date().getTime();
@@ -136,10 +139,10 @@ export class CalendarCarouselComponent implements OnInit {
 
   updateSlides() {
     if (this.isNextClicked) {
-      this.newDate.next(moment(this.allSlides[this.allSlides.length - 1].flightDate).add(1, 'days').toJSON());
+      this.newDate.next(moment(this.allSlides[this.allSlides.length - 1].flightDate).add(1, 'days').toString());
     }
     if (this.isPrevClicked) {
-      this.newDate.next(moment(this.allSlides[0].flightDate).subtract(1, 'days').toJSON());
+      this.newDate.next(moment(this.allSlides[0].flightDate).subtract(1, 'days').toString());
     }
     this.isControlsDisabled = false;
   }

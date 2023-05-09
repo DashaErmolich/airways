@@ -1,19 +1,24 @@
 import { createReducer, on } from '@ngrx/store';
 import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/constants';
-import { AIRPORTS } from 'src/app/flight/constants/data';
+import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { FlightSearchState } from '../state.models';
 import * as FlightsActions from '../actions/flights.actions';
 
 export const flightsSearchReducersNode = 'flights';
 
+function getSearchParams(): FlightSearchState | null {
+  const searchParams = localStorage.getItem(LocalStorageKeysEnum.SearchParams);
+  return searchParams ? JSON.parse(searchParams) : null;
+}
+
 export const initialState: FlightSearchState = {
-  isRoundTrip: false,
-  isOneWayTrip: true,
-  from: AIRPORTS[0],
-  to: AIRPORTS[1],
-  startTripDate: (new Date()).toDateString(),
-  rangeTripDates: null,
-  passengers: PASSENGERS_DEFAULT,
+  isRoundTrip: !!getSearchParams()?.isRoundTrip,
+  isOneWayTrip: !!getSearchParams()?.isOneWayTrip,
+  from: getSearchParams() ? getSearchParams()!.from : null,
+  to: getSearchParams() ? getSearchParams()!.to : null,
+  startTripDate: getSearchParams() ? getSearchParams()!.startTripDate : null,
+  rangeTripDates: getSearchParams() ? getSearchParams()!.rangeTripDates : null,
+  passengers: getSearchParams() ? getSearchParams()!.passengers : PASSENGERS_DEFAULT,
 };
 
 export const flightsSearchReducers = createReducer(
