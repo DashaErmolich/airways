@@ -21,7 +21,7 @@
               {{  errorMessages.passengersForm.firstName.pattern }}
             </mat-error>
           </mat-form-field>
-      
+
           <mat-form-field class="last-name-field">
             <mat-label>Last name</mat-label>
             <input matInput type="text" formControlName="lastName">
@@ -33,12 +33,12 @@
               {{  errorMessages.authForm.lastName.pattern }}
             </mat-error>
           </mat-form-field>
-      
+
           <mat-button-toggle-group formControlName="gender" class="gender-name-field">
             <mat-button-toggle value="Male">Male</mat-button-toggle>
             <mat-button-toggle value="Female">Female</mat-button-toggle>
           </mat-button-toggle-group>
-    
+
           <mat-form-field class="date-name-field">
             <mat-label>Date of birth</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
@@ -54,7 +54,7 @@
           </mat-form-field>
         </div>
         <div class="passenger-form-lower">
-          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
+          <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
         </div>
@@ -78,7 +78,7 @@
             {{  errorMessages.passengersForm.firstName.pattern }}
           </mat-error>
         </mat-form-field>
-    
+
         <mat-form-field class="last-name-field">
           <mat-label>Last name</mat-label>
           <input matInput type="text" formControlName="lastName">
@@ -90,12 +90,12 @@
             {{  errorMessages.authForm.lastName.pattern }}
           </mat-error>
         </mat-form-field>
-    
+
         <mat-button-toggle-group formControlName="gender" class="gender-name-field">
           <mat-button-toggle value="Male">Male</mat-button-toggle>
           <mat-button-toggle value="Female">Female</mat-button-toggle>
         </mat-button-toggle-group>
-  
+
         <mat-form-field class="date-name-field">
           <mat-label>Date of birth</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
@@ -111,7 +111,7 @@
         </mat-form-field>
       </div>
       <div class="passenger-form-lower">
-        <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
+        <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
         <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
         <span class="passenger-assistance-title">Need special assistance?</span>
       </div>
@@ -135,7 +135,7 @@
               {{  errorMessages.passengersForm.firstName.pattern }}
             </mat-error>
           </mat-form-field>
-      
+
           <mat-form-field class="last-name-field">
             <mat-label>Last name</mat-label>
             <input matInput type="text" formControlName="lastName">
@@ -147,12 +147,12 @@
               {{  errorMessages.authForm.lastName.pattern }}
             </mat-error>
           </mat-form-field>
-      
+
           <mat-button-toggle-group formControlName="gender" class="gender-name-field">
             <mat-button-toggle value="Male">Male</mat-button-toggle>
             <mat-button-toggle value="Female">Female</mat-button-toggle>
           </mat-button-toggle-group>
-    
+
           <mat-form-field class="date-name-field">
             <mat-label>Date of birth</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
@@ -168,7 +168,7 @@
           </mat-form-field>
         </div>
         <div class="passenger-form-lower">
-          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
+          <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
         </div>
@@ -195,7 +195,7 @@
             {{ errorMessages.authForm.countryCode.required}}
           </mat-error>
       </mat-form-field>
-  
+
       <mat-form-field class="phone-field">
         <mat-label>Mobile phone number</mat-label>
         <input matInput formControlName="phoneNumber">
@@ -206,7 +206,7 @@
           {{ errorMessages.authForm.phoneNumber.pattern }}
         </mat-error>
       </mat-form-field>
-  
+
       <mat-form-field class="email-field">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email">
