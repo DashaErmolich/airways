@@ -8,9 +8,9 @@ import { Airport, Flight, FlightSearchData } from '../models/flight.models';
   providedIn: 'root',
 })
 export class FlightsService {
-  // private BASE_URL = 'https://api.air-ways.online';
+  private BASE_URL = 'https://api.air-ways.online';
 
-  private BASE_URL = 'http://localhost:3001';
+  // private BASE_URL = 'http://localhost:3001';
 
   constructor(
     private http: HttpClient,
