@@ -45,6 +45,7 @@ body {
 .container {
   max-width: $desktop-width;
   margin: auto;
+  overflow: hidden;
 }
 
 .owl-next,

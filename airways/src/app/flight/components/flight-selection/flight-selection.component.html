@@ -4,7 +4,9 @@
     <h2>{{ getFlightTitle() }}</h2>
   </div>
 
-  <app-calendar-carousel [responseIndex]="responseIndex" *ngIf="!flightSelected"></app-calendar-carousel>
+  <!-- <app-calendar-carousel [responseIndex]="responseIndex" *ngIf="!flightSelected"></app-calendar-carousel> -->
+
+  <app-calendar-slider></app-calendar-slider>
 
   <div class="flight-selection__info info">
     <div class="info__flight flight">
@@ -37,7 +39,7 @@
     <span><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
 
     <div class="flight-price-container">
-      <span [appFlightAvailableSeats]="flight.seats">{{ flight.seats.avaible }} seats <br> available</span>
+      <span [appFlightAvailableSeats]="flight.seats" [appFlightAvailableSeatsStyle]="'background-color'">{{ flight.seats.avaible }} seats <br> available</span>
       <span class="color-gray">Price</span>
       <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
     </div>

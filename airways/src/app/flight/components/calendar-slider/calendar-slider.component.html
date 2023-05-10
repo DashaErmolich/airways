@@ -1,0 +1,26 @@
+<div class="slider-wrapper">
+  <div class="slider"
+  [@moveSlide]="isNextClicked ? 'next' : 'primary'"
+  [@moveSlide]="isPrevClicked ? 'prev' : 'primary'"
+  (@moveSlide.start)="onSlideMovingStart()"
+  (@moveSlide.done)="onSlideMovingEnd()"
+  >
+  <button class="slide"
+    *ngFor="let slide of slides"
+    [class.slide_active]="slide.data.flightNumber === activeFlight?.flightNumber"
+    [appFlightAvailableSeats]="slide.data.flightNumber === activeFlight?.flightNumber ? slide.data.seats : null"
+    [appFlightAvailableSeatsStyle]="'border-bottom-color'"
+    [disabled]="isValidDate(slide.data.takeoffDate)"
+    (click)="changeDepartureDate(slide.flightDate)">
+    <span class="slide__date">{{ slide.flightDate | date:'d MMM' }}</span>
+    <span class="slide__weekday">{{ slide.flightDate | date:'EEEE' }}</span>
+    <span class="slide__price" *ngIf="!isValidDate(slide.data.takeoffDate)">{{ slide.data.price| currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
+    <mat-icon svgIcon="no-flight" *ngIf="isValidDate(slide.data.takeoffDate)"></mat-icon>
+  </button>
+</div>
+
+<div class="controls">
+  <button (click)="showPrevSlide()" [disabled]="isControlsDisabled">&LeftAngleBracket;</button>
+  <button (click)="showNextSlide()" [disabled]="isControlsDisabled">&RightAngleBracket;</button>
+</div>
+</div>
