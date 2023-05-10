@@ -1,0 +1,14 @@
+@import '../../../../styles/abstracts/variables';
+
+.carousel__item {
+  border: none;
+  border-left: 1px solid $color-gray;
+  border-right: 1px solid $color-gray;
+  width: 100%;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.carousel__item_active {
+  border: 2px solid green;
+}

@@ -1,18 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
 import { FormValidatorService } from 'src/app/core/services/form-validator.service';
 import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
 import { Observable } from 'rxjs';
-import { selectError } from 'src/app/redux/selectors/app.selectors';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+import { selectError } from 'src/app/redux/selectors/auth.selectors';
+import { MatIconService } from 'src/app/shared/services/icon.service';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
-import * as AuthActions from '../../../redux/actions/app.actions';
+import * as AuthActions from '../../../redux/actions/auth.actions';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up-tab',
@@ -34,21 +33,12 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<SignUpTabComponent>,
     private formValidatorService: FormValidatorService,
     private store$: Store<AppState>,
-    private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer,
+    private authService: AuthService,
+    private matIconService: MatIconService,
   ) {
     this.error$ = this.store$.pipe(select(selectError));
-    this.matIconRegistry.addSvgIcon(
-      'google',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'),
-    );
-    this.matIconRegistry.addSvgIcon(
-      'facebook',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'),
-    );
   }
 
   ngOnInit() {
@@ -131,5 +121,33 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.store$.dispatch(AuthActions.signUp({ user: this.signUpForm.value }));
+  }
+
+  fillFormWithGoogle(): void {
+    this.authService.getDefaultUsers().subscribe((res) => {
+      this.signUpForm.get('email')!.setValue(res[0].email);
+      this.signUpForm.get('firstName')!.setValue(res[0].firstName);
+      this.signUpForm.get('lastName')!.setValue(res[0].lastName);
+      this.signUpForm.get('citizenship')!.setValue(res[0].citizenship);
+      this.signUpForm.get('countryCode')!.setValue(res[0].countryCode);
+      this.signUpForm.get('dateOfBirth')!.setValue(res[0].dateOfBirth);
+      this.signUpForm.get('gender')!.setValue(res[0].gender);
+      this.signUpForm.get('phoneNumber')!.setValue(res[0].phoneNumber);
+      this.signUpForm.get('password')!.setValue('Qwert123!');
+    });
+  }
+
+  fillFormWithFacebook(): void {
+    this.authService.getDefaultUsers().subscribe((res) => {
+      this.signUpForm.get('email')!.setValue(res[1].email);
+      this.signUpForm.get('firstName')!.setValue(res[1].firstName);
+      this.signUpForm.get('lastName')!.setValue(res[1].lastName);
+      this.signUpForm.get('citizenship')!.setValue(res[1].citizenship);
+      this.signUpForm.get('countryCode')!.setValue(res[1].countryCode);
+      this.signUpForm.get('dateOfBirth')!.setValue(res[1].dateOfBirth);
+      this.signUpForm.get('gender')!.setValue(res[1].gender);
+      this.signUpForm.get('phoneNumber')!.setValue(res[1].phoneNumber);
+      this.signUpForm.get('password')!.setValue('Qwert123!');
+    });
   }
 }
