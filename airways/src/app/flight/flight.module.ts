@@ -15,12 +15,12 @@ import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
-import { CalendarCarouselComponent } from './components/calendar-carousel/calendar-carousel.component';
 import { FlightAvailableSeatsDirective } from './directives/flight-available-seats.directive';
-import { FlightInfoComponent } from './components/flight-info/flight-info.component';
+import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 import { CurrencyValuePipe } from './pipes/currency-value.pipe';
 import { FlightTimePipe } from './pipes/flight-time.pipe';
 import { CalendarSliderComponent } from './components/calendar-slider/calendar-slider.component';
+import { FlightDescriptionComponent } from './components/flight-description/flight-description.component';
 
 @NgModule({
   declarations: [
@@ -28,12 +28,12 @@ import { CalendarSliderComponent } from './components/calendar-slider/calendar-s
     SelectionPageComponent,
     SearchFormComponent,
     FlightSelectionComponent,
-    CalendarCarouselComponent,
     FlightAvailableSeatsDirective,
-    FlightInfoComponent,
+    FlightsSearchSummaryComponent,
     CurrencyValuePipe,
     FlightTimePipe,
     CalendarSliderComponent,
+    FlightDescriptionComponent,
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,19 @@
+@import '../../../../styles/abstracts/variables';
+
+.page-wrapper {
+  position: relative;
+}
+
+.page-wrapper:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: -$header-height;
+  width: 100%;
+  height: calc(100vh - $footer-height);
+  opacity: 0.2;
+  background-image: url(/assets//images/Background.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}

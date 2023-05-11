@@ -13,6 +13,7 @@ import {
 } from 'src/app/redux/actions/flights-search-form.actions';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import { FlightSearchState } from 'src/app/redux/state.models';
+import { DatesService } from 'src/app/flight/services/dates.service';
 import { PASSENGERS_DEFAULT } from '../../constants/constants';
 import { AIRPORTS } from '../../constants/data';
 import { Airport, SearchFormState, Passengers } from '../../models/flight.models';
@@ -45,6 +46,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     private store$: Store<SearchFormState>,
     private router: Router,
     private route: ActivatedRoute,
+    private utilsService: DatesService,
   ) {}
 
   ngOnInit(): void {
@@ -235,10 +237,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         isOneWayTrip: !this.searchForm.value.isRoundTrip,
         from: this.searchForm.value.directions.departureFrom,
         to: this.searchForm.value.directions.destinationTo,
-        startTripDate: this.searchForm.value.date.toDateString(),
+        startTripDate: this.utilsService.formatTimezone(this.searchForm.value.date as Date),
         rangeTripDates: {
-          start: this.searchForm.value.range.start,
-          end: this.searchForm.value.range.end,
+          start: this.utilsService.formatTimezone(this.searchForm.value.range.start as Date),
+          end: this.utilsService.formatTimezone(this.searchForm.value.range.end as Date),
         },
         passengers: this.searchForm.value.passengers,
       },

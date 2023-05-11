@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
+import {
+  Actions, createEffect, ofType,
+} from '@ngrx/effects';
 import {
   catchError, map, mergeMap, tap, withLatestFrom,
 } from 'rxjs';
@@ -9,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { FlightsService } from 'src/app/flight/services/flights.service';
 import { Store } from '@ngrx/store';
-import { UtilsService } from 'src/app/core/services/utils.service';
+import { DatesService } from 'src/app/flight/services/dates.service';
 import * as AuthActions from '../actions/auth.actions';
 import * as FlightsActions from '../actions/flights.actions';
 import * as BookingActions from '../actions/booking.actions';
@@ -68,14 +70,22 @@ export class AuthEffects {
       tap(({ flightsSearchData }) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify(flightsSearchData))),
       map(() => FlightsActions.searchFlights()),
     ),
-    // { dispatch: false },
+  );
+
+  setTripDate$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(FlightsActions.setDepartureDate),
+      withLatestFrom(this.store$.select(selectFlightSearchData)),
+      tap(([{ startTripDate }, searchData]) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify({ ...searchData, startTripDate }))),
+    ),
+    { dispatch: false },
   );
 
   searchFlights$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchFlights),
     withLatestFrom(this.store$.select(selectFlightSearchData)),
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    mergeMap(([_, searchData]) => this.flightsService.searchMultipleFlights(searchData, this.utilsService.getDatesArr(searchData.startTripDate || '')).pipe(
+    mergeMap(([_, searchData]) => this.flightsService.searchMultipleFlights(searchData, this.datesService.getDatesArr(searchData.startTripDate || '')).pipe(
       map((res) => FlightsActions.getFlightsDataSuccess({ flights: res })),
       catchError(async (error) => FlightsActions.getFlightsDataFailure({ error: error.message })),
     )),
@@ -96,6 +106,6 @@ export class AuthEffects {
     private dialog: MatDialog,
     private flightsService: FlightsService,
     private store$: Store<AppState>,
-    private utilsService: UtilsService,
+    private datesService: DatesService,
   ) { }
 }

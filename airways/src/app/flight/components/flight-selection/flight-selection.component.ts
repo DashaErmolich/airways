@@ -7,12 +7,13 @@ import { Observable } from 'rxjs';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
 import moment from 'moment';
 import { selectCurrency, selectDateFormat, selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
+import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Flight, DatesRange } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
+import { DatesService } from '../../services/dates.service';
 
 @Component({
   selector: 'app-flight-selection',
@@ -38,8 +39,9 @@ export class FlightSelectionComponent implements OnInit {
 
   constructor(
     private store$: Store<AppState>,
-    private sliderService: CalendarCarouselService,
+    private sliderService: CalendarSliderService,
     private matIconService: MatIconService,
+    private datesService: DatesService,
   ) {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
@@ -98,5 +100,9 @@ export class FlightSelectionComponent implements OnInit {
   toggleFlightSelection() {
     this.flightSelected = !this.flightSelected;
     this.flightSelectedEvent.emit(this.flightSelected);
+  }
+
+  isValidDate(date: string) {
+    return this.datesService.isValidDate(date);
   }
 }

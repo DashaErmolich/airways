@@ -10,6 +10,7 @@ $slides-desktop: 7;
   display: grid;
   grid-template-columns: repeat($slides-desktop, calc(100%/($slides-desktop - 2)));
   margin-bottom: 10px;
+  height: 85px;
 }
 
 .slide {
@@ -29,6 +30,10 @@ $slides-desktop: 7;
 
   &:disabled {
     cursor: not-allowed;
+
+    .slide__date {
+      color: #D0D9DF;
+    }
   }
 }
 
@@ -70,20 +75,21 @@ $slides-desktop: 7;
   }
 }
 
-.controls {
+.control {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  background: #E9EDF1;
   position: absolute;
   top: calc(50% - 12px);
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
+}
 
-  button {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: none;
-    background: #E9EDF1;
-  }
+.control__prev {
+  left: 0;
+}
+
+.control__next {
+  right: 0;
 }

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { selectCurrency } from 'src/app/redux/selectors/auth.selectors';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
@@ -9,11 +8,12 @@ import { MatIconService } from 'src/app/shared/services/icon.service';
 import {
   animate, state, style, transition, trigger,
 } from '@angular/animations';
+import { DatesService } from 'src/app/flight/services/dates.service';
 import { Flight } from '../../models/flight.models';
-import { CalendarCarouselService } from '../../services/calendar-carousel.service';
+import { CalendarSliderService } from '../../services/calendar-slider.service';
 import { FlightsService } from '../../services/flights.service';
-import { Slide } from '../calendar-carousel/calendar-carousel.component';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
+import { Slide } from '../../models/slider.models';
 
 @Component({
   selector: 'app-calendar-slider',
@@ -59,8 +59,9 @@ export class CalendarSliderComponent implements OnInit {
   constructor(
     private store$: Store<AppState>,
     private flightsService: FlightsService,
-    private sliderService: CalendarCarouselService,
+    private sliderService: CalendarSliderService,
     private matIconService: MatIconService,
+    private datesService: DatesService,
   ) {
     this.currency$ = this.store$.pipe(select(selectCurrency));
   }
@@ -85,8 +86,8 @@ export class CalendarSliderComponent implements OnInit {
     this.newDate.subscribe((date) => {
       this.flightsService.searchFlights({ ...this.searchData, startTripDate: date }).subscribe((res: Flight[]) => {
         this.newSlide = {
-          flightDate: moment(date).format('LL'),
-          data: res[0],
+          date: date!,
+          flight: res[0],
         };
         if (date) {
           if (this.isNextClicked) {
@@ -118,32 +119,21 @@ export class CalendarSliderComponent implements OnInit {
 
   onSlideMovingEnd() {
     if (this.isNextClicked) {
-      this.newDate.next(moment(this.allSlides[this.allSlides.length - 1].flightDate).add(1, 'days').toString());
+      this.newDate.next(this.datesService.getNextCalendarDate(this.allSlides[this.allSlides.length - 1].date));
     }
     if (this.isPrevClicked) {
-      this.newDate.next(moment(this.allSlides[0].flightDate).subtract(1, 'days').toString());
+      this.newDate.next(this.datesService.getPrevCalendarDate(this.allSlides[0].date));
     }
     this.isControlsDisabled = false;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isValidDate(date: string) {
-    let result = false;
-
-    const now = new Date().getTime();
-
-    const chosen = new Date(date).getTime();
-
-    if ((chosen - now) < 0) {
-      result = true;
-    }
-
-    return result;
+    return this.datesService.isValidDate(date);
   }
 
   changeDepartureDate(date: string) {
-    const slide = this.slides.find((item: Slide) => item.flightDate === date);
-    this.sliderService.setFlight(slide!.data);
-    this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: moment(slide!.flightDate).toString() }));
+    const slide = this.slides.find((item: Slide) => item.date === date);
+    this.sliderService.setFlight(slide!.flight);
+    this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: slide!.date }));
   }
 }

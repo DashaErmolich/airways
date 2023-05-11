@@ -4,39 +4,12 @@
     <h2>{{ getFlightTitle() }}</h2>
   </div>
 
-  <!-- <app-calendar-carousel [responseIndex]="responseIndex" *ngIf="!flightSelected"></app-calendar-carousel> -->
+  <app-calendar-slider *ngIf="!flightSelected"></app-calendar-slider>
 
-  <app-calendar-slider></app-calendar-slider>
-
-  <div class="flight-selection__info info">
-    <div class="info__flight flight">
-      <span class="flight__date">{{ flight.takeoffDate | date:'E, d MMM y' }}</span>
-      <div class="flight__time-container">
-        <span class="flight__time">{{ flight.takeoffDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
-        <span class="flight__zone">{{ flight.takeoffDate | date:'z' }}</span>
-      </div>
-      <span class="flight__city">{{ flight.form.city }}</span>
+  <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)">
+    <div class="flight-selection__flights-description">
+      <app-flight-description [flight]="flight"></app-flight-description>
     </div>
-
-    <div class="info__duration">
-      <span>{{ flight.timeMins | flightTime }}</span>
-      <span class="line-outside">
-        <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': responseIndex === 1}"></mat-icon>
-      </span>
-      <span>Direct</span>
-    </div>
-
-    <div class="info__flight info__flight_right flight">
-      <span class="flight__date">{{ flight.landingDate | date:'E, d MMM y' }}</span>
-      <div class="flight__time-container flight__time-container_reverse">
-        <span class="flight__time">{{ flight.landingDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
-        <span class="flight__zone">{{ flight.landingDate | date:'z' }}</span>
-      </div>
-      <span class="flight__city">{{ flight.to.city }}</span>
-    </div>
-
-
-    <span><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
 
     <div class="flight-price-container">
       <span [appFlightAvailableSeats]="flight.seats" [appFlightAvailableSeatsStyle]="'background-color'">{{ flight.seats.avaible }} seats <br> available</span>
@@ -44,8 +17,10 @@
       <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
     </div>
 
-    <button mat-raised-button color="primary" *ngIf="!flightSelected" (click)="toggleFlightSelection()">Select</button>
+    <button mat-raised-button color="primary" *ngIf="!flightSelected && isValidDate(flight.takeoffDate)" (click)="toggleFlightSelection()">Select</button>
     <button mat-button color="primary" *ngIf="flightSelected" (click)="toggleFlightSelection()">Edit</button>
   </div>
+
+  <span *ngIf="!isValidDate(flight.takeoffDate)">Sorry, this date is not available now. Choose another one.</span>
 </div>
 

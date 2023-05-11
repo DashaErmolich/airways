@@ -12,13 +12,12 @@ import {
 import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
 import { SlidesOutputData } from 'ngx-owl-carousel-o';
-import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
-import moment from 'moment';
+import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import * as BookingActions from '../../../redux/actions/booking.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
-import { Slide } from '../../components/calendar-carousel/calendar-carousel.component';
 import { Flight } from '../../models/flight.models';
+import { Slide } from '../../models/slider.models';
 
 @Component({
   selector: 'app-selection-page',
@@ -53,7 +52,7 @@ export class SelectionPageComponent implements OnInit {
   constructor(
     private store$: Store<AppState>,
     private location: Location,
-    private sliderService: CalendarCarouselService,
+    private sliderService: CalendarSliderService,
   ) {
     this.isLoading$ = this.store$.pipe(select(selectSelectedFlightIsLoading));
     this.error$ = this.store$.pipe(select(selectSelectedFlightError));
@@ -75,7 +74,7 @@ export class SelectionPageComponent implements OnInit {
     });
 
     this.flights$.subscribe((res) => {
-      this.sliderService.setSlides(res.map((item: Flight[]) => ({ flightDate: moment(item[0].takeoffDate).format('LL'), data: item[0] })));
+      this.sliderService.setSlides(res.map((item: Flight[]) => ({ date: new Date(new Date(item[0].takeoffDate).toJSON().substring(0, 10)).toJSON(), flight: item[0] })));
     });
   }
 

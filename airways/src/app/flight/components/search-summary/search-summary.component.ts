@@ -6,11 +6,11 @@ import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 
 @Component({
-  selector: 'app-flight-info',
-  templateUrl: './flight-info.component.html',
-  styleUrls: ['./flight-info.component.scss'],
+  selector: 'app-search-summary',
+  templateUrl: './search-summary.component.html',
+  styleUrls: ['./search-summary.scss'],
 })
-export class FlightInfoComponent {
+export class FlightsSearchSummaryComponent {
   @Output() toggleSearchFormVisibilityEvent = new EventEmitter<boolean>();
 
   searchData$: Observable<FlightSearchState>;
