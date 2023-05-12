@@ -6,7 +6,8 @@
   width: 100vw;
   display: flex;
   align-items: center;
-  background: #FFFFFF;
+  // background: #FFFFFF;
+  z-index: $z-index-header;
 }
 
 .header-container {
@@ -21,4 +22,8 @@
 .header__logo {
   width: 130px;
   height: 40px;
+}
+
+.stepper {
+  display: flex;
 }

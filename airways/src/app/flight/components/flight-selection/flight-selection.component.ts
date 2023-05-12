@@ -91,7 +91,7 @@ export class FlightSelectionComponent implements OnInit {
 
   getFlightTitle() {
     let title = `From ${this.searchData.from?.city} to ${this.searchData.to?.city}`;
-    if (this.responseIndex === 1) {
+    if (this.responseIndex === FlightsAPIResponseIndexesEnum.ReturnFlightResponseIndex) {
       title = `From ${this.searchData.to?.city} to ${this.searchData.from?.city}`;
     }
     return title;

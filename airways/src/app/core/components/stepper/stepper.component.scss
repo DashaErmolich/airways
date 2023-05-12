@@ -1,0 +1,22 @@
+.stepper {
+  display: flex;
+  gap: 1rem;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.step__icon {
+  width: 16px;
+  height: 16px;
+
+  .mat-icon {
+    width: 12px !important;
+    height: 12px !important;
+
+    font-size: 12px;
+  }
+}

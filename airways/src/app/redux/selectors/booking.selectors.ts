@@ -17,3 +17,8 @@ export const selectBookingPassengers = createSelector(
   selectFeature,
   (state) => state.passengers,
 );
+
+export const selectStep = createSelector(
+  selectFeature,
+  (state) => state.step,
+);

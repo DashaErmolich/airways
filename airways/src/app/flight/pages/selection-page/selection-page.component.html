@@ -9,7 +9,7 @@
     <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
 
     <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex" (flightSelectedEvent)="toggleFlightSelection($event)"></app-flight-selection>
-    <app-flight-selection *ngIf="(searchData$ | async)!.isRoundTrip" [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex"></app-flight-selection>
+    <app-flight-selection [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex" *ngIf="(searchData$ | async)!.isRoundTrip"></app-flight-selection>
 
     <div class="">
       <button mat-raised-button (click)="goBack()">

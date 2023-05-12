@@ -11,12 +11,14 @@ import { SharedModule } from '../shared/shared.module';
 import { reducers } from '../redux/reducers/auth.reducers';
 import { AuthEffects } from '../redux/effects/app.effects';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { StepperComponent } from './components/stepper/stepper.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
     NotFoundPageComponent,
+    StepperComponent,
   ],
   imports: [
     CommonModule,

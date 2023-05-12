@@ -13,6 +13,7 @@ import { AppState, FlightSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
 import { SlidesOutputData } from 'ngx-owl-carousel-o';
 import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
+import { StepsEnum } from 'src/app/core/constants/steps.enum';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import * as BookingActions from '../../../redux/actions/booking.actions';
 import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
@@ -76,6 +77,8 @@ export class SelectionPageComponent implements OnInit {
     this.flights$.subscribe((res) => {
       this.sliderService.setSlides(res.map((item: Flight[]) => ({ date: new Date(new Date(item[0].takeoffDate).toJSON().substring(0, 10)).toJSON(), flight: item[0] })));
     });
+
+    this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Second }));
   }
 
   toggleSearchFormVisibility(event: boolean): void {

@@ -29,6 +29,7 @@ export interface FlightsState {
 }
 
 export interface BookingState {
+  step: number;
   passengers: Passengers | null;
   directFlights: Flight[],
   forwardFlights: Flight[] | null,
