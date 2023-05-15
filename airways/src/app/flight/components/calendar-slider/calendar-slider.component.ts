@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { selectCurrency } from 'src/app/redux/selectors/auth.selectors';
-import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-import { FlightSearchState, AppState } from 'src/app/redux/state.models';
+import {
+  selectForwardFlights, selectFlightSearchData, selectReturnFlights, selectForwardFlight, selectReturnFlight,
+} from 'src/app/redux/selectors/flights.selectors';
+import { TripSearchState, AppState } from 'src/app/redux/state.models';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 import {
   animate, state, style, transition, trigger,
 } from '@angular/animations';
 import { DatesService } from 'src/app/flight/services/dates.service';
 import { Flight } from '../../models/flight.models';
-import { CalendarSliderService } from '../../services/calendar-slider.service';
 import { FlightsService } from '../../services/flights.service';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { Slide } from '../../models/slider.models';
+import { CalendarSliderService } from '../../services/calendar-slider.service';
+import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
 
 @Component({
   selector: 'app-calendar-slider',
   templateUrl: './calendar-slider.component.html',
   styleUrls: ['./calendar-slider.component.scss'],
+  providers: [CalendarSliderService],
   animations: [
     trigger('moveSlide', [
       state('primary', style({ transform: 'translateX(calc((-1) * 100%/5)' })),
@@ -34,13 +38,15 @@ import { Slide } from '../../models/slider.models';
   ],
 })
 export class CalendarSliderComponent implements OnInit {
+  @Input() flightTypeIndex!: number;
+
   private allSlides: Slide[] = [];
 
   isNextClicked = false;
 
   isPrevClicked = false;
 
-  private searchData!: FlightSearchState;
+  private searchData!: TripSearchState;
 
   private newDate = new BehaviorSubject<string | null>(null);
 
@@ -56,6 +62,12 @@ export class CalendarSliderComponent implements OnInit {
 
   currentIndex: number = 0;
 
+  flight$!: Observable<Flight | null>;
+
+  flights$!: Observable<Flight[][]>;
+
+  searchData$: Observable<TripSearchState>;
+
   constructor(
     private store$: Store<AppState>,
     private flightsService: FlightsService,
@@ -64,9 +76,14 @@ export class CalendarSliderComponent implements OnInit {
     private datesService: DatesService,
   ) {
     this.currency$ = this.store$.pipe(select(selectCurrency));
+    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
   }
 
   ngOnInit(): void {
+    this.flights$ = this.store$.pipe(select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlights : selectReturnFlights));
+
+    this.flight$ = this.store$.pipe(select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight));
+
     this.sliderService.visibleSlides$.subscribe((res) => {
       this.slides = res;
     });
@@ -75,7 +92,11 @@ export class CalendarSliderComponent implements OnInit {
       this.allSlides = res;
     });
 
-    this.sliderService.flight$.subscribe((res) => {
+    this.flights$.subscribe((res) => {
+      this.sliderService.setSlides(res.map((item: Flight[]) => ({ date: new Date(new Date(item[0].takeoffDate).toJSON().substring(0, 10)).toJSON(), flight: item[0] })));
+    });
+
+    this.flight$.subscribe((res) => {
       this.activeFlight = res;
     });
 
@@ -84,7 +105,9 @@ export class CalendarSliderComponent implements OnInit {
     });
 
     this.newDate.subscribe((date) => {
-      this.flightsService.searchFlights({ ...this.searchData, startTripDate: date }).subscribe((res: Flight[]) => {
+      this.flightsService.searchFlight({
+        fromKey: this.activeFlight?.form.key, toKey: this.activeFlight?.to.key, forwardDate: date, backDate: '',
+      }).subscribe((res: Flight[]) => {
         this.newSlide = {
           date: date!,
           flight: res[0],
@@ -133,7 +156,12 @@ export class CalendarSliderComponent implements OnInit {
 
   changeDepartureDate(date: string) {
     const slide = this.slides.find((item: Slide) => item.date === date);
-    this.sliderService.setFlight(slide!.flight);
-    this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: slide!.date }));
+    this.store$.dispatch(
+      this.flightTypeIndex <= 1
+        ? FlightsActions.setForwardFlight({ forwardFlight: slide!.flight })
+        : FlightsActions.setReturnFlight({ returnFlight: slide!.flight }),
+    );
+    // this.sliderService.setFlight(slide!.flight);
+    // this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: slide!.date }));
   }
 }

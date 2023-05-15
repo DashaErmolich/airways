@@ -5,12 +5,12 @@ export const selectFeature = (state: AppState) => state.booking;
 
 export const selectDirectFlights = createSelector(
   selectFeature,
-  (state) => state.directFlights,
+  (state) => state.forwardFlights,
 );
 
 export const selectForwardFlights = createSelector(
   selectFeature,
-  (state) => state.forwardFlights,
+  (state) => state.returnFlights,
 );
 
 export const selectBookingPassengers = createSelector(

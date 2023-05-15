@@ -8,8 +8,9 @@
   <div *ngIf="(isLoading$ | async) === false">
     <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
 
-    <app-flight-selection [responseIndex]="flightsResponseIndexes.OneWayFlightResponseIndex" (flightSelectedEvent)="toggleFlightSelection($event)"></app-flight-selection>
-    <app-flight-selection [responseIndex]="flightsResponseIndexes.ReturnFlightResponseIndex" *ngIf="(searchData$ | async)!.isRoundTrip"></app-flight-selection>
+    <app-flight-selection [flightTypeIndex]="flightsTypes.OneWayTripFlight" (flightSelectedEvent)="toggleDirectFlightSelection($event)" *ngIf="(searchData$ | async)!.isOneWayTrip"></app-flight-selection>
+    <app-flight-selection [flightTypeIndex]="flightsTypes.RoundTripForwardFlight" (flightSelectedEvent)="toggleDirectFlightSelection($event)" *ngIf="(searchData$ | async)!.isRoundTrip"></app-flight-selection>
+    <app-flight-selection [flightTypeIndex]="flightsTypes.RoundTripReturnFlight" (flightSelectedEvent)="toggleForwardFlightSelection($event)" *ngIf="(searchData$ | async)!.isRoundTrip"></app-flight-selection>
 
     <div class="">
       <button mat-raised-button (click)="goBack()">

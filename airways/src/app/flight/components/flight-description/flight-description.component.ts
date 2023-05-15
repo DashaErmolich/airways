@@ -7,7 +7,6 @@ import { selectDateFormat, selectCurrency } from 'src/app/redux/selectors/auth.s
 import { AppState } from 'src/app/redux/state.models';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Flight } from '../../models/flight.models';
-import { CalendarSliderService } from '../../services/calendar-slider.service';
 import { DatesService } from '../../services/dates.service';
 
 @Component({
@@ -18,7 +17,7 @@ import { DatesService } from '../../services/dates.service';
 export class FlightDescriptionComponent {
   @Input() responseIndex!: number;
 
-  @Input() flight!: Flight;
+  @Input() flight: Flight | null = null;
 
   dateFormat$: Observable<string>;
 
@@ -26,7 +25,6 @@ export class FlightDescriptionComponent {
 
   constructor(
     private store$: Store<AppState>,
-    private sliderService: CalendarSliderService,
     private matIconService: MatIconService,
     private datesService: DatesService,
   ) {
@@ -34,7 +32,7 @@ export class FlightDescriptionComponent {
     this.currency$ = this.store$.pipe(select(selectCurrency));
   }
 
-  isValidDate(date: string) {
-    return this.datesService.isValidDate(date);
+  isValidDate(date: string | undefined) {
+    return date ? this.datesService.isValidDate(date) : false;
   }
 }

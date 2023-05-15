@@ -1,4 +1,4 @@
-import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/constants';
+import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/passengers.constants';
 import { SearchFormState } from '../../flight/models/flight.models';
 import { SearchParamsActionsTypes } from '../actions/flights-search-form.actions';
 

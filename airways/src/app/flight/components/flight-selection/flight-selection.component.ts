@@ -1,18 +1,18 @@
 import {
   Component, Input, OnInit, Output, EventEmitter,
 } from '@angular/core';
-import { AppState, FlightSearchState } from 'src/app/redux/state.models';
+import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-import moment from 'moment';
+import {
+  selectFlightSearchData, selectForwardFlight, selectReturnFlight,
+} from 'src/app/redux/selectors/flights.selectors';
 import { selectCurrency, selectDateFormat, selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
 import { MatIconService } from 'src/app/shared/services/icon.service';
-import { Flight, DatesRange } from '../../models/flight.models';
+import { Flight } from '../../models/flight.models';
 
-import * as FlightsActions from '../../../redux/actions/flights.actions';
-import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
+// import * as FlightsActions from '../../../redux/actions/flights.actions';
+import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
 import { DatesService } from '../../services/dates.service';
 
 @Component({
@@ -21,13 +21,13 @@ import { DatesService } from '../../services/dates.service';
   styleUrls: ['./flight-selection.component.scss'],
 })
 export class FlightSelectionComponent implements OnInit {
-  @Input() responseIndex!: number;
+  @Input() flightTypeIndex!: number;
 
   @Output() flightSelectedEvent = new EventEmitter<boolean>();
 
-  searchData!: FlightSearchState;
+  flight$!: Observable<Flight | null>;
 
-  flight!: Flight;
+  flight: Flight | null = null;
 
   isAuth$: Observable<boolean>;
 
@@ -37,64 +37,25 @@ export class FlightSelectionComponent implements OnInit {
 
   flightSelected = false;
 
+  searchData$: Observable<TripSearchState>;
+
   constructor(
     private store$: Store<AppState>,
-    private sliderService: CalendarSliderService,
     private matIconService: MatIconService,
     private datesService: DatesService,
   ) {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
+
+    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
   }
 
   ngOnInit(): void {
-    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
-      this.searchData = res;
-    });
-
-    this.sliderService.flight$.subscribe((res) => {
-      this.flight = res!;
-    });
-  }
-
-  searchAvailableFlights(date: string) {
-    if (this.searchData.isOneWayTrip) {
-      this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: date }));
-    }
-
-    if (this.searchData.isRoundTrip) {
-      const newRange: DatesRange = {
-        start: this.searchData.rangeTripDates!.start,
-        end: this.searchData.rangeTripDates!.end,
-      };
-
-      if (this.responseIndex === FlightsAPIResponseIndexesEnum.OneWayFlightResponseIndex) {
-        newRange.start = date;
-
-        if (moment(newRange.start).diff(moment(newRange.end)) > 0) {
-          newRange.end = newRange.start;
-        }
-      }
-
-      if (this.responseIndex === FlightsAPIResponseIndexesEnum.ReturnFlightResponseIndex) {
-        newRange.end = date;
-
-        if (moment(newRange.start).diff(moment(newRange.end)) > 0) {
-          newRange.end = newRange.start;
-        }
-      }
-
-      this.store$.dispatch(FlightsActions.setDatesRange({ range: newRange }));
-    }
-  }
-
-  getFlightTitle() {
-    let title = `From ${this.searchData.from?.city} to ${this.searchData.to?.city}`;
-    if (this.responseIndex === FlightsAPIResponseIndexesEnum.ReturnFlightResponseIndex) {
-      title = `From ${this.searchData.to?.city} to ${this.searchData.from?.city}`;
-    }
-    return title;
+    this.store$.pipe(select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight))
+      .subscribe((res) => {
+        this.flight = res;
+      });
   }
 
   toggleFlightSelection() {

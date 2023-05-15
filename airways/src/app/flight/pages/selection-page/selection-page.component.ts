@@ -7,16 +7,17 @@ import {
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import {
-  selectFlightSearchData, selectSelectedFlight, selectSelectedFlightError, selectSelectedFlightIsLoading,
+  selectFlightSearchData, selectSelectedFlightError, selectSelectedFlightIsLoading,
 } from 'src/app/redux/selectors/flights.selectors';
-import { AppState, FlightSearchState } from 'src/app/redux/state.models';
+import {
+  AppState, TripSearchState,
+} from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
 import { SlidesOutputData } from 'ngx-owl-carousel-o';
-import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
 import { StepsEnum } from 'src/app/core/constants/steps.enum';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import * as BookingActions from '../../../redux/actions/booking.actions';
-import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
+import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
 import { Flight } from '../../models/flight.models';
 import { Slide } from '../../models/slider.models';
 
@@ -28,15 +29,13 @@ import { Slide } from '../../models/slider.models';
 export class SelectionPageComponent implements OnInit {
   isSearchFormVisible = false;
 
-  searchData!: FlightSearchState;
-
-  flightsResponseIndexes = FlightsAPIResponseIndexesEnum;
+  flightsTypes = FlightsTypesEnum;
 
   isLoading$!: Observable<boolean>;
 
   error$!: Observable<string | null>;
 
-  searchData$!: Observable<FlightSearchState>;
+  searchData$!: Observable<TripSearchState>;
 
   isAuth$: Observable<boolean>;
 
@@ -44,38 +43,29 @@ export class SelectionPageComponent implements OnInit {
 
   activeSlides!: SlidesOutputData;
 
-  flight!: Flight;
+  forwardFlight!: Flight;
 
-  flights$: Observable<Flight[][]>;
+  directFlight!: Flight;
 
   isFlightsSelected = false;
 
   constructor(
     private store$: Store<AppState>,
     private location: Location,
-    private sliderService: CalendarSliderService,
   ) {
     this.isLoading$ = this.store$.pipe(select(selectSelectedFlightIsLoading));
     this.error$ = this.store$.pipe(select(selectSelectedFlightError));
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
 
     this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
-    this.flights$ = this.store$.pipe(select(selectSelectedFlight));
   }
 
   ngOnInit(): void {
-    this.store$.dispatch(FlightsActions.searchFlights());
-
-    this.sliderService.flight$.subscribe((res) => {
-      this.flight = res!;
-    });
-
-    this.searchData$.subscribe((res) => {
-      this.searchData = res;
-    });
-
-    this.flights$.subscribe((res) => {
-      this.sliderService.setSlides(res.map((item: Flight[]) => ({ date: new Date(new Date(item[0].takeoffDate).toJSON().substring(0, 10)).toJSON(), flight: item[0] })));
+    this.searchData$.subscribe((searchData) => {
+      this.store$.dispatch(FlightsActions.searchFlights({ isReturn: false }));
+      if (searchData.isRoundTrip) {
+        this.store$.dispatch(FlightsActions.searchFlights({ isReturn: true }));
+      }
     });
 
     this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Second }));
@@ -85,21 +75,19 @@ export class SelectionPageComponent implements OnInit {
     this.isSearchFormVisible = event;
   }
 
-  getPassengersQty() {
-    return this.searchData.passengers
-      ? this.searchData.passengers.adult + this.searchData.passengers.child + this.searchData.passengers.infant
-      : '';
-  }
-
   goBack(): void {
     this.location.back();
   }
 
   submitFlights(): void {
-    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.flight], forwardFlights: [this.flight] }));
+    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.directFlight], forwardFlights: [this.forwardFlight] }));
   }
 
-  toggleFlightSelection(event: boolean) {
+  toggleDirectFlightSelection(event: boolean) {
+    this.isFlightsSelected = event;
+  }
+
+  toggleForwardFlightSelection(event: boolean) {
     this.isFlightsSelected = event;
   }
 }

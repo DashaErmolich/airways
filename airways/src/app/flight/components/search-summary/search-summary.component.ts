@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectFlightSearchData, selectPassengersQty } from 'src/app/redux/selectors/flights.selectors';
-import { AppState, FlightSearchState } from 'src/app/redux/state.models';
+import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { MatIconService } from 'src/app/shared/services/icon.service';
 export class FlightsSearchSummaryComponent {
   @Output() toggleSearchFormVisibilityEvent = new EventEmitter<boolean>();
 
-  searchData$: Observable<FlightSearchState>;
+  searchData$: Observable<TripSearchState>;
 
   passengersQty$: Observable<number>;
 

@@ -1,18 +1,13 @@
-import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Flight } from 'src/app/flight/models/flight.models';
 import { DatesService } from 'src/app/flight/services/dates.service';
+import { Injectable } from '@angular/core';
 import { Slide } from '../models/slider.models';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CalendarSliderService {
   public allSlides$ = new BehaviorSubject<Slide[]>([]);
 
   public visibleSlides$ = new BehaviorSubject<Slide[]>([]);
-
-  public flight$ = new BehaviorSubject<Flight | null>(null);
 
   constructor(
     private datesService: DatesService,
@@ -21,7 +16,6 @@ export class CalendarSliderService {
   setSlides(slides: Slide[]): void {
     this.allSlides$.next(slides);
     this.visibleSlides$.next(slides);
-    this.flight$.next(slides[3]?.flight);
   }
 
   addNextSlide(slide: Slide): void {
@@ -36,10 +30,6 @@ export class CalendarSliderService {
     const visibleSlides = this.visibleSlides$.value;
     const prevVisibleSlide = this.findSlide(this.datesService.getPrevCalendarDate(visibleSlides[0].date));
     this.visibleSlides$.next([prevVisibleSlide!, ...visibleSlides.slice(0, -1)]);
-  }
-
-  setFlight(newFlight: Flight): void {
-    this.flight$.next(newFlight);
   }
 
   private findSlide(date: string): Slide | undefined {

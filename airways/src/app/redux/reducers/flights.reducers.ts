@@ -1,17 +1,17 @@
 import { createReducer, on } from '@ngrx/store';
-import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/constants';
+import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/passengers.constants';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
-import { FlightSearchState } from '../state.models';
+import { TripSearchState } from '../state.models';
 import * as FlightsActions from '../actions/flights.actions';
 
 export const flightsSearchReducersNode = 'flights';
 
-function getSearchParams(): FlightSearchState | null {
+function getSearchParams(): TripSearchState | null {
   const searchParams = localStorage.getItem(LocalStorageKeysEnum.SearchParams);
   return searchParams ? JSON.parse(searchParams) : null;
 }
 
-export const initialState: FlightSearchState = {
+export const initialState: TripSearchState = {
   isRoundTrip: !!getSearchParams()?.isRoundTrip,
   isOneWayTrip: !!getSearchParams()?.isOneWayTrip,
   from: getSearchParams() ? getSearchParams()!.from : null,
@@ -31,8 +31,8 @@ export const flightsSearchReducers = createReducer(
       isOneWayTrip: action.flightsSearchData.isOneWayTrip,
       from: action.flightsSearchData.from,
       to: action.flightsSearchData.to,
-      startTripDate: action.flightsSearchData.startTripDate,
-      rangeTripDates: action.flightsSearchData.rangeTripDates,
+      startTripDate: action.flightsSearchData.isOneWayTrip ? action.flightsSearchData.startTripDate : null,
+      rangeTripDates: action.flightsSearchData.isRoundTrip ? action.flightsSearchData.rangeTripDates : null,
       passengers: action.flightsSearchData.passengers,
     }),
   ),

@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import {
   Airport, DatesRange, Flight, Passengers,
 } from 'src/app/flight/models/flight.models';
-import { FlightSearchState } from '../state.models';
+import { TripSearchState } from '../state.models';
 
 const enum FlightsActionsTypes {
   FLIGHTS_SEARCH_SET_PARAMS = '[Flights Search] Set Params',
@@ -10,8 +10,12 @@ const enum FlightsActionsTypes {
   FLIGHTS_SEARCH_SET_PARAMS_FAILURE = '[Flights Search] Set Params Failure',
 
   FLIGHTS_GET_DATA = '[Flights] Get Data',
-  FLIGHTS_GET_DATA_SUCCESS = '[Flights] Get Data Success',
+  FLIGHTS_GET_DATA_RETURN_SUCCESS = '[Flights] Get Return Data Success',
+  FLIGHTS_GET_DATA_FORWARD_SUCCESS = '[Flights] Get Forward Data Success',
   FLIGHTS_GET_DATA_FAILURE = '[Flights] Get Data Failure',
+
+  FLIGHTS_SET_RETURN_FLIGHT = '[Flights] Set Return Flight',
+  FLIGHTS_SET_FORWARD_FLIGHT = '[Flights] Set Forward Flight',
 
   FLIGHTS_SET_FLIGHT = '[Flights] Set Flight',
 
@@ -24,7 +28,7 @@ const enum FlightsActionsTypes {
 
 export const searchFormSubmit = createAction(
   FlightsActionsTypes.FLIGHTS_SEARCH_SET_PARAMS,
-  props<{ flightsSearchData: FlightSearchState }>(),
+  props<{ flightsSearchData: TripSearchState }>(),
 );
 
 export const searchFormSubmitSuccess = createAction(
@@ -37,18 +41,19 @@ export const searchFormSubmitFailure = createAction(
   props<{ error: string }>(),
 );
 
-// export const getFlightsData = createAction(
-//   FlightsActionsTypes.FLIGHTS_GET_DATA,
-//   props<{ flightsSearchData: FlightSearchState }>(),
-// );
-
 export const searchFlights = createAction(
   FlightsActionsTypes.FLIGHTS_GET_DATA,
+  props<{ isReturn: boolean }>(),
 );
 
-export const getFlightsDataSuccess = createAction(
-  FlightsActionsTypes.FLIGHTS_GET_DATA_SUCCESS,
-  props<{ flights: Flight[][] }>(),
+export const getReturnFlightsDataSuccess = createAction(
+  FlightsActionsTypes.FLIGHTS_GET_DATA_RETURN_SUCCESS,
+  props<{ returnFlights: Flight[][] }>(),
+);
+
+export const getForwardFlightsDataSuccess = createAction(
+  FlightsActionsTypes.FLIGHTS_GET_DATA_FORWARD_SUCCESS,
+  props<{ forwardFlights: Flight[][] }>(),
 );
 
 export const getFlightsDataFailure = createAction(
@@ -84,4 +89,14 @@ export const setDepartureDate = createAction(
 export const setSelectedFlight = createAction(
   FlightsActionsTypes.FLIGHTS_SET_FLIGHT,
   props<{ flights: Flight[][] }>(),
+);
+
+export const setForwardFlight = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_FORWARD_FLIGHT,
+  props<({ forwardFlight: Flight })>(),
+);
+
+export const setReturnFlight = createAction(
+  FlightsActionsTypes.FLIGHTS_SET_RETURN_FLIGHT,
+  props<({ returnFlight: Flight })>(),
 );

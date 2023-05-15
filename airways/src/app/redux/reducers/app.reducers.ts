@@ -3,13 +3,13 @@ import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { SearchFormState } from 'src/app/flight/models/flight.models';
 import { searchParamsNode, flightsSearchFormReducers } from './flights-search-form.reducers';
 import { flightsSearchReducers, flightsSearchReducersNode } from './flights.reducers';
-import { FlightsState, FlightSearchState, BookingState } from '../state.models';
+import { FlightsState, TripSearchState, BookingState } from '../state.models';
 import { flightsReducers, flightsReducersNode } from './available-flights.reducers';
 import { bookingReducersNode, bookingReducers } from './booking.reducers';
 
 export interface State {
   [searchParamsNode]: SearchFormState,
-  [flightsSearchReducersNode]: FlightSearchState,
+  [flightsSearchReducersNode]: TripSearchState,
   [flightsReducersNode]: FlightsState,
   [bookingReducersNode]: BookingState,
 }

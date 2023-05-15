@@ -12,7 +12,7 @@ export interface AuthState {
   user: User | null;
 }
 
-export interface FlightSearchState {
+export interface TripSearchState {
   isRoundTrip: boolean;
   isOneWayTrip: boolean;
   from: Airport | null;
@@ -25,19 +25,22 @@ export interface FlightSearchState {
 export interface FlightsState {
   isLoading: boolean;
   error: string | null;
-  flights: Flight[][],
+  forwardFlights: Flight[][],
+  returnFlights: Flight[][],
+  forwardFlight: Flight | null,
+  returnFlight: Flight | null,
 }
 
 export interface BookingState {
   step: number;
   passengers: Passengers | null;
-  directFlights: Flight[],
-  forwardFlights: Flight[] | null,
+  forwardFlights: Flight[],
+  returnFlights: Flight[] | null,
 }
 
 export interface AppState {
   auth: AuthState;
-  flightsSearch: FlightSearchState;
+  flightsSearch: TripSearchState;
   flights: FlightsState;
   booking: BookingState;
 }

@@ -1,10 +1,10 @@
-<div class="flight-selection-container">
+<div class="flight-selection-container" *ngIf="flight">
   <div class="flight-selection__title">
-    <mat-icon svgIcon="plane" [ngClass]="{'icon_rotate-180': responseIndex === 1}"></mat-icon>
-    <h2>{{ getFlightTitle() }}</h2>
+    <mat-icon svgIcon="plane" [ngClass]="{'icon_rotate-180': flightTypeIndex === 2}"></mat-icon>
+    <h2>From {{ flight.form.city }} to {{ flight.to.city }}</h2>
   </div>
 
-  <app-calendar-slider *ngIf="!flightSelected"></app-calendar-slider>
+  <app-calendar-slider [flightTypeIndex]="flightTypeIndex"></app-calendar-slider>
 
   <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)">
     <div class="flight-selection__flights-description">

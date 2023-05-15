@@ -7,7 +7,10 @@ export const flightsReducersNode = 'flights-search-results';
 export const initialState: FlightsState = {
   isLoading: false,
   error: null,
-  flights: [],
+  forwardFlights: [],
+  returnFlights: [],
+  forwardFlight: null,
+  returnFlight: null,
 };
 
 export const flightsReducers = createReducer(
@@ -20,11 +23,19 @@ export const flightsReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.getFlightsDataSuccess,
+    FlightsActions.getReturnFlightsDataSuccess,
     (state, action) => ({
       ...state,
       isLoading: false,
-      flights: action.flights,
+      returnFlights: action.returnFlights,
+    }),
+  ),
+  on(
+    FlightsActions.getForwardFlightsDataSuccess,
+    (state, action) => ({
+      ...state,
+      isLoading: false,
+      forwardFlights: action.forwardFlights,
     }),
   ),
   on(
@@ -40,6 +51,20 @@ export const flightsReducers = createReducer(
     (state, action) => ({
       ...state,
       flights: action.flights,
+    }),
+  ),
+  on(
+    FlightsActions.setForwardFlight,
+    (state, action) => ({
+      ...state,
+      forwardFlight: action.forwardFlight,
+    }),
+  ),
+  on(
+    FlightsActions.setReturnFlight,
+    (state, action) => ({
+      ...state,
+      returnFlight: action.returnFlight,
     }),
   ),
 );

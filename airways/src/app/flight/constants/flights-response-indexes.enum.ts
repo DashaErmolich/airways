@@ -1,4 +1,5 @@
-export enum FlightsAPIResponseIndexesEnum {
-  OneWayFlightResponseIndex,
-  ReturnFlightResponseIndex,
+export enum FlightsTypesEnum {
+  OneWayTripFlight,
+  RoundTripForwardFlight,
+  RoundTripReturnFlight,
 }

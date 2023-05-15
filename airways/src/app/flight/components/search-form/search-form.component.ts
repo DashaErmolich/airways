@@ -12,10 +12,10 @@ import {
   chooseIsRoundTripAction, choosePassengersAction, chooseDirectionsAction, chooseRangeAction, chooseDateAction, chooseFlightsByDayAction,
 } from 'src/app/redux/actions/flights-search-form.actions';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-import { FlightSearchState } from 'src/app/redux/state.models';
+import { TripSearchState } from 'src/app/redux/state.models';
 import { DatesService } from 'src/app/flight/services/dates.service';
-import { PASSENGERS_DEFAULT } from '../../constants/constants';
-import { AIRPORTS } from '../../constants/data';
+import { PASSENGERS_DEFAULT } from '../../constants/passengers.constants';
+import { AIRPORTS } from '../../constants/airports.constants';
 import { Airport, SearchFormState, Passengers } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
@@ -38,7 +38,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   searchParams$ = new Subscription();
 
-  data!: FlightSearchState;
+  data!: TripSearchState;
 
   isSearchPage = true;
 

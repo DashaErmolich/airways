@@ -11,12 +11,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { FlightsService } from 'src/app/flight/services/flights.service';
 import { Store } from '@ngrx/store';
-import { DatesService } from 'src/app/flight/services/dates.service';
 import * as AuthActions from '../actions/auth.actions';
 import * as FlightsActions from '../actions/flights.actions';
 import * as BookingActions from '../actions/booking.actions';
 import { AppState } from '../state.models';
-import { selectFlightSearchData, selectPassengers } from '../selectors/flights.selectors';
+import {
+  selectFlightSearchData, selectForwardFlights, selectPassengers, selectReturnFlights,
+} from '../selectors/flights.selectors';
 
 @Injectable()
 export class AuthEffects {
@@ -68,8 +69,8 @@ export class AuthEffects {
     () => this.actions$.pipe(
       ofType(FlightsActions.searchFormSubmit),
       tap(({ flightsSearchData }) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify(flightsSearchData))),
-      map(() => FlightsActions.searchFlights()),
     ),
+    { dispatch: false },
   );
 
   setTripDate$ = createEffect(
@@ -84,11 +85,30 @@ export class AuthEffects {
   searchFlights$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchFlights),
     withLatestFrom(this.store$.select(selectFlightSearchData)),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    mergeMap(([_, searchData]) => this.flightsService.searchMultipleFlights(searchData, this.datesService.getDatesArr(searchData.startTripDate || '')).pipe(
-      map((res) => FlightsActions.getFlightsDataSuccess({ flights: res })),
+    mergeMap(([{ isReturn }, searchData]) => this.flightsService.searchMultipleFlights(
+      {
+        fromKey: !isReturn ? searchData.from?.key : searchData.to?.key,
+        toKey: !isReturn ? searchData.to?.key : searchData.from?.key,
+        forwardDate: '',
+        backDate: '',
+      },
+      !isReturn ? (searchData.startTripDate || searchData.rangeTripDates!.start) : searchData.rangeTripDates!.end,
+    ).pipe(
+      map((res) => (!isReturn ? FlightsActions.getForwardFlightsDataSuccess({ forwardFlights: res }) : FlightsActions.getReturnFlightsDataSuccess({ returnFlights: res }))),
       catchError(async (error) => FlightsActions.getFlightsDataFailure({ error: error.message })),
     )),
+  ));
+
+  setForwardFlight = createEffect(() => this.actions$.pipe(
+    ofType(FlightsActions.getForwardFlightsDataSuccess),
+    withLatestFrom(this.store$.select(selectForwardFlights)),
+    map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[3][0] })),
+  ));
+
+  setReturnFlight = createEffect(() => this.actions$.pipe(
+    ofType(FlightsActions.getReturnFlightsDataSuccess),
+    withLatestFrom(this.store$.select(selectReturnFlights)),
+    map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[3][0] })),
   ));
 
   setFlights$ = createEffect(
@@ -106,6 +126,5 @@ export class AuthEffects {
     private dialog: MatDialog,
     private flightsService: FlightsService,
     private store$: Store<AppState>,
-    private datesService: DatesService,
   ) { }
 }
