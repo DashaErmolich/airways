@@ -47,13 +47,6 @@ export const flightsReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setSelectedFlight,
-    (state, action) => ({
-      ...state,
-      flights: action.flights,
-    }),
-  ),
-  on(
     FlightsActions.setForwardFlight,
     (state, action) => ({
       ...state,

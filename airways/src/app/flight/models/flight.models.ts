@@ -29,10 +29,10 @@ export interface DatesRange {
 }
 
 export interface FlightSearchData {
-  fromKey: string | undefined;
-  toKey: string | undefined;
-  forwardDate: string | null | undefined;
-  backDate: string | null | undefined;
+  fromKey: string;
+  toKey: string;
+  forwardDate: string;
+  backDate: string;
 }
 
 export interface FlightPrices {

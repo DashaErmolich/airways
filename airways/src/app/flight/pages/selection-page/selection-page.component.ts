@@ -1,11 +1,11 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable class-methods-use-this */
 import { Location } from '@angular/common';
 import {
-  Component, OnInit,
+  Component, OnDestroy, OnInit,
 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {
+  Observable, Subject, take, takeUntil,
+} from 'rxjs';
 import {
   selectFlightSearchData, selectSelectedFlightError, selectSelectedFlightIsLoading,
 } from 'src/app/redux/selectors/flights.selectors';
@@ -13,20 +13,18 @@ import {
   AppState, TripSearchState,
 } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { SlidesOutputData } from 'ngx-owl-carousel-o';
 import { StepsEnum } from 'src/app/core/constants/steps.enum';
 import * as FlightsActions from '../../../redux/actions/flights.actions';
 import * as BookingActions from '../../../redux/actions/booking.actions';
 import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
 import { Flight } from '../../models/flight.models';
-import { Slide } from '../../models/slider.models';
 
 @Component({
   selector: 'app-selection-page',
   templateUrl: './selection-page.component.html',
   styleUrls: ['./selection-page.component.scss'],
 })
-export class SelectionPageComponent implements OnInit {
+export class SelectionPageComponent implements OnInit, OnDestroy {
   isSearchFormVisible = false;
 
   flightsTypes = FlightsTypesEnum;
@@ -39,15 +37,13 @@ export class SelectionPageComponent implements OnInit {
 
   isAuth$: Observable<boolean>;
 
-  slides: Slide[] = [];
-
-  activeSlides!: SlidesOutputData;
-
   forwardFlight!: Flight;
 
   directFlight!: Flight;
 
-  isFlightsSelected = false;
+  isFlightsSelected: boolean[] = [];
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private store$: Store<AppState>,
@@ -61,18 +57,38 @@ export class SelectionPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchData$.subscribe((searchData) => {
-      this.store$.dispatch(FlightsActions.searchFlights({ isReturn: false }));
-      if (searchData.isRoundTrip) {
-        this.store$.dispatch(FlightsActions.searchFlights({ isReturn: true }));
-      }
-    });
+    this.searchData$
+      .pipe(
+        take(1),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((searchData) => {
+        this.store$.dispatch(FlightsActions.searchFlights({ isReturn: false }));
+        this.isFlightsSelected = [...this.isFlightsSelected, false];
+        if (searchData.isRoundTrip) {
+          this.store$.dispatch(FlightsActions.searchFlights({ isReturn: true }));
+          this.isFlightsSelected = [...this.isFlightsSelected, false];
+        }
+      });
 
     this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Second }));
   }
 
-  toggleSearchFormVisibility(event: boolean): void {
-    this.isSearchFormVisible = event;
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
+  toggleSearchFormVisibility(isVisible: boolean): void {
+    this.isSearchFormVisible = isVisible;
+  }
+
+  toggleForwardFlightSelection(isSelected: boolean) {
+    this.isFlightsSelected = [isSelected, ...this.isFlightsSelected.slice(1)];
+  }
+
+  toggleReturnFlightSelection(isSelected: boolean) {
+    this.isFlightsSelected = [...this.isFlightsSelected.slice(0, -1), isSelected];
   }
 
   goBack(): void {
@@ -83,11 +99,7 @@ export class SelectionPageComponent implements OnInit {
     this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.directFlight], forwardFlights: [this.forwardFlight] }));
   }
 
-  toggleDirectFlightSelection(event: boolean) {
-    this.isFlightsSelected = event;
-  }
-
-  toggleForwardFlightSelection(event: boolean) {
-    this.isFlightsSelected = event;
+  isNextStepAvailable() {
+    return this.isFlightsSelected.every((item) => item);
   }
 }

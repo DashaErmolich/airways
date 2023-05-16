@@ -46,7 +46,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     private store$: Store<SearchFormState>,
     private router: Router,
     private route: ActivatedRoute,
-    private utilsService: DatesService,
+    private datesService: DatesService,
   ) {}
 
   ngOnInit(): void {
@@ -209,7 +209,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   onSelectedRange() {
     const range = this.searchForm.get('range')?.value;
     this.store$.dispatch(chooseRangeAction(range));
-    this.saveCurrentState();
+    // this.saveCurrentState();
   }
 
   onSelectedDate() {
@@ -237,11 +237,11 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         isOneWayTrip: !this.searchForm.value.isRoundTrip,
         from: this.searchForm.value.directions.departureFrom,
         to: this.searchForm.value.directions.destinationTo,
-        startTripDate: this.utilsService.formatTimezone(this.searchForm.value.date as Date),
-        rangeTripDates: {
-          start: this.utilsService.formatTimezone(this.searchForm.value.range.start as Date),
-          end: this.utilsService.formatTimezone(this.searchForm.value.range.end as Date),
-        },
+        startTripDate: !this.searchForm.value.isRoundTrip ? this.datesService.formatTimezone((this.searchForm.value.date as Date).toJSON()) : null,
+        rangeTripDates: this.searchForm.value.isRoundTrip ? {
+          start: this.datesService.formatTimezone((this.searchForm.value.range.start as Date).toJSON()),
+          end: this.datesService.formatTimezone((this.searchForm.value.range.end as Date).toJSON()),
+        } : null,
         passengers: this.searchForm.value.passengers,
       },
     }));

@@ -44,7 +44,7 @@ export const flightsSearchReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setDepartureDate,
+    FlightsActions.setStartTripDate,
     (state, action) => ({
       ...state,
       startTripDate: action.startTripDate,
@@ -52,7 +52,7 @@ export const flightsSearchReducers = createReducer(
     }),
   ),
   on(
-    FlightsActions.setDatesRange,
+    FlightsActions.setRangeTripDates,
     (state, action) => ({
       ...state,
       rangeTripDates: action.range,

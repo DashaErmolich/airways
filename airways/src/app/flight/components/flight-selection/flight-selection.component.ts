@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import {
   selectFlightSearchData, selectForwardFlight, selectReturnFlight,
 } from 'src/app/redux/selectors/flights.selectors';
@@ -25,7 +25,9 @@ export class FlightSelectionComponent implements OnInit {
 
   @Output() flightSelectedEvent = new EventEmitter<boolean>();
 
-  flight$!: Observable<Flight | null>;
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
+  private searchData$: Observable<TripSearchState>;
 
   flight: Flight | null = null;
 
@@ -37,7 +39,7 @@ export class FlightSelectionComponent implements OnInit {
 
   flightSelected = false;
 
-  searchData$: Observable<TripSearchState>;
+  searchData!: TripSearchState;
 
   constructor(
     private store$: Store<AppState>,
@@ -47,15 +49,22 @@ export class FlightSelectionComponent implements OnInit {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
-
     this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
   }
 
   ngOnInit(): void {
-    this.store$.pipe(select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight))
-      .subscribe((res) => {
-        this.flight = res;
-      });
+    this.store$.pipe(
+      select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight),
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      this.flight = res;
+    });
+
+    this.searchData$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      this.searchData = res;
+    });
   }
 
   toggleFlightSelection() {
@@ -64,6 +73,6 @@ export class FlightSelectionComponent implements OnInit {
   }
 
   isValidDate(date: string) {
-    return this.datesService.isValidDate(date);
+    return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates!.start, this.searchData.rangeTripDates!.end);
   }
 }

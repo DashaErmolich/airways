@@ -25,8 +25,8 @@ export interface TripSearchState {
 export interface FlightsState {
   isLoading: boolean;
   error: string | null;
-  forwardFlights: Flight[][],
-  returnFlights: Flight[][],
+  forwardFlights: Flight[],
+  returnFlights: Flight[],
   forwardFlight: Flight | null,
   returnFlight: Flight | null,
 }

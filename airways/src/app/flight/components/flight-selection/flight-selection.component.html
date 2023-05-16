@@ -4,11 +4,18 @@
     <h2>From {{ flight.form.city }} to {{ flight.to.city }}</h2>
   </div>
 
-  <app-calendar-slider [flightTypeIndex]="flightTypeIndex"></app-calendar-slider>
+  <app-calendar-slider
+    [searchData]="searchData"
+    [flight]="flight"
+    [flightTypeIndex]="flightTypeIndex"
+  ></app-calendar-slider>
 
   <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)">
     <div class="flight-selection__flights-description">
-      <app-flight-description [flight]="flight"></app-flight-description>
+      <app-flight-description
+        [flight]="flight"
+        [flightTypeIndex]="flightTypeIndex"
+      ></app-flight-description>
     </div>
 
     <div class="flight-price-container">
@@ -21,6 +28,6 @@
     <button mat-button color="primary" *ngIf="flightSelected" (click)="toggleFlightSelection()">Edit</button>
   </div>
 
-  <span *ngIf="!isValidDate(flight.takeoffDate)">Sorry, this date is not available now. Choose another one.</span>
+  <span *ngIf="!isValidDate(flight.takeoffDate)" class="error-message">Sorry, there are no available flights on {{ flight.takeoffDate | date }}. Choose another date.</span>
 </div>
 

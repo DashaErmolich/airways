@@ -1,4 +1,4 @@
-<div class="flight-selection__info info" *ngIf="isValidDate(flight!.takeoffDate) && flight">
+<div class="flight-selection__info info" *ngIf="flight && flightTypeIndex">
   <div class="info__flight flight">
     <span class="flight__date">{{ flight.takeoffDate | date:'E, d MMM y' }}</span>
     <div class="flight__time-container">
@@ -11,7 +11,7 @@
   <div class="info__duration">
     <span>{{ flight.timeMins | flightTime }}</span>
     <span class="line-outside">
-      <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': responseIndex === 1}"></mat-icon>
+      <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': flightTypeIndex === 2}"></mat-icon>
     </span>
     <span>Direct</span>
   </div>

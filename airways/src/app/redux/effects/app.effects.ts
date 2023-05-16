@@ -75,7 +75,7 @@ export class AuthEffects {
 
   setTripDate$ = createEffect(
     () => this.actions$.pipe(
-      ofType(FlightsActions.setDepartureDate),
+      ofType(FlightsActions.setStartTripDate),
       withLatestFrom(this.store$.select(selectFlightSearchData)),
       tap(([{ startTripDate }, searchData]) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify({ ...searchData, startTripDate }))),
     ),
@@ -87,28 +87,28 @@ export class AuthEffects {
     withLatestFrom(this.store$.select(selectFlightSearchData)),
     mergeMap(([{ isReturn }, searchData]) => this.flightsService.searchMultipleFlights(
       {
-        fromKey: !isReturn ? searchData.from?.key : searchData.to?.key,
-        toKey: !isReturn ? searchData.to?.key : searchData.from?.key,
+        fromKey: !isReturn ? searchData.from!.key : searchData.to!.key,
+        toKey: !isReturn ? searchData.to!.key : searchData.from!.key,
         forwardDate: '',
         backDate: '',
       },
       !isReturn ? (searchData.startTripDate || searchData.rangeTripDates!.start) : searchData.rangeTripDates!.end,
     ).pipe(
-      map((res) => (!isReturn ? FlightsActions.getForwardFlightsDataSuccess({ forwardFlights: res }) : FlightsActions.getReturnFlightsDataSuccess({ returnFlights: res }))),
+      map((res) => (!isReturn ? FlightsActions.getForwardFlightsDataSuccess({ forwardFlights: res.flat() }) : FlightsActions.getReturnFlightsDataSuccess({ returnFlights: res.flat() }))),
       catchError(async (error) => FlightsActions.getFlightsDataFailure({ error: error.message })),
     )),
   ));
 
-  setForwardFlight = createEffect(() => this.actions$.pipe(
+  setForwardFlight$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.getForwardFlightsDataSuccess),
     withLatestFrom(this.store$.select(selectForwardFlights)),
-    map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[3][0] })),
+    map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[3] })),
   ));
 
-  setReturnFlight = createEffect(() => this.actions$.pipe(
+  setReturnFlight$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.getReturnFlightsDataSuccess),
     withLatestFrom(this.store$.select(selectReturnFlights)),
-    map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[3][0] })),
+    map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[3] })),
   ));
 
   setFlights$ = createEffect(

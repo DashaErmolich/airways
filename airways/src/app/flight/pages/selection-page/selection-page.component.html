@@ -3,25 +3,48 @@
 <div class="container">
   <span *ngIf="isLoading$ | async">Loading...</span>
 
-  <span *ngIf="error$ | async"></span>
+  <span *ngIf="error$ | async">{{ error$ | async }}</span>
 
   <div *ngIf="(isLoading$ | async) === false">
     <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
 
-    <app-flight-selection [flightTypeIndex]="flightsTypes.OneWayTripFlight" (flightSelectedEvent)="toggleDirectFlightSelection($event)" *ngIf="(searchData$ | async)!.isOneWayTrip"></app-flight-selection>
-    <app-flight-selection [flightTypeIndex]="flightsTypes.RoundTripForwardFlight" (flightSelectedEvent)="toggleDirectFlightSelection($event)" *ngIf="(searchData$ | async)!.isRoundTrip"></app-flight-selection>
-    <app-flight-selection [flightTypeIndex]="flightsTypes.RoundTripReturnFlight" (flightSelectedEvent)="toggleForwardFlightSelection($event)" *ngIf="(searchData$ | async)!.isRoundTrip"></app-flight-selection>
+    <app-flight-selection
+      [flightTypeIndex]="flightsTypes.OneWayTripFlight"
+      (flightSelectedEvent)="toggleForwardFlightSelection($event)"
+      *ngIf="(searchData$ | async)!.isOneWayTrip">
+    </app-flight-selection>
+
+    <app-flight-selection
+      [flightTypeIndex]="flightsTypes.RoundTripForwardFlight"
+      (flightSelectedEvent)="toggleForwardFlightSelection($event)"
+      *ngIf="(searchData$ | async)!.isRoundTrip">
+    </app-flight-selection>
+
+    <app-flight-selection
+      [flightTypeIndex]="flightsTypes.RoundTripReturnFlight"
+      (flightSelectedEvent)="toggleReturnFlightSelection($event)"
+      *ngIf="(searchData$ | async)!.isRoundTrip">
+    </app-flight-selection>
 
     <div class="">
-      <button mat-raised-button (click)="goBack()">
-        Back
-      </button>
-      <button mat-raised-button color="primary" routerLink="/booking" *ngIf="isAuth$ | async" (click)="submitFlights()" [disabled]="!isFlightsSelected">
+      <button mat-raised-button (click)="goBack()">Back</button>
+
+      <button
+        mat-raised-button
+        color="primary"
+        routerLink="/booking"
+        *ngIf="isAuth$ | async" (click)="submitFlights()"
+        [disabled]="!isNextStepAvailable()">
         Continue
       </button>
 
-      <p *ngIf="(isAuth$ | async) === false" class="error-message">You must be signed in the app to continue</p>
-      <p *ngIf="!isFlightsSelected" class="error-message">You must must select flights to continue</p>
+      <p *ngIf="(isAuth$ | async) === false" class="error-message">
+        You must be signed in the app to continue
+      </p>
+
+      <p *ngIf="!isNextStepAvailable()" class="error-message">
+        You must select flights to continue
+      </p>
     </div>
   </div>
 

@@ -48,12 +48,12 @@ export const searchFlights = createAction(
 
 export const getReturnFlightsDataSuccess = createAction(
   FlightsActionsTypes.FLIGHTS_GET_DATA_RETURN_SUCCESS,
-  props<{ returnFlights: Flight[][] }>(),
+  props<{ returnFlights: Flight[] }>(),
 );
 
 export const getForwardFlightsDataSuccess = createAction(
   FlightsActionsTypes.FLIGHTS_GET_DATA_FORWARD_SUCCESS,
-  props<{ forwardFlights: Flight[][] }>(),
+  props<{ forwardFlights: Flight[] }>(),
 );
 
 export const getFlightsDataFailure = createAction(
@@ -76,19 +76,19 @@ export const setToAirport = createAction(
   props<{ to: Airport }>(),
 );
 
-export const setDatesRange = createAction(
+export const setRangeTripDates = createAction(
   FlightsActionsTypes.FLIGHTS_SEARCH_SET_RANGE,
   props<{ range: DatesRange }>(),
 );
 
-export const setDepartureDate = createAction(
+export const setStartTripDate = createAction(
   FlightsActionsTypes.FLIGHTS_SEARCH_SET_DATE,
   props<{ startTripDate: string }>(),
 );
 
 export const setSelectedFlight = createAction(
   FlightsActionsTypes.FLIGHTS_SET_FLIGHT,
-  props<{ flights: Flight[][] }>(),
+  props<{ flights: Flight[] }>(),
 );
 
 export const setForwardFlight = createAction(

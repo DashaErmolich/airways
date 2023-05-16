@@ -1,4 +1,4 @@
-<div class="slider-wrapper">
+<div class="slider-wrapper" *ngIf="flight && searchData && flightTypeIndex">
   <div class="slider"
   [@moveSlide]="isNextClicked ? 'next' : 'primary'"
   [@moveSlide]="isPrevClicked ? 'prev' : 'primary'"
@@ -7,8 +7,8 @@
   >
     <button class="slide"
       *ngFor="let slide of slides"
-      [class.slide_active]="slide.flight.flightNumber === activeFlight?.flightNumber"
-      [appFlightAvailableSeats]="(slide.flight.flightNumber === activeFlight?.flightNumber && isValidDate(slide.flight.takeoffDate)) ? slide.flight.seats : null"
+      [class.slide_active]="slide.flight.flightNumber === flight.flightNumber"
+      [appFlightAvailableSeats]="(slide.flight.flightNumber === flight.flightNumber && isValidDate(slide.flight.takeoffDate)) ? slide.flight.seats : null"
       [appFlightAvailableSeatsStyle]="'border-bottom-color'"
       [disabled]="!isValidDate(slide.flight.takeoffDate)"
       (click)="changeDepartureDate(slide.date)">
