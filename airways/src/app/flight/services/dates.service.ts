@@ -49,16 +49,16 @@ export class DatesService {
     return diff > 0;
   }
 
-  isValidDate(date: string, flightTypeIndex: number, rangeStart: string, rangeEnd: string) {
+  isValidDate(date: string, flightTypeIndex: number, rangeStart: string | undefined, rangeEnd: string | undefined) {
     let isValid = false;
 
     if (date) {
       switch (flightTypeIndex) {
         case FlightsTypesEnum.RoundTripForwardFlight:
-          isValid = this.isValidFlightDate(date) && this.isValidFlightDate(rangeEnd, date);
+          isValid = this.isValidFlightDate(date) && this.isValidFlightDate(rangeEnd!, date);
           break;
         case FlightsTypesEnum.RoundTripReturnFlight:
-          isValid = this.isValidFlightDate(date) && this.isValidFlightDate(date, rangeStart);
+          isValid = this.isValidFlightDate(date) && this.isValidFlightDate(date, rangeStart!);
           break;
         default:
           isValid = this.isValidFlightDate(date);

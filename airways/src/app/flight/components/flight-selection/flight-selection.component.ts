@@ -27,15 +27,15 @@ export class FlightSelectionComponent implements OnInit {
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  private searchData$: Observable<TripSearchState>;
+  private searchData$!: Observable<TripSearchState>;
 
   flight: Flight | null = null;
 
-  isAuth$: Observable<boolean>;
+  isAuth$!: Observable<boolean>;
 
-  dateFormat$: Observable<string>;
+  dateFormat$!: Observable<string>;
 
-  currency$: Observable<string>;
+  currency$!: Observable<string>;
 
   flightSelected = false;
 
@@ -45,14 +45,14 @@ export class FlightSelectionComponent implements OnInit {
     private store$: Store<AppState>,
     private matIconService: MatIconService,
     private datesService: DatesService,
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
-  }
 
-  ngOnInit(): void {
     this.store$.pipe(
       select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight),
       takeUntil(this.destroy$),
@@ -73,6 +73,6 @@ export class FlightSelectionComponent implements OnInit {
   }
 
   isValidDate(date: string) {
-    return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates!.start, this.searchData.rangeTripDates!.end);
+    return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates?.start, this.searchData.rangeTripDates?.end);
   }
 }

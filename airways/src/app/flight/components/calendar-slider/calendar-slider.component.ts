@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import {
-  BehaviorSubject, Observable, Subject, take, takeUntil,
+  BehaviorSubject, Observable, Subject, takeUntil,
 } from 'rxjs';
 import { selectCurrency } from 'src/app/redux/selectors/auth.selectors';
 import {
@@ -21,6 +21,7 @@ import * as FlightsActions from '../../../redux/actions/flights.actions';
 import { Slide } from '../../models/slider.models';
 import { CalendarSliderService } from '../../services/calendar-slider.service';
 import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
+import { FlightsUpdateService } from '../../services/flights-update.service';
 
 @Component({
   selector: 'app-calendar-slider',
@@ -66,7 +67,7 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
 
   isControlsDisabled = false;
 
-  currency$: Observable<string>;
+  currency$!: Observable<string>;
 
   constructor(
     private store$: Store<AppState>,
@@ -74,11 +75,12 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
     private sliderService: CalendarSliderService,
     private matIconService: MatIconService,
     private datesService: DatesService,
-  ) {
-    this.currency$ = this.store$.pipe(select(selectCurrency));
-  }
+    private flightsUpdateService: FlightsUpdateService,
+  ) { }
 
   ngOnInit(): void {
+    this.currency$ = this.store$.pipe(select(selectCurrency));
+
     this.flights$ = this.store$.pipe(
       select(
         this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight
@@ -88,7 +90,6 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
     );
 
     this.flights$.pipe(
-      take(1),
       takeUntil(this.destroy$),
     ).subscribe((res) => {
       this.sliderService.setSlides(
@@ -171,11 +172,13 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
   }
 
   isValidDate(date: string) {
-    return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates!.start, this.searchData.rangeTripDates!.end);
+    return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates?.start, this.searchData.rangeTripDates?.end);
   }
 
   changeDepartureDate(newDate: string) {
     const slide = this.slides.find((item: Slide) => item.date === newDate);
+
+    this.flightsUpdateService.setIsUpdate(false);
 
     switch (this.flightTypeIndex) {
       case FlightsTypesEnum.RoundTripForwardFlight:

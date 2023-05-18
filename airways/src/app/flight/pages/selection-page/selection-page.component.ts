@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import {
-  Observable, Subject, take, takeUntil,
+  Observable, Subject, takeUntil,
 } from 'rxjs';
 import {
   selectFlightSearchData, selectSelectedFlightError, selectSelectedFlightIsLoading,
@@ -18,6 +18,8 @@ import * as FlightsActions from '../../../redux/actions/flights.actions';
 import * as BookingActions from '../../../redux/actions/booking.actions';
 import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
 import { Flight } from '../../models/flight.models';
+import { DatesService } from '../../services/dates.service';
+import { FlightsUpdateService } from '../../services/flights-update.service';
 
 @Component({
   selector: 'app-selection-page',
@@ -35,7 +37,7 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   searchData$!: Observable<TripSearchState>;
 
-  isAuth$: Observable<boolean>;
+  isAuth$!: Observable<boolean>;
 
   forwardFlight!: Flight;
 
@@ -45,31 +47,41 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
+  searchData!: TripSearchState;
+
   constructor(
     private store$: Store<AppState>,
     private location: Location,
-  ) {
+    private datesService: DatesService,
+    private flightsUpdateService: FlightsUpdateService,
+  ) { }
+
+  ngOnInit(): void {
     this.isLoading$ = this.store$.pipe(select(selectSelectedFlightIsLoading));
     this.error$ = this.store$.pipe(select(selectSelectedFlightError));
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
-
     this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
-  }
 
-  ngOnInit(): void {
     this.searchData$
       .pipe(
-        take(1),
         takeUntil(this.destroy$),
       )
       .subscribe((searchData) => {
+        this.searchData = searchData;
+      });
+
+    this.flightsUpdateService.isUpdate$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      if (res) {
         this.store$.dispatch(FlightsActions.searchFlights({ isReturn: false }));
         this.isFlightsSelected = [...this.isFlightsSelected, false];
-        if (searchData.isRoundTrip) {
+        if (this.searchData.isRoundTrip) {
           this.store$.dispatch(FlightsActions.searchFlights({ isReturn: true }));
           this.isFlightsSelected = [...this.isFlightsSelected, false];
         }
-      });
+      }
+    });
 
     this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Second }));
   }

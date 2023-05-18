@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormGroup, FormControl, Validators, AbstractControl, ValidationErrors,
 } from '@angular/forms';
@@ -7,23 +7,27 @@ import { Store, select } from '@ngrx/store';
 import {
   Observable, Subscription, debounceTime, startWith, map,
 } from 'rxjs';
-import {
-  // eslint-disable-next-line max-len
-  chooseIsRoundTripAction, choosePassengersAction, chooseDirectionsAction, chooseRangeAction, chooseDateAction, chooseFlightsByDayAction,
-} from 'src/app/redux/actions/flights-search-form.actions';
 import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-import { TripSearchState } from 'src/app/redux/state.models';
+import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { DatesService } from 'src/app/flight/services/dates.service';
+import { MatRadioChange } from '@angular/material/radio';
 import { PASSENGERS_DEFAULT } from '../../constants/passengers.constants';
 import { AIRPORTS } from '../../constants/airports.constants';
-import { Airport, SearchFormState, Passengers } from '../../models/flight.models';
+import { Airport, Passengers } from '../../models/flight.models';
 
 import * as FlightsActions from '../../../redux/actions/flights.actions';
+import { FlightsUpdateService } from '../../services/flights-update.service';
+
+enum TripTypesEnum {
+  OneWayTrip = 'one-way-trip',
+  RoundTrip = 'round-trip',
+}
 
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
   styleUrls: ['./search-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
   searchForm!: FormGroup;
@@ -34,8 +38,6 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   filteredAirportsTo!: Observable<Airport[]>;
 
-  searchParams!: SearchFormState;
-
   searchParams$ = new Subscription();
 
   data!: TripSearchState;
@@ -43,10 +45,11 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   isSearchPage = true;
 
   constructor(
-    private store$: Store<SearchFormState>,
+    private store$: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute,
     private datesService: DatesService,
+    private flightsUpdateService: FlightsUpdateService,
   ) {}
 
   ngOnInit(): void {
@@ -57,7 +60,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       .subscribe((res) => { this.data = res; });
 
     this.searchForm = new FormGroup({
-      isRoundTrip: new FormControl(this.data.isRoundTrip),
+      tripType: new FormControl(this.data.isRoundTrip ? TripTypesEnum.RoundTrip : TripTypesEnum.OneWayTrip),
       directions: new FormGroup({
         departureFrom: new FormControl(
           this.data.from || '',
@@ -144,18 +147,16 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       countPassengers -= 1;
     }
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-    const passengers = this.searchForm.get('passengers')?.value;
-    this.store$.dispatch(choosePassengersAction(passengers));
     this.saveCurrentState();
+    this.flightsUpdateService.setIsUpdate(false);
   }
 
   increment(typePassenger: keyof Passengers) {
     let countPassengers = Number(this.searchForm.get('passengers')?.get(typePassenger)?.value);
     countPassengers += 1;
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-    const passengers = this.searchForm.get('passengers')?.value;
-    this.store$.dispatch(choosePassengersAction(passengers));
     this.saveCurrentState();
+    this.flightsUpdateService.setIsUpdate(false);
   }
 
   getCountPassengers() {
@@ -180,70 +181,71 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       departureFrom: destinationTo,
       destinationTo: departureFrom,
     });
-    this.store$.dispatch(chooseDirectionsAction(this.searchForm.get('directions')?.value));
-    this.saveCurrentState();
   }
 
   isFormInvalid() {
-    const formValue = this.searchForm.getRawValue();
     if (this.searchForm.get('directions')?.valid
-      && ((formValue.isRoundTrip && this.searchForm.get('range')?.valid)
-    || (!formValue.isRoundTrip && this.searchForm.get('date')?.valid))) {
+      && ((this.isRoundTrip() && this.searchForm.get('range')?.valid)
+    || (!this.isRoundTrip() && this.searchForm.get('date')?.valid))) {
       return false;
     }
     return true;
   }
 
   onSelectedIsRoundTrip() {
-    const isRoundTrip = this.searchForm.get('isRoundTrip')?.value;
-    this.store$.dispatch(chooseIsRoundTripAction(isRoundTrip));
-    this.saveCurrentState();
+    // this.saveCurrentState();
+    // this.datesService.setIsUpdate(false);
   }
 
   onSelectedDirections() {
-    const directions = this.searchForm.get('directions')?.value;
-    this.store$.dispatch(chooseDirectionsAction(directions));
-    this.saveCurrentState();
+    // const directions = this.searchForm.get('directions')?.value;
+    // this.saveCurrentState();
   }
 
   onSelectedRange() {
-    const range = this.searchForm.get('range')?.value;
-    this.store$.dispatch(chooseRangeAction(range));
+    // const range = this.searchForm.get('range')?.value;
     // this.saveCurrentState();
   }
 
   onSelectedDate() {
-    const date = this.searchForm.get('date')?.value.toDateString();
-    this.store$.dispatch(chooseDateAction(date));
-    this.store$.dispatch(chooseFlightsByDayAction(date));
-    this.saveCurrentState();
-  }
-
-  onSelectedPassengers() {
-    const passengers = this.searchForm.get('passengers')?.value;
-    this.store$.dispatch(choosePassengersAction(passengers));
-    this.saveCurrentState();
+    // const date = this.searchForm.get('date')?.value.toDateString();
+    // this.saveCurrentState();
   }
 
   submitForm() {
     this.saveCurrentState();
+    this.flightsUpdateService.setIsUpdate(true);
     this.router.navigate(['flights', 'selection']);
   }
 
   saveCurrentState() {
-    this.store$.dispatch(FlightsActions.searchFormSubmit({
-      flightsSearchData: {
-        isRoundTrip: this.searchForm.value.isRoundTrip,
-        isOneWayTrip: !this.searchForm.value.isRoundTrip,
-        from: this.searchForm.value.directions.departureFrom,
-        to: this.searchForm.value.directions.destinationTo,
-        startTripDate: !this.searchForm.value.isRoundTrip ? this.datesService.formatTimezone((this.searchForm.value.date as Date).toJSON()) : null,
-        rangeTripDates: this.searchForm.value.isRoundTrip ? {
-          start: this.datesService.formatTimezone((this.searchForm.value.range.start as Date).toJSON()),
-          end: this.datesService.formatTimezone((this.searchForm.value.range.end as Date).toJSON()),
-        } : null,
-        passengers: this.searchForm.value.passengers,
-      },
-    }));
+    if (!this.isFormInvalid()) {
+      this.store$.dispatch(FlightsActions.searchFormSubmit({
+        flightsSearchData: {
+          isRoundTrip: this.isRoundTrip(),
+          isOneWayTrip: !this.isRoundTrip(),
+          from: this.searchForm.value.directions.departureFrom,
+          to: this.searchForm.value.directions.destinationTo,
+          startTripDate: !this.isRoundTrip() ? this.datesService.formatTimezone((this.searchForm.value.date as Date).toJSON()) : null,
+          rangeTripDates: this.isRoundTrip() ? {
+            start: this.datesService.formatTimezone((this.searchForm.value.range.start as Date).toJSON()),
+            end: this.datesService.formatTimezone((this.searchForm.value.range.end as Date).toJSON()),
+          } : null,
+          passengers: this.searchForm.value.passengers,
+        },
+      }));
+    }
+  }
+
+  isRoundTrip(): boolean {
+    return this.searchForm.value.tripType === TripTypesEnum.RoundTrip;
+  }
+
+  isToAirportUnavailable(key: string): boolean {
+    return this.searchForm.value.directions.departureFrom.key === key;
+  }
+
+  isFromAirportUnavailable(key: string): boolean {
+    return this.searchForm.value.directions.destinationTo.key === key;
   }
 }

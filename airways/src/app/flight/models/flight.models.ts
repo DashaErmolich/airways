@@ -10,14 +10,6 @@ export interface Passengers {
   infant: number;
 }
 
-export interface SearchFormState {
-  isRoundTrip: boolean,
-  directions: Directions | null,
-  range: DatesRange | null,
-  date: string | null,
-  passengers: Passengers,
-}
-
 export interface Directions {
   departureFrom: Airport,
   destinationTo: Airport,
