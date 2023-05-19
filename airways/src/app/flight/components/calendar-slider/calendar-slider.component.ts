@@ -87,13 +87,7 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.currency$ = this.store$.pipe(select(selectCurrency));
 
-    this.flights$ = this.store$.pipe(
-      select(
-        this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight
-          ? selectForwardFlights
-          : selectReturnFlights,
-      ),
-    );
+    this.flights$ = this.store$.pipe(select(this.getFlightsType()));
 
     this.flights$.pipe(
       takeUntil(this.destroy$),
@@ -151,6 +145,12 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+  }
+
+  private getFlightsType() {
+    return this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight
+      ? selectForwardFlights
+      : selectReturnFlights;
   }
 
   showPrevSlide() {

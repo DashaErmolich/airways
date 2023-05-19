@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnInit, Output, EventEmitter,
+  Component, Input, OnInit, Output, EventEmitter, OnDestroy,
 } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
@@ -23,12 +23,12 @@ import { DatesService } from 'src/app/flight/services/dates.service';
   templateUrl: './flight-selection.component.html',
   styleUrls: ['./flight-selection.component.scss'],
 })
-export class FlightSelectionComponent implements OnInit {
+export class FlightSelectionComponent implements OnInit, OnDestroy {
   @Input() flightTypeIndex!: number;
 
   @Output() flightSelectedEvent = new EventEmitter<boolean>();
 
-  private destroy$: Subject<boolean> = new Subject<boolean>();
+  private destroy$ = new Subject<boolean>();
 
   private searchData$!: Observable<TripSearchState>;
 
@@ -57,7 +57,7 @@ export class FlightSelectionComponent implements OnInit {
     this.searchData$ = this.store$.pipe(select(selectTripSearchState));
 
     this.store$.pipe(
-      select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight),
+      select(this.getFlightType()),
       takeUntil(this.destroy$),
     ).subscribe((res) => {
       this.flight = res;
@@ -68,6 +68,17 @@ export class FlightSelectionComponent implements OnInit {
     ).subscribe((res) => {
       this.searchData = res;
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
+  }
+
+  private getFlightType() {
+    return this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight
+      ? selectForwardFlight
+      : selectReturnFlight;
   }
 
   toggleFlightSelection() {

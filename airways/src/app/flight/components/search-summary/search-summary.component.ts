@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component, EventEmitter, Input, OnInit, Output,
+} from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
 
@@ -14,25 +16,26 @@ import { MatIconService } from 'src/app/shared/services/icon.service';
   templateUrl: './search-summary.component.html',
   styleUrls: ['./search-summary.component.scss'],
 })
-export class FlightsSearchSummaryComponent {
+export class FlightsSearchSummaryComponent implements OnInit {
   @Output() toggleSearchFormVisibilityEvent = new EventEmitter<boolean>();
 
-  searchData$: Observable<TripSearchState>;
+  @Input() isSearchFormVisible!:boolean;
 
-  passengersQty$: Observable<number>;
+  searchData$!: Observable<TripSearchState>;
 
-  isSearchFormVisible = false;
+  passengersQty$!: Observable<number>;
 
   constructor(
     private store$: Store<AppState>,
     private matIconService: MatIconService,
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.searchData$ = this.store$.pipe(select(selectTripSearchState));
     this.passengersQty$ = this.store$.pipe(select(selectPassengersQty));
   }
 
   toggleSearchFormVisibility(): void {
-    this.isSearchFormVisible = !this.isSearchFormVisible;
-    this.toggleSearchFormVisibilityEvent.emit(this.isSearchFormVisible);
+    this.toggleSearchFormVisibilityEvent.emit(!this.isSearchFormVisible);
   }
 }

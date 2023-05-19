@@ -1,4 +1,4 @@
-<app-search-summary (toggleSearchFormVisibilityEvent)="toggleSearchFormVisibility($event)"></app-search-summary>
+<app-search-summary [isSearchFormVisible]="isSearchFormVisible" (toggleSearchFormVisibilityEvent)="toggleSearchFormVisibility($event)"></app-search-summary>
 
 <div class="container">
   <span *ngIf="isLoading$ | async">Loading...</span>
@@ -6,7 +6,7 @@
   <span *ngIf="error$ | async">{{ error$ | async }}</span>
 
   <div *ngIf="(isLoading$ | async) === false">
-    <app-search-form *ngIf="isSearchFormVisible"></app-search-form>
+    <app-search-form *ngIf="isSearchFormVisible" (toggleSearchFormVisibilityEvent)="toggleSearchFormVisibility($event)"></app-search-form>
 
     <app-flight-selection
       [flightTypeIndex]="flightsTypes.OneWayTripFlight"

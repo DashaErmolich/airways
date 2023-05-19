@@ -38,8 +38,8 @@ export class DatesService {
 
   formatTimezone(date: Date | string): string {
     if (typeof date === 'object') {
-      const offset = Math.abs(date.getTimezoneOffset() / 60);
-      return new Date(date.setHours(offset, 0, 0, 0)).toJSON();
+      const offset = Math.abs(new Date(date).getTimezoneOffset() / 60);
+      return new Date(new Date(date).setHours(offset, 0, 0, 0)).toJSON();
     } else {
       return new Date((new Date(date)).toJSON().substring(0, 10)).toJSON();
     }

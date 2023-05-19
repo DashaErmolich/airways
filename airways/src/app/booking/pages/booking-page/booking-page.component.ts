@@ -141,6 +141,7 @@ export class BookingPageComponent implements OnInit {
   }
 
   onSubmit() {
+    // eslint-disable-next-line no-console
     console.log(this.passengerForm.value);
   }
 

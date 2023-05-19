@@ -7,7 +7,7 @@ import { Flight } from 'src/app/flight/models/flight.models';
   styleUrls: ['./flight-description.component.scss'],
 })
 export class FlightDescriptionComponent {
-  @Input() flightTypeIndex: number | null = null;
+  @Input() flightTypeIndex!: number;
 
-  @Input() flight: Flight | null = null;
+  @Input() flight!: Flight;
 }

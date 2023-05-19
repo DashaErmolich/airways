@@ -12,6 +12,10 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+
+  .form__directions_btn {
+    position: relative !important;
+  }
 }
 
 .form {
