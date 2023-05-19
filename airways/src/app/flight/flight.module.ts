@@ -47,8 +47,6 @@ import { FlightDescriptionComponent } from './components/flight-description/flig
     MatNativeDateModule,
     MatIconModule,
     CarouselModule,
-    // StoreModule.forFeature('new-flights', flightsReducers),
-    // EffectsModule.forFeature([AuthEffects]),
   ],
 })
 export class FlightModule { }

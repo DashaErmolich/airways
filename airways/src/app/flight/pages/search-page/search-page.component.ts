@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { StepsEnum } from 'src/app/core/constants/steps.enum';
-import { AppState } from 'src/app/redux/state.models';
+
 import { Store } from '@ngrx/store';
-import * as BookingActions from '../../../redux/actions/booking.actions';
+
+import { StepsEnum } from 'src/app/core/constants/steps.enum';
+
+import { AppState } from 'src/app/redux/state.models';
+import * as BookingActions from 'src/app/redux/actions/booking.actions';
 
 @Component({
   selector: 'app-search-page',

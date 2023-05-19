@@ -1,27 +1,33 @@
 import {
   Component, Input, OnDestroy, OnInit,
 } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import {
-  BehaviorSubject, Observable, Subject, takeUntil,
-} from 'rxjs';
-import { selectCurrency } from 'src/app/redux/selectors/auth.selectors';
-import {
-  selectForwardFlights, selectReturnFlights,
-} from 'src/app/redux/selectors/flights.selectors';
-import { TripSearchState, AppState } from 'src/app/redux/state.models';
-import { MatIconService } from 'src/app/shared/services/icon.service';
 import {
   animate, state, style, transition, trigger,
 } from '@angular/animations';
+
+import { Store, select } from '@ngrx/store';
+
+import {
+  BehaviorSubject, Observable, Subject, takeUntil,
+} from 'rxjs';
+
+import { TripSearchState, AppState } from 'src/app/redux/state.models';
+import { selectCurrency } from 'src/app/redux/selectors/settings.selectors';
+import {
+  selectForwardFlights, selectReturnFlights,
+} from 'src/app/redux/selectors/flights.selectors';
+import * as FlightsActions from 'src/app/redux/actions/flights.actions';
+import * as TripSearchActions from 'src/app/redux/actions/trip-search.actions';
+
+import { MatIconService } from 'src/app/shared/services/icon.service';
+
 import { DatesService } from 'src/app/flight/services/dates.service';
-import { Flight } from '../../models/flight.models';
-import { FlightsService } from '../../services/flights.service';
-import * as FlightsActions from '../../../redux/actions/flights.actions';
-import { Slide } from '../../models/slider.models';
-import { CalendarSliderService } from '../../services/calendar-slider.service';
-import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
-import { FlightsUpdateService } from '../../services/flights-update.service';
+import { Flight } from 'src/app/flight/models/flight.models';
+import { FlightsService } from 'src/app/flight/services/flights.service';
+import { Slide } from 'src/app/flight/models/slider.models';
+import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
+import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
+import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
 
 @Component({
   selector: 'app-calendar-slider',
@@ -183,15 +189,15 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
     switch (this.flightTypeIndex) {
       case FlightsTypesEnum.RoundTripForwardFlight:
         this.store$.dispatch(FlightsActions.setForwardFlight({ forwardFlight: slide!.flight }));
-        this.store$.dispatch(FlightsActions.setRangeTripDates({ range: { start: slide!.date, end: this.searchData.rangeTripDates!.end } }));
+        this.store$.dispatch(TripSearchActions.setRangeTripDates({ range: { start: slide!.date, end: this.searchData.rangeTripDates!.end } }));
         break;
       case FlightsTypesEnum.RoundTripReturnFlight:
         this.store$.dispatch(FlightsActions.setReturnFlight({ returnFlight: slide!.flight }));
-        this.store$.dispatch(FlightsActions.setRangeTripDates({ range: { start: this.searchData.rangeTripDates!.start, end: slide!.date } }));
+        this.store$.dispatch(TripSearchActions.setRangeTripDates({ range: { start: this.searchData.rangeTripDates!.start, end: slide!.date } }));
         break;
       default:
         this.store$.dispatch(FlightsActions.setForwardFlight({ forwardFlight: slide!.flight }));
-        this.store$.dispatch(FlightsActions.setStartTripDate({ startTripDate: slide!.date }));
+        this.store$.dispatch(TripSearchActions.setStartTripDate({ startTripDate: slide!.date }));
     }
   }
 }

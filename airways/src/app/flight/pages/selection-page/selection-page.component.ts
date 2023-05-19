@@ -2,24 +2,28 @@ import { Location } from '@angular/common';
 import {
   Component, OnDestroy, OnInit,
 } from '@angular/core';
+
 import { Store, select } from '@ngrx/store';
+
 import {
   Observable, Subject, takeUntil,
 } from 'rxjs';
-import {
-  selectFlightSearchData, selectSelectedFlightError, selectSelectedFlightIsLoading,
-} from 'src/app/redux/selectors/flights.selectors';
+
 import {
   AppState, TripSearchState,
 } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
+import { selectSelectedFlightError, selectSelectedFlightIsLoading } from 'src/app/redux/selectors/flights.selectors';
+import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import * as FlightsActions from 'src/app/redux/actions/flights.actions';
+import * as BookingActions from 'src/app/redux/actions/booking.actions';
+
 import { StepsEnum } from 'src/app/core/constants/steps.enum';
-import * as FlightsActions from '../../../redux/actions/flights.actions';
-import * as BookingActions from '../../../redux/actions/booking.actions';
-import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
-import { Flight } from '../../models/flight.models';
-import { DatesService } from '../../services/dates.service';
-import { FlightsUpdateService } from '../../services/flights-update.service';
+
+import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
+import { Flight } from 'src/app/flight/models/flight.models';
+import { DatesService } from 'src/app/flight/services/dates.service';
+import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
 
 @Component({
   selector: 'app-selection-page',
@@ -60,24 +64,25 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.store$.pipe(select(selectSelectedFlightIsLoading));
     this.error$ = this.store$.pipe(select(selectSelectedFlightError));
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
-    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
+    this.searchData$ = this.store$.pipe(select(selectTripSearchState));
 
     this.searchData$
       .pipe(
         takeUntil(this.destroy$),
       )
-      .subscribe((searchData) => {
-        this.searchData = searchData;
+      .subscribe((res) => {
+        this.searchData = res;
       });
 
     this.flightsUpdateService.isUpdate$.pipe(
       takeUntil(this.destroy$),
     ).subscribe((res) => {
       if (res) {
-        this.store$.dispatch(FlightsActions.searchFlights({ isReturn: false }));
+        this.store$.dispatch(FlightsActions.searchAllFlights({ isReturn: false }));
+        this.isFlightsSelected = [];
         this.isFlightsSelected = [...this.isFlightsSelected, false];
         if (this.searchData.isRoundTrip) {
-          this.store$.dispatch(FlightsActions.searchFlights({ isReturn: true }));
+          this.store$.dispatch(FlightsActions.searchAllFlights({ isReturn: true }));
           this.isFlightsSelected = [...this.isFlightsSelected, false];
         }
       }

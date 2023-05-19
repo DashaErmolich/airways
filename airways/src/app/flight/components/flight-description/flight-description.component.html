@@ -19,7 +19,7 @@
   <div class="info__flight info__flight_right flight">
     <span class="flight__date">{{ flight.landingDate | date:'E, d MMM y' }}</span>
     <div class="flight__time-container flight__time-container_reverse">
-      <span class="flight__time">{{ flight.landingDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
+      <span class="flight__time">{{ flight.landingDate | date:'H' }}:{{ flight.landingDate | date:'mm' }}</span>
       <span class="flight__zone">{{ flight.landingDate | date:'z' }}</span>
     </div>
     <span class="flight__city">{{ flight.to.city }}</span>

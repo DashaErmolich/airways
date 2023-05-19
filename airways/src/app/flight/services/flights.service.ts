@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+
 import { Observable, forkJoin } from 'rxjs';
-import { Airport, Flight, FlightSearchData } from '../models/flight.models';
-import { DatesService } from './dates.service';
+
+import { Airport, Flight, FlightSearchData } from 'src/app/flight/models/flight.models';
+import { DatesService } from 'src/app/flight/services/dates.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FlightsService {
   // private BASE_URL = 'https://api.air-ways.online';
-
   private BASE_URL = 'http://localhost:3001';
 
   constructor(

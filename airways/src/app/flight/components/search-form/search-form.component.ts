@@ -1,22 +1,27 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+/* eslint-disable class-methods-use-this */
+import {
+  ChangeDetectionStrategy, Component, OnDestroy, OnInit,
+} from '@angular/core';
 import {
   FormGroup, FormControl, Validators, AbstractControl, ValidationErrors,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { Store, select } from '@ngrx/store';
+
 import {
   Observable, Subscription, debounceTime, startWith, map,
 } from 'rxjs';
-import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-import { AppState, TripSearchState } from 'src/app/redux/state.models';
-import { DatesService } from 'src/app/flight/services/dates.service';
-import { MatRadioChange } from '@angular/material/radio';
-import { PASSENGERS_DEFAULT } from '../../constants/passengers.constants';
-import { AIRPORTS } from '../../constants/airports.constants';
-import { Airport, Passengers } from '../../models/flight.models';
 
-import * as FlightsActions from '../../../redux/actions/flights.actions';
-import { FlightsUpdateService } from '../../services/flights-update.service';
+import { AppState, TripSearchState } from 'src/app/redux/state.models';
+import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import * as TripSearchActions from 'src/app/redux/actions/trip-search.actions';
+
+import { DatesService } from 'src/app/flight/services/dates.service';
+import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/passengers.constants';
+import { AIRPORTS } from 'src/app/flight/constants/airports.constants';
+import { Airport, Passengers } from 'src/app/flight/models/flight.models';
+import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
 
 enum TripTypesEnum {
   OneWayTrip = 'one-way-trip',
@@ -56,7 +61,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.isSearchPage = this.route.snapshot.routeConfig?.path !== 'selection';
 
     this.store$
-      .pipe(select(selectFlightSearchData))
+      .pipe(select(selectTripSearchState))
       .subscribe((res) => { this.data = res; });
 
     this.searchForm = new FormGroup({
@@ -108,7 +113,6 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.searchParams$.unsubscribe();
   }
 
-  // eslint-disable-next-line class-methods-use-this
   sameDirectionsValidator(group: AbstractControl): ValidationErrors | null {
     const departureFrom = group.get('departureFrom')?.value;
     const destinationTo = group.get('destinationTo')?.value;
@@ -118,19 +122,16 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     return null;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   filter(searchValue: string) {
     const value = typeof searchValue === 'string' ? searchValue.toLowerCase().trim() : '';
     return AIRPORTS.filter((airport) => Object.values(airport)
       .find((el) => el.toLowerCase().includes(value)));
   }
 
-  // eslint-disable-next-line class-methods-use-this
   displayAirport(airport: Airport): string {
     return airport ? `${airport.city} ${airport.key}` : '';
   }
 
-  // eslint-disable-next-line class-methods-use-this
   unavailableDate(calendarDate: Date | null): boolean {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -147,7 +148,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       countPassengers -= 1;
     }
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-    this.saveCurrentState();
+
+    this.store$.dispatch(TripSearchActions.setPassengers({ passengers: this.searchForm.value.passengers }));
     this.flightsUpdateService.setIsUpdate(false);
   }
 
@@ -155,7 +157,8 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     let countPassengers = Number(this.searchForm.get('passengers')?.get(typePassenger)?.value);
     countPassengers += 1;
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-    this.saveCurrentState();
+
+    this.store$.dispatch(TripSearchActions.setPassengers({ passengers: this.searchForm.value.passengers }));
     this.flightsUpdateService.setIsUpdate(false);
   }
 
@@ -192,26 +195,6 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  onSelectedIsRoundTrip() {
-    // this.saveCurrentState();
-    // this.datesService.setIsUpdate(false);
-  }
-
-  onSelectedDirections() {
-    // const directions = this.searchForm.get('directions')?.value;
-    // this.saveCurrentState();
-  }
-
-  onSelectedRange() {
-    // const range = this.searchForm.get('range')?.value;
-    // this.saveCurrentState();
-  }
-
-  onSelectedDate() {
-    // const date = this.searchForm.get('date')?.value.toDateString();
-    // this.saveCurrentState();
-  }
-
   submitForm() {
     this.saveCurrentState();
     this.flightsUpdateService.setIsUpdate(true);
@@ -220,16 +203,16 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   saveCurrentState() {
     if (!this.isFormInvalid()) {
-      this.store$.dispatch(FlightsActions.searchFormSubmit({
+      this.store$.dispatch(TripSearchActions.searchFormSubmit({
         flightsSearchData: {
           isRoundTrip: this.isRoundTrip(),
           isOneWayTrip: !this.isRoundTrip(),
           from: this.searchForm.value.directions.departureFrom,
           to: this.searchForm.value.directions.destinationTo,
-          startTripDate: !this.isRoundTrip() ? this.datesService.formatTimezone((this.searchForm.value.date as Date).toJSON()) : null,
+          startTripDate: !this.isRoundTrip() ? this.datesService.formatTimezone((this.searchForm.value.date as Date)) : null,
           rangeTripDates: this.isRoundTrip() ? {
-            start: this.datesService.formatTimezone((this.searchForm.value.range.start as Date).toJSON()),
-            end: this.datesService.formatTimezone((this.searchForm.value.range.end as Date).toJSON()),
+            start: this.datesService.formatTimezone((this.searchForm.value.range.start as Date)),
+            end: this.datesService.formatTimezone((this.searchForm.value.range.end as Date)),
           } : null,
           passengers: this.searchForm.value.passengers,
         },

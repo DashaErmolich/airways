@@ -1,7 +1,10 @@
+/* eslint-disable no-else-return */
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
+
 import moment from 'moment';
-import { FlightsTypesEnum } from '../constants/flights-response-indexes.enum';
+
+import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -33,10 +36,13 @@ export class DatesService {
     return this.formatTimezone(moment(date).subtract(1, 'days').toJSON());
   }
 
-  formatTimezone(date: string): string {
-    // const offset = Math.abs(date.getTimezoneOffset() / 60);
-    // return new Date((date).setHours(offset, 0, 0, 0)).toJSON();
-    return new Date((new Date(date)).toJSON().substring(0, 10)).toJSON();
+  formatTimezone(date: Date | string): string {
+    if (typeof date === 'object') {
+      const offset = Math.abs(date.getTimezoneOffset() / 60);
+      return new Date(date.setHours(offset, 0, 0, 0)).toJSON();
+    } else {
+      return new Date((new Date(date)).toJSON().substring(0, 10)).toJSON();
+    }
   }
 
   private isValidFlightDate(dateOne: string, dateTwo?: string) {

@@ -1,7 +1,9 @@
-import { BehaviorSubject } from 'rxjs';
-import { DatesService } from 'src/app/flight/services/dates.service';
 import { Injectable } from '@angular/core';
-import { Slide } from '../models/slider.models';
+
+import { BehaviorSubject } from 'rxjs';
+
+import { DatesService } from 'src/app/flight/services/dates.service';
+import { Slide } from 'src/app/flight/models/slider.models';
 
 @Injectable()
 export class CalendarSliderService {

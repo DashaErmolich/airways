@@ -1,19 +1,22 @@
 import {
   Component, Input, OnInit, Output, EventEmitter,
 } from '@angular/core';
-import { AppState, TripSearchState } from 'src/app/redux/state.models';
-import { Store, select } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import {
-  selectFlightSearchData, selectForwardFlight, selectReturnFlight,
-} from 'src/app/redux/selectors/flights.selectors';
-import { selectCurrency, selectDateFormat, selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { MatIconService } from 'src/app/shared/services/icon.service';
-import { Flight } from '../../models/flight.models';
 
-// import * as FlightsActions from '../../../redux/actions/flights.actions';
-import { FlightsTypesEnum } from '../../constants/flights-response-indexes.enum';
-import { DatesService } from '../../services/dates.service';
+import { Store, select } from '@ngrx/store';
+
+import { Observable, Subject, takeUntil } from 'rxjs';
+
+import { AppState, TripSearchState } from 'src/app/redux/state.models';
+import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
+import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
+import { selectCurrency, selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
+
+import { MatIconService } from 'src/app/shared/services/icon.service';
+
+import { Flight } from 'src/app/flight/models/flight.models';
+import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
+import { DatesService } from 'src/app/flight/services/dates.service';
 
 @Component({
   selector: 'app-flight-selection',
@@ -51,7 +54,7 @@ export class FlightSelectionComponent implements OnInit {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
-    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
+    this.searchData$ = this.store$.pipe(select(selectTripSearchState));
 
     this.store$.pipe(
       select(this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight ? selectForwardFlight : selectReturnFlight),

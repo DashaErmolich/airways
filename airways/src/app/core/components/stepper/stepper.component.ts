@@ -4,7 +4,7 @@ import { selectStep } from 'src/app/redux/selectors/booking.selectors';
 import { AppState } from 'src/app/redux/state.models';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Subscription } from 'rxjs';
-import { StepsEnum } from '../../constants/steps.enum';
+import { StepsEnum } from 'src/app/core/constants/steps.enum';
 
 interface Step {
   number: number,

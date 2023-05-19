@@ -10,6 +10,7 @@
 
 .selection__form {
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
@@ -48,7 +49,6 @@
   &__control {
     display: flex;
     gap: 16px;
-    // margin-bottom: 16px;
     &_selection {
       display: flex;
       gap: 20px;

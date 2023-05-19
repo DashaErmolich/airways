@@ -1,31 +1,8 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { FlightsState, TripSearchState } from '../state.models';
-import { flightsSearchReducersNode } from '../reducers/flights.reducers';
-import { flightsReducersNode } from '../reducers/available-flights.reducers';
-
-export const selectFlightsSearchFeature = createFeatureSelector<TripSearchState>(flightsSearchReducersNode);
+import { FlightsState } from '../state.models';
+import { flightsReducersNode } from '../reducers/flights.reducers';
 
 export const selectFlightsFeature = createFeatureSelector<FlightsState>(flightsReducersNode);
-
-export const selectFlightSearchData = createSelector(
-  selectFlightsSearchFeature,
-  (state) => state,
-);
-
-export const selectIsOneWayTrip = createSelector(
-  selectFlightsSearchFeature,
-  (state) => state.isOneWayTrip,
-);
-
-export const selectPassengersQty = createSelector(
-  selectFlightsSearchFeature,
-  (state) => state.passengers.adult + state.passengers.child + state.passengers.infant,
-);
-
-export const selectPassengers = createSelector(
-  selectFlightsSearchFeature,
-  (state) => state.passengers,
-);
 
 export const selectSelectedFlightIsLoading = createSelector(
   selectFlightsFeature,
