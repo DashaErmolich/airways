@@ -34,4 +34,8 @@ export class AuthService {
   getToken(): string | null {
     return localStorage.getItem(LocalStorageKeysEnum.AccessToken);
   }
+
+  getDefaultUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.BASE_URL}/defaultUsers`);
+  }
 }

@@ -1,96 +1,24 @@
-import { createReducer, on } from '@ngrx/store';
-import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
-import { CurrenciesEnum } from 'src/app/core/constants/currency.enum';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
-import { AuthState } from '../state.models';
-import * as AuthActions from '../actions/app.actions';
-import { User } from '../../shared/models/user.model';
+import { isDevMode } from '@angular/core';
+import { ActionReducerMap, MetaReducer } from '@ngrx/store';
+import { SearchFormState } from 'src/app/flight/models/flight.models';
+import { searchParamsNode, flightsSearchFormReducers } from './flights-search-form.reducers';
+import { flightsSearchReducers, flightsSearchReducersNode } from './flights.reducers';
+import { FlightsState, FlightSearchState, BookingState } from '../state.models';
+import { flightsReducers, flightsReducersNode } from './available-flights.reducers';
+import { bookingReducersNode, bookingReducers } from './booking.reducers';
 
-function getUser(): User | null {
-  const user = localStorage.getItem(LocalStorageKeysEnum.User);
-  return user ? JSON.parse(user) : null;
+export interface State {
+  [searchParamsNode]: SearchFormState,
+  [flightsSearchReducersNode]: FlightSearchState,
+  [flightsReducersNode]: FlightsState,
+  [bookingReducersNode]: BookingState,
 }
 
-export const initialState: AuthState = {
-  isAuth: !!localStorage.getItem(LocalStorageKeysEnum.AccessToken),
-  error: null,
-  dateFormat: DateFormatEnum.MM_DD_YYYY,
-  currency: CurrenciesEnum.EUR,
-  token: localStorage.getItem(LocalStorageKeysEnum.AccessToken),
-  user: getUser(),
+export const reducers: ActionReducerMap<State> = {
+  [searchParamsNode]: flightsSearchFormReducers,
+  [flightsSearchReducersNode]: flightsSearchReducers,
+  [flightsReducersNode]: flightsReducers,
+  [bookingReducersNode]: bookingReducers,
 };
 
-export const reducers = createReducer(
-  initialState,
-  on(
-    AuthActions.signUpSuccess,
-    (state, action) => ({
-      ...state,
-      isAuth: true,
-      error: null,
-      token: action.activeUser.accessToken,
-      user: action.activeUser.user,
-    }),
-  ),
-  on(
-    AuthActions.signUpFailure,
-    (state, action) => ({
-      ...state,
-      isAuth: false,
-      error: action.error,
-      token: null,
-      user: null,
-    }),
-  ),
-  on(
-    AuthActions.loginSuccess,
-    (state, action) => ({
-      ...state,
-      isAuth: true,
-      error: null,
-      token: action.activeUser.accessToken,
-      user: action.activeUser.user,
-    }),
-  ),
-  on(
-    AuthActions.loginFailure,
-    (state, action) => ({
-      ...state,
-      isAuth: false,
-      error: action.error,
-      token: null,
-      user: null,
-    }),
-  ),
-  on(
-    AuthActions.logout,
-    (state) => ({
-      ...state,
-      isAuth: false,
-      error: null,
-      token: null,
-      user: null,
-    }),
-  ),
-  on(
-    AuthActions.setDateFormat,
-    (state, action) => ({
-      ...state,
-      dateFormat: action.dateFormat,
-    }),
-  ),
-  on(
-    AuthActions.setCurrency,
-    (state, action) => ({
-      ...state,
-      currency: action.currency,
-    }),
-  ),
-  on(
-    AuthActions.clearError,
-    (state) => ({
-      ...state,
-      error: null,
-    }),
-  ),
-);
+export const metaReducers: MetaReducer<State>[] = isDevMode() ? [] : [];

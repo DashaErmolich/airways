@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
-import * as AuthActions from '../../../redux/actions/app.actions';
+import * as AuthActions from '../../../redux/actions/auth.actions';
 
 @Component({
   selector: 'app-auth-dialog',

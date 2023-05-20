@@ -1,0 +1,27 @@
+<div class="flights-info-wrapper">
+  <div class="container flights-info-container">
+    <div class="flights-info__directions">
+      <span>{{ (searchData$ | async)!.from!.city }}</span>
+      <mat-icon svgIcon="round-trip" *ngIf="(searchData$ | async)!.isRoundTrip"></mat-icon>
+      <mat-icon *ngIf="(searchData$ | async)!.isOneWayTrip">arrow_right_alt</mat-icon>
+      <span>{{ (searchData$ | async)!.to!.city }}</span>
+    </div>
+
+    <div class="flights-info__data">
+      <span *ngIf="(searchData$ | async)!.isRoundTrip">Return</span>
+      <span *ngIf="(searchData$ | async)!.isRoundTrip">&bull;</span>
+      <span *ngIf="(searchData$ | async)!.isOneWayTrip">{{ (searchData$ | async)!.startTripDate | date }}</span>
+      <span *ngIf="(searchData$ | async)!.isRoundTrip">
+        {{ (searchData$ | async)!.rangeTripDates?.start| date }} - {{ (searchData$ | async)!.rangeTripDates?.end| date }}
+      </span>
+      <span>&bull;</span>
+      <span>
+        {{ passengersQty$ | async }}
+      </span>
+      <mat-icon> person</mat-icon>
+    </div>
+
+    <button mat-button color="primary" (click)="toggleSearchFormVisibility()">Edit</button>
+  </div>
+</div>
+

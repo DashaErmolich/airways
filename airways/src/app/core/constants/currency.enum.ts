@@ -1,6 +1,6 @@
-export enum CurrenciesEnum {
+export enum CurrencyEnum {
   EUR = 'EUR',
-  USA = 'USA',
+  USD = 'USD',
   RUB = 'RUB',
   PLN = 'PLN',
 }

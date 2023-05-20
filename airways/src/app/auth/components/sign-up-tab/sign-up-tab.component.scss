@@ -8,26 +8,6 @@
   }
 }
 
-.line-outside {
-	display: flex;
-	flex-basis: 100%;
-	align-items: center;
-	color: black;
-  font-size: 12px;
-  margin: 2rem 0;
-}
-
-.line-outside::before,
-.line-outside::after {
-	content: "";
-	flex-grow: 1;
-	background: black;
-	height: 1px;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px 8px;
-}
-
 .agreement {
   margin-bottom: 22px;
 }

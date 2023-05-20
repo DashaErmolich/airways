@@ -1,11 +1,11 @@
   <mat-dialog-content [formGroup]="signUpForm" class="form">
     <div class="social-network-buttons">
-      <button mat-stroked-button class="form__button">
+      <button mat-stroked-button class="form__button" (click)="fillFormWithGoogle()">
         <mat-icon svgIcon="google"></mat-icon>
         Continue with Google
       </button>
 
-      <button mat-stroked-button class="form__button">
+      <button mat-stroked-button class="form__button" (click)="fillFormWithFacebook()">
         <mat-icon svgIcon="facebook"></mat-icon>
         Continue with Facebook
       </button>
