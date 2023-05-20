@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FlightInfoComponent } from './flight-info.component';
+import { CalendarSliderComponent } from './calendar-slider.component';
 
-describe('FlightInfoComponent', () => {
-  let component: FlightInfoComponent;
-  let fixture: ComponentFixture<FlightInfoComponent>;
+describe('CalendarSliderComponent', () => {
+  let component: CalendarSliderComponent;
+  let fixture: ComponentFixture<CalendarSliderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FlightInfoComponent],
+      declarations: [CalendarSliderComponent],
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(FlightInfoComponent);
+    fixture = TestBed.createComponent(CalendarSliderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

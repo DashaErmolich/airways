@@ -6,6 +6,8 @@
       </svg>
     </a>
 
+    <app-stepper></app-stepper>
+
     <mat-form-field appearance="outline" class="header__currency-select">
       <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
         <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">

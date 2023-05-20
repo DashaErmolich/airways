@@ -6,13 +6,16 @@ import { User } from '../shared/models/user.model';
 export interface AuthState {
   isAuth: boolean;
   error: string | null;
-  dateFormat: string;
-  currency: string;
   token: string | null;
   user: User | null;
 }
 
-export interface FlightSearchState {
+export interface SettingsState {
+  dateFormat: string;
+  currency: string;
+}
+
+export interface TripSearchState {
   isRoundTrip: boolean;
   isOneWayTrip: boolean;
   from: Airport | null;
@@ -25,18 +28,23 @@ export interface FlightSearchState {
 export interface FlightsState {
   isLoading: boolean;
   error: string | null;
-  flights: Flight[][],
+  forwardFlights: Flight[],
+  returnFlights: Flight[],
+  forwardFlight: Flight | null,
+  returnFlight: Flight | null,
 }
 
 export interface BookingState {
+  step: number;
   passengers: Passengers | null;
-  directFlights: Flight[],
-  forwardFlights: Flight[] | null,
+  forwardFlights: Flight[],
+  returnFlights: Flight[] | null,
 }
 
 export interface AppState {
   auth: AuthState;
-  flightsSearch: FlightSearchState;
+  settings: SettingsState;
+  flightsSearch: TripSearchState;
   flights: FlightsState;
   booking: BookingState;
 }

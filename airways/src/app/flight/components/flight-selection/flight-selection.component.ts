@@ -1,102 +1,102 @@
 import {
-  Component, Input, OnInit, Output, EventEmitter,
+  Component, Input, OnInit, Output, EventEmitter, OnDestroy,
 } from '@angular/core';
-import { AppState, FlightSearchState } from 'src/app/redux/state.models';
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectFlightSearchData } from 'src/app/redux/selectors/flights.selectors';
-import moment from 'moment';
-import { selectCurrency, selectDateFormat, selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
-import { MatIconService } from 'src/app/shared/services/icon.service';
-import { Flight, DatesRange } from '../../models/flight.models';
 
-import * as FlightsActions from '../../../redux/actions/flights.actions';
-import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
+import { Store, select } from '@ngrx/store';
+
+import { Observable, Subject, takeUntil } from 'rxjs';
+
+import { AppState, TripSearchState } from 'src/app/redux/state.models';
+import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
+import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
+import { selectCurrency, selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
+
+import { MatIconService } from 'src/app/shared/services/icon.service';
+
+import { Flight } from 'src/app/flight/models/flight.models';
+import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
+import { DatesService } from 'src/app/flight/services/dates.service';
+import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({
   selector: 'app-flight-selection',
   templateUrl: './flight-selection.component.html',
   styleUrls: ['./flight-selection.component.scss'],
 })
-export class FlightSelectionComponent implements OnInit {
-  @Input() responseIndex!: number;
+export class FlightSelectionComponent implements OnInit, OnDestroy {
+  @Input() flightTypeIndex!: number;
 
   @Output() flightSelectedEvent = new EventEmitter<boolean>();
 
-  searchData!: FlightSearchState;
+  private destroy$ = new Subject<boolean>();
 
-  flight!: Flight;
+  private searchData$!: Observable<TripSearchState>;
 
-  isAuth$: Observable<boolean>;
+  flight: Flight | null = null;
 
-  dateFormat$: Observable<string>;
+  isAuth$!: Observable<boolean>;
 
-  currency$: Observable<string>;
+  dateFormat$!: Observable<string>;
+
+  currency$!: Observable<string>;
 
   flightSelected = false;
 
+  searchData!: TripSearchState;
+
   constructor(
     private store$: Store<AppState>,
-    private sliderService: CalendarCarouselService,
     private matIconService: MatIconService,
-  ) {
+    private datesService: DatesService,
+    private flightHelper: FlightsHelperService,
+  ) { }
+
+  ngOnInit(): void {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
-  }
+    this.searchData$ = this.store$.pipe(select(selectTripSearchState));
 
-  ngOnInit(): void {
-    this.store$.pipe(select(selectFlightSearchData)).subscribe((res) => {
+    this.store$.pipe(
+      select(this.getFlightType()),
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      this.flight = res;
+    });
+
+    this.searchData$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
       this.searchData = res;
     });
-
-    this.sliderService.flight$.subscribe((res) => {
-      this.flight = res!;
-    });
   }
 
-  searchAvailableFlights(date: string) {
-    if (this.searchData.isOneWayTrip) {
-      this.store$.dispatch(FlightsActions.setDepartureDate({ startTripDate: date }));
-    }
-
-    if (this.searchData.isRoundTrip) {
-      const newRange: DatesRange = {
-        start: this.searchData.rangeTripDates!.start,
-        end: this.searchData.rangeTripDates!.end,
-      };
-
-      if (this.responseIndex === FlightsAPIResponseIndexesEnum.OneWayFlightResponseIndex) {
-        newRange.start = date;
-
-        if (moment(newRange.start).diff(moment(newRange.end)) > 0) {
-          newRange.end = newRange.start;
-        }
-      }
-
-      if (this.responseIndex === FlightsAPIResponseIndexesEnum.ReturnFlightResponseIndex) {
-        newRange.end = date;
-
-        if (moment(newRange.start).diff(moment(newRange.end)) > 0) {
-          newRange.end = newRange.start;
-        }
-      }
-
-      this.store$.dispatch(FlightsActions.setDatesRange({ range: newRange }));
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
-  getFlightTitle() {
-    let title = `From ${this.searchData.from?.city} to ${this.searchData.to?.city}`;
-    if (this.responseIndex === 1) {
-      title = `From ${this.searchData.to?.city} to ${this.searchData.from?.city}`;
-    }
-    return title;
+  private getFlightType() {
+    return this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight
+      ? selectForwardFlight
+      : selectReturnFlight;
   }
 
   toggleFlightSelection() {
     this.flightSelected = !this.flightSelected;
     this.flightSelectedEvent.emit(this.flightSelected);
+  }
+
+  isValidDate(date: string) {
+    return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates?.start, this.searchData.rangeTripDates?.end);
+  }
+
+  isFlightNotSelected(flightTakeOffDate: string): boolean {
+    return !this.flightSelected && this.isValidDate(flightTakeOffDate);
+  }
+
+  isReturnFlight(): boolean {
+    return this.flightHelper.isReturnFlight(this.flightTypeIndex);
   }
 }

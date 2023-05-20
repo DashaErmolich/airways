@@ -1,92 +1,111 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable class-methods-use-this */
 import { Location } from '@angular/common';
 import {
-  Component, OnInit,
+  Component, OnDestroy, OnInit,
 } from '@angular/core';
+
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+
 import {
-  selectFlightSearchData, selectSelectedFlight, selectSelectedFlightError, selectSelectedFlightIsLoading,
-} from 'src/app/redux/selectors/flights.selectors';
-import { AppState, FlightSearchState } from 'src/app/redux/state.models';
+  Observable, Subject, takeUntil,
+} from 'rxjs';
+
+import {
+  AppState, TripSearchState,
+} from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { SlidesOutputData } from 'ngx-owl-carousel-o';
-import { CalendarCarouselService } from 'src/app/flight/services/calendar-carousel.service';
-import moment from 'moment';
-import * as FlightsActions from '../../../redux/actions/flights.actions';
-import * as BookingActions from '../../../redux/actions/booking.actions';
-import { FlightsAPIResponseIndexesEnum } from '../../constants/flights-response-indexes.enum';
-import { Slide } from '../../components/calendar-carousel/calendar-carousel.component';
-import { Flight } from '../../models/flight.models';
+import { selectSelectedFlightError, selectSelectedFlightIsLoading } from 'src/app/redux/selectors/flights.selectors';
+import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import * as FlightsActions from 'src/app/redux/actions/flights.actions';
+import * as BookingActions from 'src/app/redux/actions/booking.actions';
+
+import { StepsEnum } from 'src/app/core/constants/steps.enum';
+
+import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
+import { Flight } from 'src/app/flight/models/flight.models';
+import { DatesService } from 'src/app/flight/services/dates.service';
+import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
 
 @Component({
   selector: 'app-selection-page',
   templateUrl: './selection-page.component.html',
   styleUrls: ['./selection-page.component.scss'],
 })
-export class SelectionPageComponent implements OnInit {
+export class SelectionPageComponent implements OnInit, OnDestroy {
   isSearchFormVisible = false;
 
-  searchData!: FlightSearchState;
-
-  flightsResponseIndexes = FlightsAPIResponseIndexesEnum;
+  flightsTypes = FlightsTypesEnum;
 
   isLoading$!: Observable<boolean>;
 
   error$!: Observable<string | null>;
 
-  searchData$!: Observable<FlightSearchState>;
+  searchData$!: Observable<TripSearchState>;
 
-  isAuth$: Observable<boolean>;
+  isAuth$!: Observable<boolean>;
 
-  slides: Slide[] = [];
+  forwardFlight!: Flight;
 
-  activeSlides!: SlidesOutputData;
+  directFlight!: Flight;
 
-  flight!: Flight;
+  isFlightsSelected: boolean[] = [];
 
-  flights$: Observable<Flight[][]>;
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
-  isFlightsSelected = false;
+  searchData!: TripSearchState;
 
   constructor(
     private store$: Store<AppState>,
     private location: Location,
-    private sliderService: CalendarCarouselService,
-  ) {
+    private datesService: DatesService,
+    private flightsUpdateService: FlightsUpdateService,
+  ) { }
+
+  ngOnInit(): void {
     this.isLoading$ = this.store$.pipe(select(selectSelectedFlightIsLoading));
     this.error$ = this.store$.pipe(select(selectSelectedFlightError));
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
+    this.searchData$ = this.store$.pipe(select(selectTripSearchState));
 
-    this.searchData$ = this.store$.pipe(select(selectFlightSearchData));
-    this.flights$ = this.store$.pipe(select(selectSelectedFlight));
-  }
+    this.searchData$
+      .pipe(
+        takeUntil(this.destroy$),
+      )
+      .subscribe((res) => {
+        this.searchData = res;
+      });
 
-  ngOnInit(): void {
-    this.store$.dispatch(FlightsActions.searchFlights());
-
-    this.sliderService.flight$.subscribe((res) => {
-      this.flight = res!;
+    this.flightsUpdateService.isUpdate$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      if (res) {
+        this.store$.dispatch(FlightsActions.searchAllFlights({ isReturn: false }));
+        this.isFlightsSelected = [];
+        this.isFlightsSelected = [...this.isFlightsSelected, false];
+        if (this.searchData.isRoundTrip) {
+          this.store$.dispatch(FlightsActions.searchAllFlights({ isReturn: true }));
+          this.isFlightsSelected = [...this.isFlightsSelected, false];
+        }
+      }
     });
 
-    this.searchData$.subscribe((res) => {
-      this.searchData = res;
-    });
-
-    this.flights$.subscribe((res) => {
-      this.sliderService.setSlides(res.map((item: Flight[]) => ({ flightDate: moment(item[0].takeoffDate).format('LL'), data: item[0] })));
-    });
+    this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Second }));
   }
 
-  toggleSearchFormVisibility(event: boolean): void {
-    this.isSearchFormVisible = event;
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
-  getPassengersQty() {
-    return this.searchData.passengers
-      ? this.searchData.passengers.adult + this.searchData.passengers.child + this.searchData.passengers.infant
-      : '';
+  toggleSearchFormVisibility(isVisible: boolean): void {
+    this.isSearchFormVisible = isVisible;
+  }
+
+  toggleForwardFlightSelection(isSelected: boolean) {
+    this.isFlightsSelected = [isSelected, ...this.isFlightsSelected.slice(1)];
+  }
+
+  toggleReturnFlightSelection(isSelected: boolean) {
+    this.isFlightsSelected = [...this.isFlightsSelected.slice(0, -1), isSelected];
   }
 
   goBack(): void {
@@ -94,10 +113,10 @@ export class SelectionPageComponent implements OnInit {
   }
 
   submitFlights(): void {
-    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.flight], forwardFlights: [this.flight] }));
+    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.directFlight], forwardFlights: [this.forwardFlight] }));
   }
 
-  toggleFlightSelection(event: boolean) {
-    this.isFlightsSelected = event;
+  isNextStepAvailable() {
+    return this.isFlightsSelected.every((item) => item);
   }
 }

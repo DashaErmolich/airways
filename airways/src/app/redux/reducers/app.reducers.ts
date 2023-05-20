@@ -1,22 +1,26 @@
 import { isDevMode } from '@angular/core';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
-import { SearchFormState } from 'src/app/flight/models/flight.models';
-import { searchParamsNode, flightsSearchFormReducers } from './flights-search-form.reducers';
-import { flightsSearchReducers, flightsSearchReducersNode } from './flights.reducers';
-import { FlightsState, FlightSearchState, BookingState } from '../state.models';
-import { flightsReducers, flightsReducersNode } from './available-flights.reducers';
+import { flightsSearchReducers, tripSearchReducersNode } from './trip-search.reducers';
+import {
+  FlightsState, TripSearchState, BookingState, AuthState, SettingsState,
+} from '../state.models';
+import { flightsReducers, flightsReducersNode } from './flights.reducers';
 import { bookingReducersNode, bookingReducers } from './booking.reducers';
+import { authReducers, authReducersNode } from './auth.reducers';
+import { settingsReducers, settingsReducersNode } from './settings.reducers';
 
 export interface State {
-  [searchParamsNode]: SearchFormState,
-  [flightsSearchReducersNode]: FlightSearchState,
+  [authReducersNode]: AuthState,
+  [settingsReducersNode]: SettingsState,
+  [tripSearchReducersNode]: TripSearchState,
   [flightsReducersNode]: FlightsState,
   [bookingReducersNode]: BookingState,
 }
 
 export const reducers: ActionReducerMap<State> = {
-  [searchParamsNode]: flightsSearchFormReducers,
-  [flightsSearchReducersNode]: flightsSearchReducers,
+  [authReducersNode]: authReducers,
+  [settingsReducersNode]: settingsReducers,
+  [tripSearchReducersNode]: flightsSearchReducers,
   [flightsReducersNode]: flightsReducers,
   [bookingReducersNode]: bookingReducers,
 };

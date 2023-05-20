@@ -1,0 +1,98 @@
+@import '../../../../styles/abstracts/variables';
+
+.flight-selection-container {
+  margin-bottom: 2rem;
+}
+
+.flight-selection__title {
+  color: $color-primary-blue;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.flight-selection__info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.info__duration {
+  flex: 1;
+  align-self: center;
+  text-align: center;
+
+  .line-outside {
+    margin: 0;
+  }
+
+  .line-outside::before,
+  .line-outside::after {
+    background: #D0D9DF;
+  }
+}
+
+.info__flight {
+  display: flex;
+  flex-direction: column;
+}
+
+.info__flight_right {
+  text-align: right;
+}
+
+.flight__date {
+  color: $color-gray;
+  font-size: 1rem;
+}
+
+.flight__time-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flight__time-container_reverse {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 1rem;
+}
+
+.flight__time {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 2.4rem;
+}
+
+.flight__zone {
+  color: $color-gray;
+  font-size: .5rem;
+  line-height: 1.25rem;
+}
+
+.flight__city {
+  color: $color-gray;
+  font-size: .75rem;
+  line-height: 1rem;
+}
+
+.flight-price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  text-align: end;
+
+  min-width: 133px;
+
+  span {
+    border-radius: 2px;
+  }
+}

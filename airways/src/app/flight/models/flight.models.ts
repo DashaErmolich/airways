@@ -10,14 +10,6 @@ export interface Passengers {
   infant: number;
 }
 
-export interface SearchFormState {
-  isRoundTrip: boolean,
-  directions: Directions | null,
-  range: DatesRange | null,
-  date: string | null,
-  passengers: Passengers,
-}
-
 export interface Directions {
   departureFrom: Airport,
   destinationTo: Airport,
@@ -29,10 +21,10 @@ export interface DatesRange {
 }
 
 export interface FlightSearchData {
-  fromKey: string | undefined;
-  toKey: string | undefined;
-  forwardDate: string | null | undefined;
-  backDate: string | null | undefined;
+  fromKey: string;
+  toKey: string;
+  forwardDate: string;
+  backDate: string;
 }
 
 export interface FlightPrices {

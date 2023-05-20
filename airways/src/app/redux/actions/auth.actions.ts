@@ -9,8 +9,6 @@ const enum AppActionsTypes {
   AUTH_SIGN_UP_SUCCESS = '[Auth] Sign Up Success',
   AUTH_SIGN_UP_FAILURE = '[Auth] Sign Up Failure',
   AUTH_LOGOUT = '[Auth] Logout',
-  SETTINGS_DATE = '[Settings] Change Date Format',
-  SETTINGS_CURRENCY = '[Settings] Change Currency',
   AUTH_CLEAR_ERROR = '[Auth] Clear Error',
 }
 
@@ -46,16 +44,6 @@ export const loginFailure = createAction(
 
 export const logout = createAction(
   AppActionsTypes.AUTH_LOGOUT,
-);
-
-export const setDateFormat = createAction(
-  AppActionsTypes.SETTINGS_DATE,
-  props<{ dateFormat: string }>(),
-);
-
-export const setCurrency = createAction(
-  AppActionsTypes.SETTINGS_CURRENCY,
-  props<{ currency: string }>(),
 );
 
 export const clearError = createAction(

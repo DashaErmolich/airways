@@ -4,11 +4,18 @@ import {
 import { AvailableSeatsStateColorsEnum } from '../constants/available-seats-state.enum';
 import { FlightSeats } from '../models/flight.models';
 
+enum CssPropertiesEnum {
+  backgroundColor = 'background-color',
+  borderBottomColor = 'border-bottom-color',
+}
+
 @Directive({
   selector: '[appFlightAvailableSeats]',
 })
 export class FlightAvailableSeatsDirective implements OnInit, OnChanges {
-  @Input() appFlightAvailableSeats!: FlightSeats;
+  @Input() appFlightAvailableSeats: FlightSeats | null = null;
+
+  @Input() appFlightAvailableSeatsStyle!: string;
 
   constructor(
     private element: ElementRef,
@@ -27,24 +34,41 @@ export class FlightAvailableSeatsDirective implements OnInit, OnChanges {
     if (this.element) {
       this.renderer2.setStyle(
         this.element.nativeElement,
-        'background-color',
+        this.appFlightAvailableSeatsStyle,
         `${this.getColor()}`,
       );
     }
   }
 
   private getColor(): string {
-    let bgColor: string = '';
-    switch (true) {
-      case this.appFlightAvailableSeats.avaible >= this.appFlightAvailableSeats.total / 2:
-        bgColor = AvailableSeatsStateColorsEnum.MoreThanHalf;
-        break;
-      case this.appFlightAvailableSeats.avaible < this.appFlightAvailableSeats.total / 2 && this.appFlightAvailableSeats.avaible >= 10:
-        bgColor = AvailableSeatsStateColorsEnum.LessThanHalf;
-        break;
-      default:
-        bgColor = AvailableSeatsStateColorsEnum.LessThanTen;
+    let color: string = '';
+    if (this.appFlightAvailableSeats) {
+      switch (true) {
+        case this.appFlightAvailableSeats.avaible >= this.appFlightAvailableSeats.total / 2:
+          if (this.appFlightAvailableSeatsStyle === CssPropertiesEnum.backgroundColor) {
+            color = AvailableSeatsStateColorsEnum.MoreThanHalf_30;
+          }
+          if (this.appFlightAvailableSeatsStyle === CssPropertiesEnum.borderBottomColor) {
+            color = AvailableSeatsStateColorsEnum.MoreThanHalf;
+          }
+          break;
+        case this.appFlightAvailableSeats.avaible < this.appFlightAvailableSeats.total / 2 && this.appFlightAvailableSeats.avaible >= 10:
+          if (this.appFlightAvailableSeatsStyle === CssPropertiesEnum.backgroundColor) {
+            color = AvailableSeatsStateColorsEnum.LessThanHalf_30;
+          }
+          if (this.appFlightAvailableSeatsStyle === CssPropertiesEnum.borderBottomColor) {
+            color = AvailableSeatsStateColorsEnum.LessThanHalf;
+          }
+          break;
+        default:
+          if (this.appFlightAvailableSeatsStyle === CssPropertiesEnum.backgroundColor) {
+            color = AvailableSeatsStateColorsEnum.LessThanTen_30;
+          }
+          if (this.appFlightAvailableSeatsStyle === CssPropertiesEnum.borderBottomColor) {
+            color = AvailableSeatsStateColorsEnum.LessThanTen;
+          }
+      }
     }
-    return bgColor;
+    return color;
   }
 }

@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { selectCurrency, selectIsAuth, selectUsername } from 'src/app/redux/selectors/auth.selectors';
+import { selectIsAuth, selectUsername } from 'src/app/redux/selectors/auth.selectors';
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/redux/state.models';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthDialogComponent } from 'src/app/auth/components/auth-dialog/auth-dialog.component';
-import * as AuthActions from '../../../redux/actions/auth.actions';
-import { CurrencyEnum } from '../../constants/currency.enum';
-import { DateFormatEnum } from '../../constants/date-format.enum';
-import { selectDateFormat } from '../../../redux/selectors/auth.selectors';
+import * as SettingsActions from 'src/app/redux/actions/settings.actions';
+import * as AuthActions from 'src/app/redux/actions/auth.actions';
+import { selectDateFormat, selectCurrency } from 'src/app/redux/selectors/settings.selectors';
+import { CurrencyEnum } from 'src/app/core/constants/currency.enum';
+import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 
 @Component({
   selector: 'app-header',
@@ -44,11 +45,11 @@ export class HeaderComponent {
   }
 
   onCurrencyChange(selectChange: MatSelectChange) {
-    this.store$.dispatch(AuthActions.setCurrency({ currency: selectChange.value }));
+    this.store$.dispatch(SettingsActions.setCurrency({ currency: selectChange.value }));
   }
 
   onDateFormatChange(selectChange: MatSelectChange) {
-    this.store$.dispatch(AuthActions.setDateFormat({ dateFormat: selectChange.value }));
+    this.store$.dispatch(SettingsActions.setDateFormat({ dateFormat: selectChange.value }));
   }
 
   openDialog(): void {

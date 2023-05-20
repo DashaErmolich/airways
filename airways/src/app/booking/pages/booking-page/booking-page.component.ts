@@ -10,8 +10,12 @@ import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-for
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/redux/state.models';
+import { StepsEnum } from 'src/app/core/constants/steps.enum';
 import { passengerResponse } from '../../../shared/mocked/passengers-response';
 import countryInfo from '../../../../assets/country-codes.json';
+import * as BookingActions from '../../../redux/actions/booking.actions';
 
 @Component({
   selector: 'app-booking-page',
@@ -33,6 +37,7 @@ export class BookingPageComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private router: Router,
+    private store$: Store<AppState>,
   ) {
     this.matIconRegistry.addSvgIcon(
       'pass-icon',
@@ -72,6 +77,8 @@ export class BookingPageComponent implements OnInit {
       }),
     });
     this.setupForm();
+
+    this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Third }));
   }
 
   get adult() {
@@ -134,6 +141,7 @@ export class BookingPageComponent implements OnInit {
   }
 
   onSubmit() {
+    // eslint-disable-next-line no-console
     console.log(this.passengerForm.value);
   }
 

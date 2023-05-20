@@ -12,6 +12,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { metaReducers, reducers } from './redux/reducers/app.reducers';
+import { FlightsEffects } from './redux/effects/flights.effects';
+import { BookingEffects } from './redux/effects/booking.effects';
+import { TripSearchEffects } from './redux/effects/trip-search.effects';
+import { AuthEffects } from './redux/effects/auth.effects';
 
 @NgModule({
   declarations: [
@@ -26,8 +30,7 @@ import { metaReducers, reducers } from './redux/reducers/app.reducers';
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
-    // StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects, FlightsEffects, BookingEffects, TripSearchEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     CoreModule,
     AuthModule,

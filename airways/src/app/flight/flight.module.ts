@@ -4,23 +4,24 @@ import { CommonModule } from '@angular/common';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { CarouselModule } from 'ngx-owl-carousel-o';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MomentDateModule } from '@angular/material-moment-adapter';
 import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
-import { CalendarCarouselComponent } from './components/calendar-carousel/calendar-carousel.component';
 import { FlightAvailableSeatsDirective } from './directives/flight-available-seats.directive';
-import { ActiveFlightDirective } from './directives/active-flight.directive';
-import { FlightInfoComponent } from './components/flight-info/flight-info.component';
+import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 import { CurrencyValuePipe } from './pipes/currency-value.pipe';
 import { FlightTimePipe } from './pipes/flight-time.pipe';
+import { CalendarSliderComponent } from './components/calendar-slider/calendar-slider.component';
+import { FlightDescriptionComponent } from './components/flight-description/flight-description.component';
 
 @NgModule({
   declarations: [
@@ -28,12 +29,12 @@ import { FlightTimePipe } from './pipes/flight-time.pipe';
     SelectionPageComponent,
     SearchFormComponent,
     FlightSelectionComponent,
-    CalendarCarouselComponent,
     FlightAvailableSeatsDirective,
-    ActiveFlightDirective,
-    FlightInfoComponent,
+    FlightsSearchSummaryComponent,
     CurrencyValuePipe,
     FlightTimePipe,
+    CalendarSliderComponent,
+    FlightDescriptionComponent,
   ],
   imports: [
     CommonModule,
@@ -47,8 +48,7 @@ import { FlightTimePipe } from './pipes/flight-time.pipe';
     MatNativeDateModule,
     MatIconModule,
     CarouselModule,
-    // StoreModule.forFeature('new-flights', flightsReducers),
-    // EffectsModule.forFeature([AuthEffects]),
+    MomentDateModule,
   ],
 })
 export class FlightModule { }

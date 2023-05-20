@@ -1,19 +1,18 @@
-<div class="container">
   <form [formGroup]="searchForm" [ngClass]="isSearchPage ? 'search__form' : 'selection__form'" (ngSubmit)="submitForm()">
 
     <div class="form__control">
-      <mat-radio-group aria-label="Select an option" formControlName="isRoundTrip" (change)="onSelectedIsRoundTrip()">
-        <mat-radio-button color="primary" [value]="true">Round Trip</mat-radio-button>
-        <mat-radio-button color="primary" [value]="false">One Way</mat-radio-button>
+      <mat-radio-group aria-label="Select an option" formControlName="tripType">
+        <mat-radio-button color="primary" value="round-trip" [checked]="searchState.isRoundTrip">Round Trip</mat-radio-button>
+        <mat-radio-button color="primary" value="one-way-trip" [checked]="searchState.isOneWayTrip">One Way</mat-radio-button>
       </mat-radio-group>
     </div>
 
     <form [ngClass]="isSearchPage ? 'form__directions' : 'form__directions_selection'" formGroupName="directions">
       <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Departure</mat-label>
+        <mat-label>From</mat-label>
         <input matInput placeholder="From" formControlName="departureFrom" [matAutocomplete]="from" type="text" >
-        <mat-autocomplete #from="matAutocomplete" [displayWith]="displayAirport" (optionSelected)="onSelectedDirections()">
-          <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom">
+        <mat-autocomplete #from="matAutocomplete" [displayWith]="displayAirport">
+          <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom" [disabled]="isFromAirportUnavailable(airportFrom.key)">
             <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.key}})</span> </div>
             <div class="airport__subinfo"><span>{{airportFrom.name}}</span><span> {{airportFrom.country}}</span></div>
           </mat-option>
@@ -25,9 +24,9 @@
 
       <mat-form-field class="example-full-width" appearance="fill">
         <mat-label>Destination</mat-label>
-        <input matInput placeholder="To" formControlName="destinationTo" [matAutocomplete]="to" type="text">
-        <mat-autocomplete #to="matAutocomplete" [displayWith]="displayAirport" (optionSelected)="onSelectedDirections()">
-          <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo">
+        <input matInput placeholder="Destination" formControlName="destinationTo" [matAutocomplete]="to" type="text">
+        <mat-autocomplete #to="matAutocomplete" [displayWith]="displayAirport">
+          <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo" [disabled]="isToAirportUnavailable(airportTo.key)">
             <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.key}})</span> </div>
             <div class="airport__subinfo"><span>{{airportTo.name}}</span><span> {{airportTo.country}}</span></div>
           </mat-option>
@@ -41,18 +40,18 @@
         Please choose different airports
       </mat-error>
 
-      <button *ngIf="isSearchPage" mat-mini-fab class="form__directions_btn" color="primary" type="button"
+      <button mat-mini-fab class="form__directions_btn" color="primary" type="button"
         (click)="swapDirections()"><mat-icon>sync_alt</mat-icon></button>
     </form>
 
     <div [ngClass]="isSearchPage ? 'form__control' : 'form__control_selection'">
-      <mat-form-field class="dates__form" *ngIf="searchForm.get('isRoundTrip')?.value" appearance="fill">
+      <mat-form-field class="dates__form" *ngIf="isRoundTrip()" appearance="fill">
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input matDateRangeInput [rangePicker]="picker" formGroupName="range" [dateFilter]="unavailableDate">
-          <input matStartDate formControlName="start" placeholder="Start date" (dateChange)="onSelectedRange()">
-          <input matEndDate formControlName="end" placeholder="End date" (dateChange)="onSelectedRange()">
-          <!--  -->
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
         </mat-date-range-input>
+        <mat-hint>{{ dateFormat$ | async }}</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
         <mat-error
@@ -64,9 +63,10 @@
         <mat-error *ngIf="searchForm.get('range')?.get('end')?.hasError('matEndDateInvalid')">Invalid end date</mat-error>
       </mat-form-field>
 
-      <mat-form-field class="dates__form" *ngIf="!searchForm.get('isRoundTrip')?.value" appearance="fill">
+      <mat-form-field class="dates__form" *ngIf="!this.isRoundTrip()" appearance="fill">
         <mat-label>Enter a date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="date" [matDatepickerFilter]="unavailableDate" (dateChange)="onSelectedDate()">
+        <input matInput [matDatepicker]="picker" formControlName="date" [matDatepickerFilter]="unavailableDate">
+        <mat-hint>{{ dateFormat$ | async }}</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error *ngIf="searchForm.get('date')?.hasError('required')">Please enter a date</mat-error>
@@ -125,9 +125,8 @@
       </div>
     </div>
 
-    <div *ngIf="isSearchPage" class="form__control">
+    <div class="form__control">
       <button class="form__btn" mat-raised-button color="primary" type="submit"
         [disabled]="isFormInvalid()">Search</button>
     </div>
   </form>
-</div>

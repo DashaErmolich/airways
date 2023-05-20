@@ -5,9 +5,10 @@ import * as BookingActions from '../actions/booking.actions';
 export const bookingReducersNode = 'booking';
 
 export const initialState: BookingState = {
+  step: 1,
   passengers: null,
-  directFlights: [],
   forwardFlights: [],
+  returnFlights: [],
 };
 
 export const bookingReducers = createReducer(
@@ -16,8 +17,8 @@ export const bookingReducers = createReducer(
     BookingActions.setFlights,
     (state, action) => ({
       ...state,
-      directFlights: action.directFlights,
-      forwardFlights: action.forwardFlights,
+      forwardFlights: action.directFlights,
+      returnFlights: action.forwardFlights,
     }),
   ),
   on(
@@ -25,6 +26,13 @@ export const bookingReducers = createReducer(
     (state, action) => ({
       ...state,
       passengers: action.passengers,
+    }),
+  ),
+  on(
+    BookingActions.setStep,
+    (state, action) => ({
+      ...state,
+      step: action.step,
     }),
   ),
 );
