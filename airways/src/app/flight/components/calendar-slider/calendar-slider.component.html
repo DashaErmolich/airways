@@ -7,14 +7,16 @@
   >
     <button class="slide"
       *ngFor="let slide of slides"
-      [class.slide_active]="slide.flight.flightNumber === flight.flightNumber"
-      [appFlightAvailableSeats]="(slide.flight.flightNumber === flight.flightNumber && isValidDate(slide.flight.takeoffDate)) ? slide.flight.seats : null"
+      [class.slide_active]="isActiveSlide(slide.flight.flightNumber)"
+      [appFlightAvailableSeats]="getFlightSeats(slide.flight)"
       [appFlightAvailableSeatsStyle]="'border-bottom-color'"
       [disabled]="!isValidDate(slide.flight.takeoffDate)"
       (click)="changeDepartureDate(slide.date)">
       <span class="slide__date">{{ slide.date | date:'d MMM' }}</span>
       <span class="slide__weekday">{{ slide.date | date:'EEEE' }}</span>
-      <span class="slide__price" *ngIf="isValidDate(slide.flight.takeoffDate)">{{ slide.flight.price| currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
+      <span class="slide__price" *ngIf="isValidDate(slide.flight.takeoffDate)">
+        {{ slide.flight.price| currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}
+      </span>
       <mat-icon svgIcon="no-flight" *ngIf="!isValidDate(slide.flight.takeoffDate)"></mat-icon>
     </button>
   </div>

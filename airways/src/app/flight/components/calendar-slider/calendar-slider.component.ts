@@ -22,7 +22,7 @@ import * as TripSearchActions from 'src/app/redux/actions/trip-search.actions';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 
 import { DatesService } from 'src/app/flight/services/dates.service';
-import { Flight } from 'src/app/flight/models/flight.models';
+import { Flight, FlightSeats } from 'src/app/flight/models/flight.models';
 import { FlightsService } from 'src/app/flight/services/flights.service';
 import { Slide } from 'src/app/flight/models/slider.models';
 import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
@@ -199,5 +199,13 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
         this.store$.dispatch(FlightsActions.setForwardFlight({ forwardFlight: slide!.flight }));
         this.store$.dispatch(TripSearchActions.setStartTripDate({ startTripDate: slide!.date }));
     }
+  }
+
+  isActiveSlide(flightNumber: string): boolean {
+    return flightNumber === this.flight.flightNumber;
+  }
+
+  getFlightSeats(flight: Flight): FlightSeats | null {
+    return (this.isActiveSlide(flight.flightNumber) && this.isValidDate(flight.takeoffDate)) ? flight.seats : null;
   }
 }
