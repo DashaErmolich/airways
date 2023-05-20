@@ -8,7 +8,7 @@
 
     <app-stepper></app-stepper>
 
-    <mat-form-field appearance="outline" class="header__currency-select">
+    <mat-form-field *ngIf="(layout.isSmall$ | async) === false" appearance="outline" class="header__currency-select">
       <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
         <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">
           {{ dateFormat }}
@@ -16,7 +16,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="header__currency-select">
+    <mat-form-field *ngIf="(layout.isSmall$ | async) === false" appearance="outline" class="header__currency-select">
       <mat-select [value]="currency$ | async" (selectionChange)="onCurrencyChange($event)">
         <mat-option *ngFor="let currency of currencies" [value]="currency">
           {{ currency }}
@@ -29,16 +29,48 @@
       Sign in
     </button>
 
-    <button *ngIf="isAuth$ | async" mat-stroked-button class="header__user-account-button" routerLink="/booking/user">
-      <mat-icon>account_circle</mat-icon>
-      {{ username$ | async }}
-    </button>
+    <ng-container *ngIf="(isAuth$ | async) && (layout.isHandset$ | async) === false">
+      <button mat-stroked-button class="header__user-account-button" routerLink="/booking/user">
+        <mat-icon>account_circle</mat-icon>
+        {{ username$ | async }}
+      </button>
+    </ng-container>
 
-    <a mat-button routerLink="/booking/cart" class="header__shopping-cart-link">
+    <ng-container *ngIf="(isAuth$ | async) && (layout.isHandset$ | async)">
+      <button mat-icon-button class="header__user-account-button" routerLink="/booking/user">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </ng-container>
+
+    <a mat-icon-button routerLink="/booking/cart" class="header__shopping-cart-link">
       <mat-icon>shopping_cart</mat-icon>
     </a>
 
-    <!-- Temporary logout button -->
-    <button mat-raised-button (click)="logout()" color="warn">LOGOUT</button>
+    <button *ngIf="layout.isSmall$ | async" mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-form-field appearance="outline" class="header__currency-select">
+          <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
+            <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">
+              {{ dateFormat }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </button>
+
+      <button mat-menu-item>
+        <mat-form-field appearance="outline" class="header__currency-select">
+          <mat-select [value]="currency$ | async" (selectionChange)="onCurrencyChange($event)">
+            <mat-option *ngFor="let currency of currencies" [value]="currency">
+              {{ currency }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </button>
+
+    </mat-menu>
   </div>
 </header>

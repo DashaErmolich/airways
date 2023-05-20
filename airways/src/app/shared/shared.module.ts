@@ -15,7 +15,8 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatMenuModule } from '@angular/material/menu';
+import { LayoutModule } from '@angular/cdk/layout';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -39,7 +40,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatRadioModule,
     MatTabsModule,
     HttpClientModule,
-    MatStepperModule,
+    LayoutModule,
+    MatMenuModule,
   ],
   providers: [
     {

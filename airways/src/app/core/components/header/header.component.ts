@@ -11,6 +11,7 @@ import * as AuthActions from 'src/app/redux/actions/auth.actions';
 import { selectDateFormat, selectCurrency } from 'src/app/redux/selectors/settings.selectors';
 import { CurrencyEnum } from 'src/app/core/constants/currency.enum';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
+import { LayoutService } from 'src/app/shared/services/layout.service';
 
 @Component({
   selector: 'app-header',
@@ -33,6 +34,7 @@ export class HeaderComponent {
   constructor(
     private store$: Store<AppState>,
     private dialog: MatDialog,
+    public layout: LayoutService,
   ) {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));

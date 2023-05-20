@@ -26,6 +26,11 @@ body {
   max-width: $desktop-width;
   margin: auto;
   overflow: hidden;
+
+  @media screen and (max-width: $desktop-width) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
 .content-wrapper {

@@ -10,12 +10,15 @@
 }
 
 .header-container {
-  min-width: $desktop-width;
+  width: $desktop-width;
   display: flex;
   flex-direction: row;
-  gap: 1rem;
   align-items: center;
   justify-content: space-between;
+
+  @media screen and (max-width: 850px) {
+    gap: 1rem;
+  }
 }
 
 .header__logo {
