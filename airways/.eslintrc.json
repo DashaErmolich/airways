@@ -12,7 +12,8 @@
         "project": [
           "tsconfig.json"
         ],
-        "createDefaultProgram": true
+        "createDefaultProgram": true,
+        "tsconfigRootDir": "B:\\RSSchool\\angular-airways\\airways\\airways"
       },
       "extends": [
         "plugin:@angular-eslint/recommended",

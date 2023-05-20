@@ -1,0 +1,15 @@
+@import '../../../../styles/abstracts/variables';
+
+.summary-title-wrapper {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+.summary-title {
+  margin: 0;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 28;
+  line-height: 100%;
+  color: $color-primary-deep-blue;
+}
