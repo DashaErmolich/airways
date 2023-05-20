@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "db": "json-server db.json -m ./node_modules/json-server-auth --middlewares ./node_modules/json-server-reset --middlewares ./node_modules/json-server-reset/src/merge"
+    "db": "json-server db.json -m ./node_modules/json-server-auth"
   },
   "private": true,
   "dependencies": {
@@ -27,9 +27,7 @@
     "@ngrx/store": "^15.4.0",
     "@ngrx/store-devtools": "^15.4.0",
     "animate.css": "^4.1.1",
-    "json-server-reset": "^1.6.0",
     "moment": "^2.29.4",
-    "ngx-owl-carousel-o": "^15.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
