@@ -34,5 +34,21 @@ export class MatIconService {
       'airplane-takeoff',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/airplane-takeoff.svg'),
     );
+    this.matIconRegistry.addSvgIcon(
+      'one',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/1.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'two',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/2.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'three',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/3.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'four',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/4.svg'),
+    );
   }
 }

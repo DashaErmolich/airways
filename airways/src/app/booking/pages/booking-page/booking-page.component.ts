@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {
   FormArray, FormBuilder, FormGroup, Validators,
 } from '@angular/forms';
-
 import { CountryInfo } from 'src/app/auth/models/country-code.model';
 import { FormValidatorService } from 'src/app/core/services/form-validator.service';
 import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
@@ -10,14 +9,15 @@ import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-for
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-
+import { AppState } from 'src/app/redux/state.models';
+import { StepsEnum } from 'src/app/core/constants/steps.enum';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { AppState } from 'src/app/redux/state.models';
 import { selectBookingPassengers } from 'src/app/redux/selectors/booking.selectors';
 import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/flights.selectors';
 import countryInfo from '../../../../assets/country-codes.json';
+import * as BookingActions from '../../../redux/actions/booking.actions';
 // import { passengerResponse } from '../../../shared/mocked/passengers-response';
 
 @Component({
@@ -88,6 +88,8 @@ export class BookingPageComponent implements OnInit {
       }),
     });
     this.setupForm();
+
+    this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Third }));
   }
 
   get adult() {
@@ -152,6 +154,7 @@ export class BookingPageComponent implements OnInit {
   }
 
   onSubmit() {
+    // eslint-disable-next-line no-console
     console.log(this.passengerForm.value);
   }
 

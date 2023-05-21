@@ -101,3 +101,19 @@
     border-radius: 2px;
   }
 }
+
+.flight-selection__data {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background-color: white;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  padding: 27px 40px;
+}
+
+.flight-selection__flights-description {
+  flex: 1;
+}
+

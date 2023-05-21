@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
-import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
-import { CurrencyEnum } from 'src/app/core/constants/currency.enum';
 import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
 import { AuthState } from '../state.models';
 import * as AuthActions from '../actions/auth.actions';
 import { User } from '../../shared/models/user.model';
+
+export const authReducersNode = 'auth';
 
 function getUser(): User | null {
   const user = localStorage.getItem(LocalStorageKeysEnum.User);
@@ -14,13 +14,11 @@ function getUser(): User | null {
 export const initialState: AuthState = {
   isAuth: !!localStorage.getItem(LocalStorageKeysEnum.AccessToken),
   error: null,
-  dateFormat: DateFormatEnum.MM_DD_YYYY,
-  currency: CurrencyEnum.EUR,
   token: localStorage.getItem(LocalStorageKeysEnum.AccessToken),
   user: getUser(),
 };
 
-export const reducers = createReducer(
+export const authReducers = createReducer(
   initialState,
   on(
     AuthActions.signUpSuccess,
@@ -70,20 +68,6 @@ export const reducers = createReducer(
       error: null,
       token: null,
       user: null,
-    }),
-  ),
-  on(
-    AuthActions.setDateFormat,
-    (state, action) => ({
-      ...state,
-      dateFormat: action.dateFormat,
-    }),
-  ),
-  on(
-    AuthActions.setCurrency,
-    (state, action) => ({
-      ...state,
-      currency: action.currency,
     }),
   ),
   on(
