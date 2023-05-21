@@ -11,8 +11,14 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { passengerResponse } from '../../../shared/mocked/passengers-response';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { AppState } from 'src/app/redux/state.models';
+import { selectBookingPassengers } from 'src/app/redux/selectors/booking.selectors';
+import { Passengers } from 'src/app/flight/models/flight.models';
+import { selectPassengers } from 'src/app/redux/selectors/flights.selectors';
 import countryInfo from '../../../../assets/country-codes.json';
+// import { passengerResponse } from '../../../shared/mocked/passengers-response';
 
 @Component({
   selector: 'app-booking-page',
@@ -22,11 +28,15 @@ import countryInfo from '../../../../assets/country-codes.json';
 export class BookingPageComponent implements OnInit {
   passengerForm!: FormGroup;
 
+  passengersInfo:Passengers | null = null;
+
   COUNTRY_INFO: CountryInfo[] = countryInfo;
 
   errorMessages = formValidationErrorsMessages;
 
   customErrors = CustomFormValidatorErrorsEnum;
+
+  passengers$: Observable<Passengers | null>;
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +44,9 @@ export class BookingPageComponent implements OnInit {
     private matIconRegistry: MatIconRegistry,
     private domSanitizer: DomSanitizer,
     private router: Router,
+    private store$: Store<AppState>,
   ) {
+    this.passengers$ = this.store$.pipe(select(selectBookingPassengers));
     this.matIconRegistry.addSvgIcon(
       'pass-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-icon.svg'),
@@ -50,6 +62,9 @@ export class BookingPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.store$.pipe(select(selectPassengers)).subscribe((data) => {
+      this.passengersInfo = data;
+    });
     this.passengerForm = this.fb.group({
       adult: this.fb.array([]),
       child: this.fb.array([]),
@@ -92,17 +107,19 @@ export class BookingPageComponent implements OnInit {
   }
 
   private setupForm() {
-    for (let i = 0; i < passengerResponse.adults; i += 1) {
-      const item = this.createPassenger();
-      this.adult.push(item);
-    }
-    for (let i = 0; i < passengerResponse.child; i += 1) {
-      const item = this.createPassenger();
-      this.child.push(item);
-    }
-    for (let i = 0; i < passengerResponse.infant; i += 1) {
-      const item = this.createPassenger();
-      this.infant.push(item);
+    if (this.passengersInfo) {
+      for (let i = 0; i < this.passengersInfo?.adult; i += 1) {
+        const item = this.createPassenger();
+        this.adult.push(item);
+      }
+      for (let i = 0; i < this.passengersInfo?.child; i += 1) {
+        const item = this.createPassenger();
+        this.child.push(item);
+      }
+      for (let i = 0; i < this.passengersInfo?.infant; i += 1) {
+        const item = this.createPassenger();
+        this.infant.push(item);
+      }
     }
   }
 

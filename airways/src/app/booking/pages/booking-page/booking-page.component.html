@@ -53,8 +53,8 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="passenger-form-lower">
-          <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
+        <div class="passenger-form-lower" [formGroupName]="i">
+          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
         </div>
@@ -110,8 +110,8 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="passenger-form-lower">
-        <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
+      <div class="passenger-form-lower" [formGroupName]="i">
+        <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
         <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
         <span class="passenger-assistance-title">Need special assistance?</span>
       </div>
@@ -167,8 +167,8 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="passenger-form-lower">
-          <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
+        <div class="passenger-form-lower" [formGroupName]="i">
+          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
         </div>
