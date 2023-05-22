@@ -34,6 +34,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
 import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
+import { LayoutService } from '../../../shared/services/responsive.service';
 
 const moment = _rollupMoment || _moment;
 
@@ -89,6 +90,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private datesService: DatesService,
     private flightsUpdateService: FlightsUpdateService,
+    public layout: LayoutService,
   ) {}
 
   ngOnInit(): void {

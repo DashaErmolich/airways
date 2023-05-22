@@ -1,9 +1,8 @@
 <div class="slider-wrapper" *ngIf="flight && searchData">
-  <div class="slider"
-  [@moveSlide]="isNextClicked ? 'next' : 'primary'"
-  [@moveSlide]="isPrevClicked ? 'prev' : 'primary'"
-  (@moveSlide.start)="onSlideMovingStart()"
-  (@moveSlide.done)="onSlideMovingEnd()"
+  <div [ngClass]="{'slider': (layout.isSmall$ | async) === false, 'slider_small': (layout.isSmall$ | async)}"
+  [@moveSlider]="getSliderMoveProps()"
+  (@moveSlider.start)="onSlideMovingStart()"
+  (@moveSlider.done)="onSlideMovingEnd()"
   >
     <button class="slide"
       *ngFor="let slide of slides"
@@ -14,7 +13,7 @@
       (click)="changeDepartureDate(slide.date)">
       <span class="slide__date">{{ slide.date | date:'d MMM' }}</span>
       <span class="slide__weekday">{{ slide.date | date:'EEEE' }}</span>
-      <span class="slide__price" *ngIf="isValidDate(slide.flight.takeoffDate)">{{ slide.flight.price| currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
+      <span class="slide__price" *ngIf="isValidDate(slide.flight.takeoffDate)">{{ slide.flight.price| currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
       <mat-icon svgIcon="no-flight" *ngIf="!isValidDate(slide.flight.takeoffDate)"></mat-icon>
     </button>
   </div>

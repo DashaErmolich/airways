@@ -11,7 +11,7 @@ import * as AuthActions from 'src/app/redux/actions/auth.actions';
 import { selectDateFormat, selectCurrency } from 'src/app/redux/selectors/settings.selectors';
 import { CurrencyEnum } from 'src/app/core/constants/currency.enum';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
-import { LayoutService } from 'src/app/shared/services/layout.service';
+import { LayoutService } from 'src/app/shared/services/responsive.service';
 
 @Component({
   selector: 'app-header',

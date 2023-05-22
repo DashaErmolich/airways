@@ -1,4 +1,13 @@
-  <form [formGroup]="searchForm" [ngClass]="isSearchPage ? 'search__form' : 'selection__form'" (ngSubmit)="submitForm()">
+  <form
+    [formGroup]="searchForm"
+    [ngClass]="{
+      'search__form': isSearchPage,
+      'search__form_small': (layout.isSmall$ | async) && isSearchPage,
+      'selection__form': !isSearchPage,
+      'selection__form_small': (layout.isSmall$ | async) && !isSearchPage,
+      'selection__form_handset': (layout.isHandset$ | async) && !isSearchPage,
+    }"
+    (ngSubmit)="submitForm()">
 
     <div class="form__control">
       <mat-radio-group aria-label="Select an option" formControlName="tripType">

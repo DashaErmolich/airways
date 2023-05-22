@@ -21,7 +21,7 @@
     <div class="flight-price-container">
       <span [appFlightAvailableSeats]="flight.seats" [appFlightAvailableSeatsStyle]="'background-color'">{{ flight.seats.avaible }} seats <br> available</span>
       <span class="color-gray">Price</span>
-      <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! }}</span>
+      <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
     </div>
 
     <button mat-raised-button color="primary" *ngIf="!flightSelected && isValidDate(flight.takeoffDate)" (click)="toggleFlightSelection()">Select</button>

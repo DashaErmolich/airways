@@ -1,9 +1,11 @@
 <footer class="footer">
   <div class="container footer-container">
-    <span class="footer__copyrights">© 2023, AIRWAY. All rights reserved.</span>
+    <span class="footer__copyrights">© 2023, AIRWAY.
+      <span *ngIf="(layout.isHandset$ | async) === false">All rights reserved.</span>
+    </span>
 
     <div class="footer__payments payments">
-      <span class="payments__title"> We accept these payment methods</span>
+      <span class="payments__title" *ngIf="(layout.isHandset$ | async) === false"> We accept these payment methods</span>
 
       <div class="payments__icons">
         <svg class="payments__icon">

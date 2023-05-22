@@ -1,14 +1,19 @@
 @import '../../../../styles/abstracts/variables';
 
-$slides-desktop: 7;
-
 .slider-wrapper {
   position: relative;
 }
 
 .slider {
   display: grid;
-  grid-template-columns: repeat($slides-desktop, calc(100%/($slides-desktop - 2)));
+  grid-template-columns: repeat($slides-all, calc(100%/$slides-visible-default));
+  margin-bottom: 10px;
+  height: 85px;
+}
+
+.slider_small {
+  display: grid;
+  grid-template-columns: repeat($slides-all, calc(100%/$slides-visible-small));
   margin-bottom: 10px;
   height: 85px;
 }

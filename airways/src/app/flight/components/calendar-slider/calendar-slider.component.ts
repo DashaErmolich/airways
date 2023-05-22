@@ -28,6 +28,8 @@ import { Slide } from 'src/app/flight/models/slider.models';
 import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.service';
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
+import { SLIDER_CONFIG, SliderAnimationEnum } from '../../constants/slider.constants';
+import { LayoutService } from '../../../shared/services/responsive.service';
 
 @Component({
   selector: 'app-calendar-slider',
@@ -35,10 +37,45 @@ import { FlightsUpdateService } from 'src/app/flight/services/flights-update.ser
   styleUrls: ['./calendar-slider.component.scss'],
   providers: [CalendarSliderService],
   animations: [
-    trigger('moveSlide', [
-      state('primary', style({ transform: 'translateX(calc((-1) * 100%/5)' })),
-      state('prev', style({ transform: 'translateX(0)' })),
-      state('next', style({ transform: 'translateX(calc((-2) * 100%/5)' })),
+    trigger(SliderAnimationEnum.Trigger, [
+      state(
+        SliderAnimationEnum.PrimaryState,
+        style(
+          {
+            transform: 'translateX(calc(({{ shiftPrimary }}) * 100%/{{ visibleSlidesQty }})',
+          },
+        ),
+        {
+          params: {
+            shiftPrimary: SLIDER_CONFIG.default.shiftPrimary,
+            visibleSlidesQty: SLIDER_CONFIG.default.visibleSlidesQty,
+          },
+        },
+      ),
+      state(
+        SliderAnimationEnum.PrevState,
+        style({
+          transform: 'translateX(calc(({{ shiftPrev }}) * 100%/{{ visibleSlidesQty }})',
+        }),
+        {
+          params: {
+            shiftPrev: SLIDER_CONFIG.default.shiftPrev,
+            visibleSlidesQty: SLIDER_CONFIG.default.visibleSlidesQty,
+          },
+        },
+      ),
+      state(
+        SliderAnimationEnum.NextState,
+        style({
+          transform: 'translateX(calc(({{ shiftNext }}) * 100%/{{ visibleSlidesQty }})',
+        }),
+        {
+          params: {
+            shiftNext: SLIDER_CONFIG.default.shiftNext,
+            visibleSlidesQty: SLIDER_CONFIG.default.visibleSlidesQty,
+          },
+        },
+      ),
       transition('primary => next', [
         animate('0.4s'),
       ]),
@@ -75,6 +112,8 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
 
   currency$!: Observable<string>;
 
+  isSmallLayout!: boolean;
+
   constructor(
     private store$: Store<AppState>,
     private flightsService: FlightsService,
@@ -82,12 +121,19 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
     private matIconService: MatIconService,
     private datesService: DatesService,
     private flightsUpdateService: FlightsUpdateService,
+    public layout: LayoutService,
   ) { }
 
   ngOnInit(): void {
     this.currency$ = this.store$.pipe(select(selectCurrency));
 
     this.flights$ = this.store$.pipe(select(this.getFlightsType()));
+
+    this.layout.isSmall$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      this.isSmallLayout = res;
+    });
 
     this.flights$.pipe(
       takeUntil(this.destroy$),
@@ -199,5 +245,32 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
         this.store$.dispatch(FlightsActions.setForwardFlight({ forwardFlight: slide!.flight }));
         this.store$.dispatch(TripSearchActions.setStartTripDate({ startTripDate: slide!.date }));
     }
+  }
+
+  getSliderMoveProps() {
+    return {
+      value: this.getAnimationValue(),
+      params: this.getAnimationParams(),
+    };
+  }
+
+  getAnimationValue(): SliderAnimationEnum {
+    switch (true) {
+      case this.isNextClicked:
+        return SliderAnimationEnum.NextState;
+      case this.isPrevClicked:
+        return SliderAnimationEnum.PrevState;
+      default:
+        return SliderAnimationEnum.PrimaryState;
+    }
+  }
+
+  getAnimationParams() {
+    return {
+      shiftPrimary: this.isSmallLayout ? SLIDER_CONFIG.small.shiftPrimary : SLIDER_CONFIG.default.shiftPrimary,
+      shiftPrev: this.isSmallLayout ? SLIDER_CONFIG.small.shiftPrev : SLIDER_CONFIG.default.shiftPrev,
+      shiftNext: this.isSmallLayout ? SLIDER_CONFIG.small.shiftNext : SLIDER_CONFIG.default.shiftNext,
+      visibleSlidesQty: this.isSmallLayout ? SLIDER_CONFIG.small.visibleSlidesQty : SLIDER_CONFIG.default.visibleSlidesQty,
+    };
   }
 }

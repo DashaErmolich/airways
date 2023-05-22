@@ -10,6 +10,7 @@ import { selectTripSearchState, selectPassengersQty } from 'src/app/redux/select
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 
 import { MatIconService } from 'src/app/shared/services/icon.service';
+import { LayoutService } from '../../../shared/services/responsive.service';
 
 @Component({
   selector: 'app-search-summary',
@@ -28,6 +29,7 @@ export class FlightsSearchSummaryComponent implements OnInit {
   constructor(
     private store$: Store<AppState>,
     private matIconService: MatIconService,
+    public layout: LayoutService,
   ) { }
 
   ngOnInit(): void {

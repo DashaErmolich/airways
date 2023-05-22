@@ -7,7 +7,7 @@
       <mat-icon [svgIcon]="step.icon" *ngIf="isFuture(step.number)"></mat-icon>
     </button>
 
-    <span>{{ step.label }}</span>
+    <span *ngIf="(layout.isSmall$ | async) === false">{{ step.label }}</span>
 
   </div>
 </div>

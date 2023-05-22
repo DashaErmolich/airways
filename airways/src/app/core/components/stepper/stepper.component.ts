@@ -5,6 +5,7 @@ import { AppState } from 'src/app/redux/state.models';
 import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Subscription } from 'rxjs';
 import { StepsEnum } from 'src/app/core/constants/steps.enum';
+import { LayoutService } from 'src/app/shared/services/responsive.service';
 
 interface Step {
   number: number,
@@ -50,6 +51,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   constructor(
     private matIconService: MatIconService,
     private store$: Store<AppState>,
+    public layout: LayoutService,
   ) { }
 
   ngOnInit() {

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LayoutService } from 'src/app/shared/services/responsive.service';
 
 @Component({
   selector: 'app-footer',
@@ -6,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-
+  constructor(
+    public layout: LayoutService,
+  ) { }
 }
