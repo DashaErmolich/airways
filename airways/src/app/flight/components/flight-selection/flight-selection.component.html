@@ -1,6 +1,6 @@
 <div class="flight-selection-container" *ngIf="flight">
   <div class="flight-selection__title">
-    <mat-icon svgIcon="plane" [ngClass]="{'icon_rotate-180': flightTypeIndex === 2}"></mat-icon>
+    <mat-icon svgIcon="plane" [ngClass]="{'icon_rotate-180': isReturnFlight()}"></mat-icon>
     <h2>From {{ flight.form.city }} to {{ flight.to.city }}</h2>
   </div>
 
@@ -19,13 +19,32 @@
     </div>
 
     <div class="flight-price-container">
-      <span [appFlightAvailableSeats]="flight.seats" [appFlightAvailableSeatsStyle]="'background-color'">{{ flight.seats.avaible }} seats <br> available</span>
+      <span
+        [appFlightAvailableSeats]="flight.seats"
+        [appFlightAvailableSeatsStyle]="'background-color'">
+          {{ flight.seats.avaible }} seats <br> available
+      </span>
       <span class="color-gray">Price</span>
-      <span class="flight-price_active">{{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+      <span class="flight-price_active">
+        {{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow' }}
+      </span>
     </div>
 
-    <button mat-raised-button color="primary" *ngIf="!flightSelected && isValidDate(flight.takeoffDate)" (click)="toggleFlightSelection()">Select</button>
-    <button mat-button color="primary" *ngIf="flightSelected" (click)="toggleFlightSelection()">Edit</button>
+    <button
+      *ngIf="isFlightNotSelected(flight.takeoffDate)"
+      mat-raised-button
+      color="primary"
+      (click)="toggleFlightSelection()">
+        Select
+      </button>
+
+    <button
+      *ngIf="flightSelected"
+      mat-button
+      color="primary"
+      (click)="toggleFlightSelection()">
+        Edit
+      </button>
   </div>
 
   <span *ngIf="!isValidDate(flight.takeoffDate)" class="error-message">Sorry, there are no available flights on {{ flight.takeoffDate | date }}. Choose another date.</span>

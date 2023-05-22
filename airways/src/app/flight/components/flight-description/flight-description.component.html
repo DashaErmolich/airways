@@ -11,7 +11,7 @@
   <div class="info__duration">
     <span>{{ flight.timeMins | flightTime }}</span>
     <span class="line-outside">
-      <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': flightTypeIndex === 2}"></mat-icon>
+      <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': isReturnFlight()}"></mat-icon>
     </span>
     <span>Direct</span>
   </div>

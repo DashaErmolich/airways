@@ -17,6 +17,7 @@ import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Flight } from 'src/app/flight/models/flight.models';
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { DatesService } from 'src/app/flight/services/dates.service';
+import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({
   selector: 'app-flight-selection',
@@ -48,6 +49,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     private store$: Store<AppState>,
     private matIconService: MatIconService,
     private datesService: DatesService,
+    private flightHelper: FlightsHelperService,
   ) { }
 
   ngOnInit(): void {
@@ -88,5 +90,13 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   isValidDate(date: string) {
     return this.datesService.isValidDate(date, this.flightTypeIndex, this.searchData.rangeTripDates?.start, this.searchData.rangeTripDates?.end);
+  }
+
+  isFlightNotSelected(flightTakeOffDate: string): boolean {
+    return !this.flightSelected && this.isValidDate(flightTakeOffDate);
+  }
+
+  isReturnFlight(): boolean {
+    return this.flightHelper.isReturnFlight(this.flightTypeIndex);
   }
 }
