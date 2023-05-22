@@ -50,5 +50,13 @@ export class MatIconService {
       'four',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/4.svg'),
     );
+    this.matIconRegistry.addSvgIcon(
+      'shopping_basket',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/shopping_basket.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'user',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/user.svg'),
+    );
   }
 }

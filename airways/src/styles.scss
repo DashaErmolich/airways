@@ -1,6 +1,7 @@
 @import './styles/abstracts/variables';
 @import './styles/components/forms';
 @import './styles/components/stepper';
+@import './styles/components/header-selects';
 
 html,
 body {
@@ -28,8 +29,8 @@ body {
   overflow: hidden;
 
   @media screen and (max-width: $desktop-width) {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 }
 

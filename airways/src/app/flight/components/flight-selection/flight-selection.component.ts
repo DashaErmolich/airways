@@ -17,6 +17,7 @@ import { MatIconService } from 'src/app/shared/services/icon.service';
 import { Flight } from 'src/app/flight/models/flight.models';
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { DatesService } from 'src/app/flight/services/dates.service';
+import { LayoutService } from 'src/app/shared/services/responsive.service';
 import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({
@@ -50,6 +51,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     private matIconService: MatIconService,
     private datesService: DatesService,
     private flightHelper: FlightsHelperService,
+    public layout: LayoutService,
   ) { }
 
   ngOnInit(): void {

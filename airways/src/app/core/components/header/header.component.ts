@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { selectIsAuth, selectUsername } from 'src/app/redux/selectors/auth.selectors';
 import { Observable } from 'rxjs';
@@ -18,24 +18,26 @@ import { LayoutService } from 'src/app/shared/services/responsive.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   public dateFormats = Object.values(DateFormatEnum);
 
   public currencies = Object.values(CurrencyEnum);
 
-  public isAuth$: Observable<boolean>;
+  public isAuth$!: Observable<boolean>;
 
-  public dateFormat$: Observable<string>;
+  public dateFormat$!: Observable<string>;
 
-  public currency$: Observable<string>;
+  public currency$!: Observable<string>;
 
-  public username$: Observable<string>;
+  public username$!: Observable<string>;
 
   constructor(
     private store$: Store<AppState>,
     private dialog: MatDialog,
     public layout: LayoutService,
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.isAuth$ = this.store$.pipe(select(selectIsAuth));
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));

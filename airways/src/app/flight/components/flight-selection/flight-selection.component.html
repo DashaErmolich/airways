@@ -10,7 +10,7 @@
     [flightTypeIndex]="flightTypeIndex"
   ></app-calendar-slider>
 
-  <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)">
+  <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)" [ngClass]="{'flight-selection__data_small': layout.isSmall$ | async}">
     <div class="flight-selection__flights-description">
       <app-flight-description
         [flight]="flight"
