@@ -13,7 +13,7 @@ import { SLIDER_CONFIG } from '../constants/slider.constants';
 export class DatesService {
   getDatesArr(activeDate: string) {
     const result = [];
-    const middle = Math.floor(SLIDER_CONFIG.default.totalSlidesQty / 2);
+    const middle = Math.floor(SLIDER_CONFIG.totalSlidesQty / 2);
 
     for (let i = -middle; i <= middle; i += 1) {
       if (i < 0) {

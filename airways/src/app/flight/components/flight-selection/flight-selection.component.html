@@ -10,6 +10,10 @@
     [flightTypeIndex]="flightTypeIndex"
   ></app-calendar-slider>
 
+  <span *ngIf="isFlightAvailable(flight.seats.avaible, (passengersQty$ | async)!)" class="error-message">
+    Sorry, the number of available seats ({{ flight.seats.avaible }}) is less then passengers quantity ({{passengersQty$ | async}}). Choose another flight.
+  </span>
+
   <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)" [ngClass]="{'flight-selection__data_small': layout.isSmall$ | async}">
     <div class="flight-selection__flights-description">
       <app-flight-description
@@ -34,9 +38,10 @@
       *ngIf="isFlightNotSelected(flight.takeoffDate)"
       mat-raised-button
       color="primary"
+      [disabled]="isFlightAvailable(flight.seats.avaible, (passengersQty$ | async)!)"
       (click)="toggleFlightSelection()">
         Select
-      </button>
+    </button>
 
     <button
       *ngIf="flightSelected"

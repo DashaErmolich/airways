@@ -265,7 +265,6 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   saveCurrentState() {
-    console.log((this.searchForm.value.date as Date).toDateString());
     if (!this.isFormInvalid()) {
       this.store$.dispatch(TripSearchActions.searchFormSubmit({
         flightsSearchData: {

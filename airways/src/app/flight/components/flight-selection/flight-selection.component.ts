@@ -8,7 +8,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import { selectPassengersQty, selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
 import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
 import { selectCurrency, selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 
@@ -33,6 +33,8 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   private searchData$!: Observable<TripSearchState>;
+
+  passengersQty$!: Observable<number>;
 
   flight: Flight | null = null;
 
@@ -59,6 +61,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.searchData$ = this.store$.pipe(select(selectTripSearchState));
+    this.passengersQty$ = this.store$.pipe(select(selectPassengersQty));
 
     this.store$.pipe(
       select(this.getFlightType()),
@@ -100,5 +103,9 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   isReturnFlight(): boolean {
     return this.flightHelper.isReturnFlight(this.flightTypeIndex);
+  }
+
+  isFlightAvailable(seatsQty: number, passengersQty: number): boolean {
+    return this.flightHelper.isFlightAvailable(seatsQty, passengersQty);
   }
 }

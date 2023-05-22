@@ -1,7 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
-import { Observable, forkJoin } from 'rxjs';
+import {
+  Observable, catchError, forkJoin, retry, throwError,
+} from 'rxjs';
 
 import { Airport, Flight, FlightSearchData } from 'src/app/flight/models/flight.models';
 import { DatesService } from 'src/app/flight/services/dates.service';
@@ -21,7 +24,7 @@ export class FlightsService {
   public searchFlight(
     searchFlightsData: FlightSearchData,
   ): Observable<Flight[]> {
-    return this.http.post<Flight[]>(`${this.BASE_URL}/search/flight`, searchFlightsData);
+    return this.http.post<Flight[]>(`${this.BASE_URL}/search/flight`, searchFlightsData).pipe(retry(3), catchError(this.handleError));
   }
 
   public searchAirport(q: string): Observable<Airport> {
@@ -41,6 +44,15 @@ export class FlightsService {
         this.searchFlight({ ...flightSearchData, forwardDate: item }),
       );
     });
-    return forkJoin(flights$);
+    return forkJoin(flights$).pipe(retry(3), catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      console.error('An error occurred:', error.error);
+    } else {
+      console.error(`Backend returned code ${error.status}, body was: `, error.error);
+    }
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 }
