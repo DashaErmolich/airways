@@ -6,7 +6,6 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { RouterModule } from '@angular/router';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
@@ -26,7 +25,6 @@ import { AuthEffects } from './redux/effects/auth.effects';
     AppRoutingModule,
     BrowserAnimationsModule,
     RouterModule,
-    CarouselModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
