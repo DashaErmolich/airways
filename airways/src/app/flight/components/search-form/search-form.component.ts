@@ -265,6 +265,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   }
 
   saveCurrentState() {
+    console.log((this.searchForm.value.date as Date).toDateString());
     if (!this.isFormInvalid()) {
       this.store$.dispatch(TripSearchActions.searchFormSubmit({
         flightsSearchData: {
@@ -272,10 +273,10 @@ export class SearchFormComponent implements OnInit, OnDestroy {
           isOneWayTrip: !this.isRoundTrip(),
           from: this.searchForm.value.directions.departureFrom,
           to: this.searchForm.value.directions.destinationTo,
-          startTripDate: !this.isRoundTrip() ? this.datesService.formatTimezone((this.searchForm.value.date)) : null,
+          startTripDate: !this.isRoundTrip() ? (this.searchForm.value.date as Date).toDateString() : null,
           rangeTripDates: this.isRoundTrip() ? {
-            start: this.datesService.formatTimezone((this.searchForm.value.range.start)),
-            end: this.datesService.formatTimezone((this.searchForm.value.range.end)),
+            start: (this.searchForm.value.range.start as Date).toDateString(),
+            end: (this.searchForm.value.range.end as Date).toDateString(),
           } : null,
           passengers: this.searchForm.value.passengers,
         },

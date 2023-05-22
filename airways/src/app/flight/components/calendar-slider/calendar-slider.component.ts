@@ -140,7 +140,7 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
     ).subscribe((res) => {
       this.sliderService.setSlides(
         res.map(
-          (item: Flight) => ({ date: this.datesService.formatTimezone(item.takeoffDate), flight: item }),
+          (item: Flight) => ({ date: new Date(item.takeoffDate).toDateString(), flight: item }),
         ),
       );
     });
@@ -229,7 +229,6 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
 
   changeDepartureDate(newDate: string) {
     const slide = this.slides.find((item: Slide) => item.date === newDate);
-
     this.flightsUpdateService.setIsUpdate(false);
 
     switch (this.flightTypeIndex) {
