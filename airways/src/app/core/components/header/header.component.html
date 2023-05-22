@@ -1,10 +1,12 @@
-<header class="header">
+<header class="header" [ngClass]="{'header_smoky': (step$ | async)! === 1, 'header_solid': (step$ | async)! >= 2}">
   <div class="container header-container">
-    <a mat-button routerLink="" class="header__logo-container">
-      <svg class="header__logo">
-        <use xlink:href="assets/icons/sprite.svg#logo"></use>
-      </svg>
-    </a>
+    <div class="header__logo-container">
+      <a mat-button routerLink="">
+        <svg class="header__logo">
+          <use xlink:href="assets/icons/sprite.svg#logo"></use>
+        </svg>
+      </a>
+    </div>
 
     <app-stepper></app-stepper>
 

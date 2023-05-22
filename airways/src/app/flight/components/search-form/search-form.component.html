@@ -82,9 +82,9 @@
       </mat-form-field>
 
       <div class="passengers__form">
-        <mat-form-field class="example-full-width" (click)="visibleCounter()">
+        <mat-form-field class="example-full-width" (click)="visibleCounter()" appearance="fill">
           <mat-label>Passengers</mat-label>
-          <input class="passengers__info" matInput readonly [value]="getCountPassengers()" >
+          <input class="passengers__info" matInput readonly [value]="getCountPassengers()">
           <mat-icon class="passengers__btn" color="primary">arrow_drop_down</mat-icon>
         </mat-form-field>
 

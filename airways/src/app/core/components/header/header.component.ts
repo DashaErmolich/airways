@@ -12,6 +12,7 @@ import { selectDateFormat, selectCurrency } from 'src/app/redux/selectors/settin
 import { CurrencyEnum } from 'src/app/core/constants/currency.enum';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { LayoutService } from 'src/app/shared/services/responsive.service';
+import { selectStep } from 'src/app/redux/selectors/booking.selectors';
 
 @Component({
   selector: 'app-header',
@@ -31,6 +32,8 @@ export class HeaderComponent implements OnInit {
 
   public username$!: Observable<string>;
 
+  public step$!: Observable<number>;
+
   constructor(
     private store$: Store<AppState>,
     private dialog: MatDialog,
@@ -42,6 +45,7 @@ export class HeaderComponent implements OnInit {
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.username$ = this.store$.pipe(select(selectUsername));
+    this.step$ = this.store$.pipe(select(selectStep));
   }
 
   logout() {

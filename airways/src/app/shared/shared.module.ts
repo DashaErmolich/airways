@@ -17,6 +17,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -42,6 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     LayoutModule,
     MatMenuModule,
+    MatDividerModule,
   ],
   providers: [
     {

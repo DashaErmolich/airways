@@ -8,6 +8,8 @@
     [searchData]="searchData"
     [flight]="flight"
     [flightTypeIndex]="flightTypeIndex"
+    [isFlightSelected]="isFlightSelected"
+    (isFlightSelectedEvent)="toggleFlightSelection($event)"
   ></app-calendar-slider>
 
   <span *ngIf="isFlightAvailable(flight.seats.avaible, (passengersQty$ | async)!)" class="error-message">
@@ -44,7 +46,7 @@
     </button>
 
     <button
-      *ngIf="flightSelected"
+      *ngIf="isFlightSelected"
       mat-button
       color="primary"
       (click)="toggleFlightSelection()">

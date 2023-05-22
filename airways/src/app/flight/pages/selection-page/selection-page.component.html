@@ -1,7 +1,7 @@
 <app-search-summary [isSearchFormVisible]="isSearchFormVisible" (toggleSearchFormVisibilityEvent)="toggleSearchFormVisibility($event)"></app-search-summary>
 
 <div class="container">
-  
+
   <span *ngIf="isLoading$ | async">Loading...</span>
 
   <span *ngIf="error$ | async">{{ error$ | async }}</span>
@@ -11,19 +11,19 @@
 
     <app-flight-selection
       [flightTypeIndex]="flightsTypes.OneWayTripFlight"
-      (flightSelectedEvent)="toggleForwardFlightSelection($event)"
+      (isFlightSelectedEvent)="toggleForwardFlightSelection($event)"
       *ngIf="(searchData$ | async)!.isOneWayTrip">
     </app-flight-selection>
 
     <app-flight-selection
       [flightTypeIndex]="flightsTypes.RoundTripForwardFlight"
-      (flightSelectedEvent)="toggleForwardFlightSelection($event)"
+      (isFlightSelectedEvent)="toggleForwardFlightSelection($event)"
       *ngIf="(searchData$ | async)!.isRoundTrip">
     </app-flight-selection>
 
     <app-flight-selection
       [flightTypeIndex]="flightsTypes.RoundTripReturnFlight"
-      (flightSelectedEvent)="toggleReturnFlightSelection($event)"
+      (isFlightSelectedEvent)="toggleReturnFlightSelection($event)"
       *ngIf="(searchData$ | async)!.isRoundTrip">
     </app-flight-selection>
 

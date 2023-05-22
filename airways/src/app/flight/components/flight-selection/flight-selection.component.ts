@@ -28,7 +28,7 @@ import { FlightsHelperService } from '../../services/flights-helper.service';
 export class FlightSelectionComponent implements OnInit, OnDestroy {
   @Input() flightTypeIndex!: number;
 
-  @Output() flightSelectedEvent = new EventEmitter<boolean>();
+  @Output() isFlightSelectedEvent = new EventEmitter<boolean>();
 
   private destroy$ = new Subject<boolean>();
 
@@ -44,7 +44,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   currency$!: Observable<string>;
 
-  flightSelected = false;
+  isFlightSelected = false;
 
   searchData!: TripSearchState;
 
@@ -88,9 +88,13 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
       : selectReturnFlight;
   }
 
-  toggleFlightSelection() {
-    this.flightSelected = !this.flightSelected;
-    this.flightSelectedEvent.emit(this.flightSelected);
+  toggleFlightSelection(value?: boolean) {
+    if (value === undefined) {
+      this.isFlightSelected = !this.isFlightSelected;
+    } else {
+      this.isFlightSelected = value;
+    }
+    this.isFlightSelectedEvent.emit(this.isFlightSelected);
   }
 
   isValidDate(date: string) {
@@ -98,7 +102,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
   }
 
   isFlightNotSelected(flightTakeOffDate: string): boolean {
-    return !this.flightSelected && this.isValidDate(flightTakeOffDate);
+    return !this.isFlightSelected && this.isValidDate(flightTakeOffDate);
   }
 
   isReturnFlight(): boolean {

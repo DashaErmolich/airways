@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnDestroy, OnInit,
+  Component, EventEmitter, Input, OnDestroy, OnInit, Output,
 } from '@angular/core';
 import {
   animate, state, style, transition, trigger,
@@ -91,6 +91,10 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
   @Input() flight!: Flight;
 
   @Input() searchData!: TripSearchState;
+
+  @Input() isFlightSelected!: boolean;
+
+  @Output() isFlightSelectedEvent = new EventEmitter<boolean>();
 
   private allSlides: Slide[] = [];
 
@@ -230,6 +234,7 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
   changeDepartureDate(newDate: string) {
     const slide = this.slides.find((item: Slide) => item.date === newDate);
     this.flightsUpdateService.setIsUpdate(false);
+    this.toggleFlightSelection();
 
     switch (this.flightTypeIndex) {
       case FlightsTypesEnum.RoundTripForwardFlight:
@@ -279,5 +284,9 @@ export class CalendarSliderComponent implements OnInit, OnDestroy {
       shiftNext: this.isSmallLayout ? SLIDER_CONFIG.small.shiftNext : SLIDER_CONFIG.default.shiftNext,
       visibleSlidesQty: this.isSmallLayout ? SLIDER_CONFIG.small.visibleSlidesQty : SLIDER_CONFIG.default.visibleSlidesQty,
     };
+  }
+
+  toggleFlightSelection() {
+    this.isFlightSelectedEvent.emit(false);
   }
 }
