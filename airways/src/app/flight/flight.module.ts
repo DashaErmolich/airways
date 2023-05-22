@@ -8,7 +8,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { CarouselModule } from 'ngx-owl-carousel-o';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MomentDateModule } from '@angular/material-moment-adapter';
 import { FlightRoutingModule } from './flight-routing.module';
@@ -47,7 +46,6 @@ import { FlightDescriptionComponent } from './components/flight-description/flig
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    CarouselModule,
     MomentDateModule,
   ],
 })
