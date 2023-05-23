@@ -1,4 +1,4 @@
-<header class="header" [ngClass]="{'header_smoky': (step$ | async)! === 1, 'header_solid': (step$ | async)! >= 2, 'header_solid_small': layout.isSmall$}">
+<header class="header" [ngClass]="{'header_smoky': (step$ | async)! === 1, 'header_solid': (step$ | async)! >= 2, 'header_solid_small': layout.isSmall$ && (step$ | async)! >= 2}">
     <div class="container header-container" [ngClass]="{'header-container_small': layout.isSmall$ | async}">
 
       <div class="header__logo-container">

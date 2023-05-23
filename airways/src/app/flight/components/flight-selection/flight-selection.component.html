@@ -31,7 +31,7 @@
           {{ flight.seats.avaible }} seats <br> available
       </span>
       <span class="color-gray">Price</span>
-      <span class="flight-price_active">
+      <span class="flight-price_active" [ngClass]="{'flight-price_active_handset': layout.isHandset$ | async}">
         {{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow' }}
       </span>
     </div>
