@@ -18,6 +18,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -44,6 +45,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     LayoutModule,
     MatMenuModule,
     MatDividerModule,
+    MatTooltipModule,
   ],
   providers: [
     {

@@ -8,6 +8,7 @@ import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-
 import { Observable } from 'rxjs';
 import { selectError } from 'src/app/redux/selectors/auth.selectors';
 import * as AuthActions from '../../../redux/actions/auth.actions';
+import { AuthFormHelperService } from '../../auth-form-helper.service';
 
 @Component({
   selector: 'app-login-tab',
@@ -29,6 +30,7 @@ export class LoginTabComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private formValidatorService: FormValidatorService,
     private store$: Store<AppState>,
+    private formHelper: AuthFormHelperService,
   ) {
     this.error$ = this.store$.pipe(select(selectError));
   }
@@ -61,5 +63,13 @@ export class LoginTabComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     this.store$.dispatch(AuthActions.login({ user: this.loginForm.value }));
+  }
+
+  isPasswordErrors(): boolean {
+    return this.formHelper.isPasswordErrors(this.loginForm.controls['password']);
+  }
+
+  getTooltipMessage(): string {
+    return this.formHelper.getPasswordErrorsTooltipMessage(this.loginForm.controls['password']);
   }
 }

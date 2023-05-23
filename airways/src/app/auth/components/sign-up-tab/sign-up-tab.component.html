@@ -25,35 +25,17 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field [matTooltip]="getTooltipMessage()" matTooltipClass="form-control-tooltip">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" [type]="isPasswordHidden ? 'password' : 'text'">
         <button mat-icon-button matSuffix (click)="isPasswordHidden = !isPasswordHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isPasswordHidden">
-          <mat-icon>{{isPasswordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-icon>{{ isPasswordHidden ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
         <mat-error *ngIf="signUpForm.controls['password'].hasError('required')">
           {{ errorsMessages.password.required }}
         </mat-error>
-        <mat-error *ngIf="
-          signUpForm.controls['password'].hasError('minlength')
-          || signUpForm.controls['password'].hasError(customErrors.HasLettersUpperAndLowerCase)
-          || signUpForm.controls['password'].hasError(customErrors.HasNumber)
-          || signUpForm.controls['password'].hasError(customErrors.HasSpecialChar)
-          ">
+        <mat-error *ngIf="isPasswordErrors()">
           {{ errorsMessages.password.strong.inform }}
-        </mat-error>
-        <mat-error *ngIf="signUpForm.controls['password'].hasError('minlength')">
-          {{ errorsMessages.password.strong.length }}
-        </mat-error>
-        <mat-error *ngIf="signUpForm.controls['password'].hasError(customErrors.HasLettersUpperAndLowerCase)">
-          {{ errorsMessages.password.strong.hasUpperCaseAndLowerCaseLetters }}
-        </mat-error>
-        <mat-error *ngIf="signUpForm.controls['password'].hasError(customErrors.HasNumber)">
-          {{  errorsMessages.password.strong.hasNumber }}
-        </mat-error>
-        <mat-error *ngIf="signUpForm.controls['password'].hasError(customErrors.HasSpecialChar)">
-          {{ errorsMessages.password.strong.hasSpecialChar
-           }}
         </mat-error>
       </mat-form-field>
 

@@ -12,6 +12,7 @@ import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
 import * as AuthActions from '../../../redux/actions/auth.actions';
 import { AuthService } from '../../services/auth.service';
+import { AuthFormHelperService } from '../../auth-form-helper.service';
 
 @Component({
   selector: 'app-sign-up-tab',
@@ -37,6 +38,7 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
     private store$: Store<AppState>,
     private authService: AuthService,
     private matIconService: MatIconService,
+    private formHelper: AuthFormHelperService,
   ) {
     this.error$ = this.store$.pipe(select(selectError));
   }
@@ -149,5 +151,13 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
       this.signUpForm.get('phoneNumber')!.setValue(res[1].phoneNumber);
       this.signUpForm.get('password')!.setValue('Qwert123!');
     });
+  }
+
+  isPasswordErrors(): boolean {
+    return this.formHelper.isPasswordErrors(this.signUpForm.controls['password']);
+  }
+
+  getTooltipMessage(): string {
+    return this.formHelper.getPasswordErrorsTooltipMessage(this.signUpForm.controls['password']);
   }
 }

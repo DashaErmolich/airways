@@ -7,7 +7,7 @@ export const formValidationErrorsMessages = {
     password: {
       required: 'Please enter a password',
       strong: {
-        inform: 'Your password isn\'t strong enough: ',
+        inform: 'Your password isn\'t strong enough',
         length: 'at least 8 characters',
         hasUpperCaseAndLowerCaseLetters: 'a mixture of both uppercase and lowercase letters',
         hasNumber: 'a mixture of letters and numbers',
