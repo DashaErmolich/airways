@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Flight } from 'src/app/flight/models/flight.models';
-import { LayoutService } from 'src/app/shared/services/responsive.service';
+import { LayoutService } from 'src/app/core/services/layout.service';
 import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({

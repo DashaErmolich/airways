@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
 import { Observable } from 'rxjs';
 import { selectError } from 'src/app/redux/selectors/auth.selectors';
-import { MatIconService } from 'src/app/shared/services/icon.service';
+import { MatIconService } from 'src/app/core/services/icon.service';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
 import * as AuthActions from '../../../redux/actions/auth.actions';

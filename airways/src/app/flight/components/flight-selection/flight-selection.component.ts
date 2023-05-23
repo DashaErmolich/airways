@@ -12,12 +12,12 @@ import { selectPassengersQty, selectTripSearchState } from 'src/app/redux/select
 import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
 import { selectCurrency, selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 
-import { MatIconService } from 'src/app/shared/services/icon.service';
+import { MatIconService } from 'src/app/core/services/icon.service';
 
 import { Flight } from 'src/app/flight/models/flight.models';
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { DatesService } from 'src/app/flight/services/dates.service';
-import { LayoutService } from 'src/app/shared/services/responsive.service';
+import { LayoutService } from 'src/app/core/services/layout.service';
 import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({

@@ -19,7 +19,7 @@ import {
 import * as FlightsActions from 'src/app/redux/actions/flights.actions';
 import * as TripSearchActions from 'src/app/redux/actions/trip-search.actions';
 
-import { MatIconService } from 'src/app/shared/services/icon.service';
+import { MatIconService } from 'src/app/core/services/icon.service';
 
 import { DatesService } from 'src/app/flight/services/dates.service';
 import { Flight, FlightSeats } from 'src/app/flight/models/flight.models';
@@ -29,7 +29,7 @@ import { CalendarSliderService } from 'src/app/flight/services/calendar-slider.s
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
 import { SLIDER_CONFIG, SliderAnimationEnum } from '../../constants/slider.constants';
-import { LayoutService } from '../../../shared/services/responsive.service';
+import { LayoutService } from '../../../core/services/layout.service';
 
 @Component({
   selector: 'app-calendar-slider',

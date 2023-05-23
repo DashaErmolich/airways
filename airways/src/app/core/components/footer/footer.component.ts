@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LayoutService } from 'src/app/shared/services/responsive.service';
+import { LayoutService } from 'src/app/core/services/layout.service';
 
 @Component({
   selector: 'app-footer',

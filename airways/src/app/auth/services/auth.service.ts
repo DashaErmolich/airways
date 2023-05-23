@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
-import { ActiveUser, User } from 'src/app/shared/models/user.model';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
+import { ActiveUser, User } from 'src/app/auth/models/user.model';
 
 @Injectable({
   providedIn: 'root',
