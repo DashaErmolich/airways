@@ -11,8 +11,9 @@ import { MatIconService } from 'src/app/core/services/icon.service';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
 import * as AuthActions from '../../../redux/actions/auth.actions';
-import { AuthService } from '../../services/auth.service';
 import { AuthFormHelperService } from '../../auth-form-helper.service';
+import { User } from '../../models/user.model';
+import { DefaultFacebookUserEnum, DefaultGoogleUserEnum } from '../../constants/default-users.enum';
 
 @Component({
   selector: 'app-sign-up-tab',
@@ -36,14 +37,13 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private formValidatorService: FormValidatorService,
     private store$: Store<AppState>,
-    private authService: AuthService,
     private matIconService: MatIconService,
     private formHelper: AuthFormHelperService,
-  ) {
-    this.error$ = this.store$.pipe(select(selectError));
-  }
+  ) { }
 
   ngOnInit() {
+    this.error$ = this.store$.pipe(select(selectError));
+
     this.signUpForm = this.fb.group({
       email: [
         '',
@@ -121,36 +121,28 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
     this.signUpForm.reset();
   }
 
+  private fillFormWithDefaultData<T>(defaultUser: { [k: string]: T }): void {
+    // eslint-disable-next-line guard-for-in, no-restricted-syntax
+    for (const prop in defaultUser) {
+      const formControl = this.signUpForm.get(prop);
+      if (formControl) {
+        formControl.setValue(defaultUser[prop as keyof User]);
+      }
+    }
+  }
+
   onSubmit(): void {
     this.store$.dispatch(AuthActions.signUp({ user: this.signUpForm.value }));
   }
 
   fillFormWithGoogle(): void {
-    this.authService.getDefaultUsers().subscribe((res) => {
-      this.signUpForm.get('email')!.setValue(res[0].email);
-      this.signUpForm.get('firstName')!.setValue(res[0].firstName);
-      this.signUpForm.get('lastName')!.setValue(res[0].lastName);
-      this.signUpForm.get('citizenship')!.setValue(res[0].citizenship);
-      this.signUpForm.get('countryCode')!.setValue(res[0].countryCode);
-      this.signUpForm.get('dateOfBirth')!.setValue(res[0].dateOfBirth);
-      this.signUpForm.get('gender')!.setValue(res[0].gender);
-      this.signUpForm.get('phoneNumber')!.setValue(res[0].phoneNumber);
-      this.signUpForm.get('password')!.setValue('Qwert123!');
-    });
+    const defaultUser = Object.fromEntries(Object.entries(DefaultGoogleUserEnum));
+    this.fillFormWithDefaultData<DefaultGoogleUserEnum>(defaultUser);
   }
 
   fillFormWithFacebook(): void {
-    this.authService.getDefaultUsers().subscribe((res) => {
-      this.signUpForm.get('email')!.setValue(res[1].email);
-      this.signUpForm.get('firstName')!.setValue(res[1].firstName);
-      this.signUpForm.get('lastName')!.setValue(res[1].lastName);
-      this.signUpForm.get('citizenship')!.setValue(res[1].citizenship);
-      this.signUpForm.get('countryCode')!.setValue(res[1].countryCode);
-      this.signUpForm.get('dateOfBirth')!.setValue(res[1].dateOfBirth);
-      this.signUpForm.get('gender')!.setValue(res[1].gender);
-      this.signUpForm.get('phoneNumber')!.setValue(res[1].phoneNumber);
-      this.signUpForm.get('password')!.setValue('Qwert123!');
-    });
+    const defaultUser = Object.fromEntries(Object.entries(DefaultFacebookUserEnum));
+    this.fillFormWithDefaultData<DefaultFacebookUserEnum>(defaultUser);
   }
 
   isPasswordErrors(): boolean {
