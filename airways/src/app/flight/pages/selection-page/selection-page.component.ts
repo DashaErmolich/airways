@@ -18,7 +18,7 @@ import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selec
 import * as FlightsActions from 'src/app/redux/actions/flights.actions';
 import * as BookingActions from 'src/app/redux/actions/booking.actions';
 
-import { StepsEnum } from 'src/app/core/constants/steps.enum';
+import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants';
 
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { Flight } from 'src/app/flight/models/flight.models';
@@ -88,7 +88,7 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Second }));
+    this.store$.dispatch(BookingActions.setStep({ step: BookingStepsEnum.Second }));
   }
 
   ngOnDestroy(): void {

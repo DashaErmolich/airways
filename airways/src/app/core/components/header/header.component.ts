@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { selectIsAuth, selectUsername } from 'src/app/redux/selectors/auth.selectors';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { AppState } from 'src/app/redux/state.models';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,13 +13,18 @@ import { CurrencyEnum } from 'src/app/core/constants/currency.enum';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { LayoutService } from 'src/app/core/services/layout.service';
 import { selectStep } from 'src/app/redux/selectors/booking.selectors';
+import { BookingStepsService } from 'src/app/core/services/booking-steps.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
+  public currentBookingStepNumber!: number;
+
   public dateFormats = Object.values(DateFormatEnum);
 
   public currencies = Object.values(CurrencyEnum);
@@ -38,6 +43,7 @@ export class HeaderComponent implements OnInit {
     private store$: Store<AppState>,
     private dialog: MatDialog,
     public layout: LayoutService,
+    private bookingStepsService: BookingStepsService,
   ) { }
 
   ngOnInit(): void {
@@ -46,6 +52,17 @@ export class HeaderComponent implements OnInit {
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.username$ = this.store$.pipe(select(selectUsername));
     this.step$ = this.store$.pipe(select(selectStep));
+
+    this.step$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      this.currentBookingStepNumber = res;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   logout() {
@@ -62,5 +79,13 @@ export class HeaderComponent implements OnInit {
 
   openDialog(): void {
     this.dialog.open(AuthDialogComponent);
+  }
+
+  isSearchPage(): boolean {
+    return this.bookingStepsService.isSearchPage(this.currentBookingStepNumber);
+  }
+
+  isStepperVisible(): boolean {
+    return this.bookingStepsService.isStepperVisible(this.currentBookingStepNumber);
   }
 }

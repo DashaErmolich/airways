@@ -1,5 +1,11 @@
-<header class="header" [ngClass]="{'header_smoky': (step$ | async)! === 1, 'header_solid': (step$ | async)! >= 2, 'header_solid_small': layout.isSmall$ && (step$ | async)! >= 2}">
-    <div class="container header-container" [ngClass]="{'header-container_small': layout.isSmall$ | async}">
+<header class="header"
+  [ngClass]="{
+  'header_smoky': isSearchPage(),
+  'header_solid': isStepperVisible(),
+  'header_solid_small': layout.isSmall$ && this.isStepperVisible()
+  }">
+    <div class="container header-container"
+      [ngClass]="{'header-container_small': layout.isSmall$ | async}">
 
       <div class="header__logo-container">
         <a mat-button routerLink="">
@@ -12,7 +18,9 @@
         </a>
       </div>
 
-      <app-stepper *ngIf="(layout.isSmall$ | async) === false"></app-stepper>
+      <ng-container *ngIf="(layout.isSmall$ | async) === false">
+        <app-stepper [currentBookingStepNumber]="currentBookingStepNumber"></app-stepper>
+      </ng-container>
 
       <mat-form-field *ngIf="(layout.isSmall$ | async) === false" appearance="outline" class="header__date-format-select">
         <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
@@ -88,5 +96,7 @@
       </mat-menu>
     </div>
 
-    <app-stepper *ngIf="layout.isSmall$ | async"></app-stepper>
+    <ng-container *ngIf="layout.isSmall$ | async">
+      <app-stepper [currentBookingStepNumber]="currentBookingStepNumber"></app-stepper>
+    </ng-container>
 </header>
