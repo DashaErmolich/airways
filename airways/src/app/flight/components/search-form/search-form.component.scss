@@ -12,6 +12,18 @@
   width: 100%;
 }
 
+.search__form_handset {
+  .form__control {
+    flex-direction: column;
+    width: 100%;
+
+    .dates__form,
+    .passengers__form {
+      width: 100%;
+    }
+  }
+}
+
 .selection__form {
   display: flex;
   flex-direction: column;

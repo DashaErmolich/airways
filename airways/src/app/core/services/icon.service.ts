@@ -58,5 +58,9 @@ export class MatIconService {
       'user',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/header/user.svg'),
     );
+    this.matIconRegistry.addSvgIcon(
+      'github',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/footer/github-mark.svg'),
+    );
   }
 }

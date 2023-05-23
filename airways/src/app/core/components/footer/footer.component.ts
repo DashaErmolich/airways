@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LayoutService } from 'src/app/core/services/layout.service';
+import { MatIconService } from '../../services/icon.service';
 
 @Component({
   selector: 'app-footer',
@@ -9,5 +10,6 @@ import { LayoutService } from 'src/app/core/services/layout.service';
 export class FooterComponent {
   constructor(
     public layout: LayoutService,
+    private matIconService: MatIconService,
   ) { }
 }

@@ -3,6 +3,7 @@
     [ngClass]="{
       'search__form': isSearchPage,
       'search__form_small': (layout.isSmall$ | async) && isSearchPage,
+      'search__form_handset': (layout.isHandset$ | async) && isSearchPage,
       'selection__form': !isSearchPage,
       'selection__form_small': (layout.isSmall$ | async) && !isSearchPage,
       'selection__form_handset': (layout.isHandset$ | async) && !isSearchPage,
