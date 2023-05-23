@@ -18,6 +18,15 @@
   border-bottom: 1px solid #D0D9DF;
 }
 
+.header_solid_small {
+  flex-direction: column;
+  align-items: unset;
+
+  .header-container {
+    width: auto;
+  }
+}
+
 .header-container {
   width: $desktop-width;
   display: flex;
@@ -27,9 +36,14 @@
   gap: 1rem;
 }
 
+.header-container_small {
+  gap: 0;
+}
+
 .header__logo-container {
   display: block;
   flex: 1;
+  flex-shrink: 1;
 }
 
 .header__logo {

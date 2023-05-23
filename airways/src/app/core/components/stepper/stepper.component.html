@@ -1,4 +1,4 @@
-<div class="stepper" *ngIf="activeState >= 2 && activeState <= 4">
+<div class="stepper" *ngIf="activeState >= 2 && activeState <= 4" [ngClass]="{'stepper_small': layout.isSmall$ | async}">
   <div class="step" *ngFor="let step of steps">
 
     <button mat-mini-fab [color]="isDone(step.number) || isActive(step.number) ? 'primary' : 'basic'" class="step__icon">

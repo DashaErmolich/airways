@@ -58,6 +58,11 @@
   line-height: 20px;
 }
 
+.slide__price_handset {
+  font-size: 12px;
+  line-height: 12px;
+}
+
 .slide_active {
   border-bottom: 4px solid transparent;
 
@@ -77,6 +82,23 @@
     color: $color-primary-blue;
     font-size: 30px;
     line-height: 36px;
+  }
+}
+
+.slide_active_handset {
+  .slide__date {
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+
+  .slide__weekday {
+    font-size: 12px;
+    line-height: 1rem;
+  }
+
+  .slide__price {
+    font-size: 1rem;
+    line-height: 1rem;
   }
 }
 
