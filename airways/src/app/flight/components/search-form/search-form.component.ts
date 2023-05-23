@@ -43,15 +43,15 @@ enum TripTypesEnum {
   RoundTrip = 'round-trip',
 }
 
-export class MyFormat {
-  value = DateFormatEnum.DD_MM_YYYY;
+export class UserDateFormat {
+  dateFormat = DateFormatEnum.DD_MM_YYYY;
 
   get display() {
-    return { dateInput: this.value };
+    return { dateInput: this.dateFormat };
   }
 
   get parse() {
-    return { dateInput: this.value };
+    return { dateInput: this.dateFormat };
   }
 }
 
@@ -61,7 +61,7 @@ export class MyFormat {
   styleUrls: ['./search-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    { provide: MAT_DATE_FORMATS, useClass: MyFormat },
+    { provide: MAT_DATE_FORMATS, useClass: UserDateFormat },
   ],
 })
 export class SearchFormComponent implements OnInit, OnDestroy {
@@ -84,7 +84,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   dateFormat$!: Observable<string>;
 
   constructor(
-    @Inject(MAT_DATE_FORMATS) private config: MyFormat,
+    @Inject(MAT_DATE_FORMATS) private config: UserDateFormat,
     private store$: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute,
@@ -104,35 +104,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
         this.searchState = res;
       });
 
-    this.searchForm = new FormGroup({
-      tripType: new FormControl(this.searchState.isRoundTrip ? TripTypesEnum.RoundTrip : TripTypesEnum.OneWayTrip),
-      directions: new FormGroup({
-        departureFrom: new FormControl(
-          this.searchState.from || '',
-          [Validators.required],
-        ),
-        destinationTo: new FormControl(
-          this.searchState.to || '',
-          [Validators.required],
-        ),
-      }, { validators: this.sameDirectionsValidator }),
-      range: new FormGroup({
-        start: new FormControl(
-          new Date(this.searchState.rangeTripDates?.start || ''),
-          Validators.required,
-        ),
-        end: new FormControl(
-          new Date(this.searchState.rangeTripDates?.end || ''),
-          Validators.required,
-        ),
-      }),
-      date: new FormControl(new Date(this.searchState.startTripDate || ''), Validators.required),
-      passengers: new FormGroup({
-        adult: new FormControl(this.searchState.passengers?.adult),
-        child: new FormControl(this.searchState.passengers?.child),
-        infant: new FormControl(this.searchState.passengers?.infant),
-      }),
-    });
+    this.createSearchForm();
 
     this.filteredAirportsFrom = this.searchForm.get('directions')!.get('departureFrom')!.valueChanges
       .pipe(
@@ -153,19 +125,9 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.dateFormat$.pipe(
       takeUntil(this.destroy$),
     ).subscribe((res) => {
-      this.config.value = res as DateFormatEnum;
-
-      const { date } = this.searchForm.value;
-      const { range } = this.searchForm.value;
-
-      this.searchForm.removeControl('date');
-      this.searchForm.addControl('date', new FormControl(new Date(date), Validators.required));
-
-      (this.searchForm.get('range') as FormGroup).removeControl('start');
-      (this.searchForm.get('range') as FormGroup).addControl('start', new FormControl(new Date(range.start), Validators.required));
-
-      (this.searchForm.get('range') as FormGroup).removeControl('end');
-      (this.searchForm.get('range') as FormGroup).addControl('end', new FormControl(new Date(range.end), Validators.required));
+      this.updateDateFormatConfig(res);
+      this.updateDateFormControl();
+      this.updateDatesRangeFormGroup();
     });
   }
 
@@ -267,18 +229,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
   saveCurrentState() {
     if (!this.isFormInvalid()) {
       this.store$.dispatch(TripSearchActions.searchFormSubmit({
-        flightsSearchData: {
-          isRoundTrip: this.isRoundTrip(),
-          isOneWayTrip: !this.isRoundTrip(),
-          from: this.searchForm.value.directions.departureFrom,
-          to: this.searchForm.value.directions.destinationTo,
-          startTripDate: !this.isRoundTrip() ? (this.searchForm.value.date as Date).toDateString() : null,
-          rangeTripDates: this.isRoundTrip() ? {
-            start: (this.searchForm.value.range.start as Date).toDateString(),
-            end: (this.searchForm.value.range.end as Date).toDateString(),
-          } : null,
-          passengers: this.searchForm.value.passengers,
-        },
+        flightsSearchData: this.getFlightSearchData(),
       }));
     }
   }
@@ -293,5 +244,77 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   isFromAirportUnavailable(key: string): boolean {
     return this.searchForm.value.directions.destinationTo.key === key;
+  }
+
+  updateDateFormatConfig(newDateFormat: string) {
+    this.config.dateFormat = newDateFormat as DateFormatEnum;
+  }
+
+  updateDateFormControl() {
+    const { date } = this.searchForm.value;
+    this.searchForm.removeControl('date');
+    this.searchForm.addControl('date', new FormControl(new Date(date), Validators.required));
+  }
+
+  updateDatesRangeFormGroup() {
+    const { range } = this.searchForm.value;
+    this.searchForm.removeControl('range');
+    this.searchForm.addControl('range', new FormGroup({
+      start: new FormControl(
+        new Date(range.start),
+        Validators.required,
+      ),
+      end: new FormControl(
+        new Date(range.end),
+        Validators.required,
+      ),
+    }));
+  }
+
+  createSearchForm() {
+    this.searchForm = new FormGroup({
+      tripType: new FormControl(this.searchState.isRoundTrip ? TripTypesEnum.RoundTrip : TripTypesEnum.OneWayTrip),
+      directions: new FormGroup({
+        departureFrom: new FormControl(
+          this.searchState.from || '',
+          [Validators.required],
+        ),
+        destinationTo: new FormControl(
+          this.searchState.to || '',
+          [Validators.required],
+        ),
+      }, { validators: this.sameDirectionsValidator }),
+      range: new FormGroup({
+        start: new FormControl(
+          new Date(this.searchState.rangeTripDates?.start || ''),
+          Validators.required,
+        ),
+        end: new FormControl(
+          new Date(this.searchState.rangeTripDates?.end || ''),
+          Validators.required,
+        ),
+      }),
+      date: new FormControl(new Date(this.searchState.startTripDate || ''), Validators.required),
+      passengers: new FormGroup({
+        adult: new FormControl(this.searchState.passengers?.adult),
+        child: new FormControl(this.searchState.passengers?.child),
+        infant: new FormControl(this.searchState.passengers?.infant),
+      }),
+    });
+  }
+
+  getFlightSearchData(): TripSearchState {
+    return {
+      isRoundTrip: this.isRoundTrip(),
+      isOneWayTrip: !this.isRoundTrip(),
+      from: this.searchForm.value.directions.departureFrom,
+      to: this.searchForm.value.directions.destinationTo,
+      startTripDate: !this.isRoundTrip() ? new Date(this.searchForm.value.date).toDateString() : null,
+      rangeTripDates: this.isRoundTrip() ? {
+        start: new Date(this.searchForm.value.range.start).toDateString(),
+        end: new Date(this.searchForm.value.range.end).toDateString(),
+      } : null,
+      passengers: this.searchForm.value.passengers,
+    };
   }
 }

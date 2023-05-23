@@ -2,8 +2,11 @@
   <div class="container header-container">
     <div class="header__logo-container">
       <a mat-button routerLink="">
-        <svg class="header__logo">
+        <svg class="header__logo" *ngIf="(layout.isHandset$ | async) === false">
           <use xlink:href="assets/icons/sprite.svg#logo"></use>
+        </svg>
+        <svg class="header__logo_small" *ngIf="layout.isHandset$ | async">
+          <use xlink:href="assets/icons/sprite.svg#logo-small"></use>
         </svg>
       </a>
     </div>
@@ -26,7 +29,7 @@
       </mat-select>
     </mat-form-field>
 
-    <button *ngIf="(isAuth$ | async) === false" mat-stroked-button class="header__sign-in-button" (click)="openDialog()">
+    <button *ngIf="(isAuth$ | async) === false" mat-stroked-button class="header__user-account-button" (click)="openDialog()">
       <mat-icon svgIcon="user"></mat-icon>
       Sign in
     </button>
@@ -39,7 +42,7 @@
     </ng-container>
 
     <ng-container *ngIf="(isAuth$ | async) && (layout.isHandset$ | async)">
-      <button mat-icon-button class="header__user-account-button" routerLink="/booking/user">
+      <button mat-icon-button routerLink="/booking/user">
         <mat-icon svgIcon="user"></mat-icon>
       </button>
     </ng-container>
