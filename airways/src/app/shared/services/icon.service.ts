@@ -12,51 +12,51 @@ export class MatIconService {
   ) {
     this.matIconRegistry.addSvgIcon(
       'google',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/social-network/google.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'facebook',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/facebook.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/social-network/facebook.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'plane',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/plane.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/flights/plane.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'round-trip',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/round-trip.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/flights/round-trip.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'no-flight',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/no-flight.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/flights/no-flight.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'airplane-takeoff',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/airplane-takeoff.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/flights/airplane-takeoff.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'one',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/1.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/stepper/1.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'two',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/2.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/stepper/2.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'three',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/3.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/stepper/3.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'four',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/4.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/stepper/4.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'shopping_basket',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/shopping_basket.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/header/shopping_basket.svg'),
     );
     this.matIconRegistry.addSvgIcon(
       'user',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/user.svg'),
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/header/user.svg'),
     );
   }
 }
