@@ -24,8 +24,13 @@
   }
 }
 
-.not-found__icon {
+.not-found__icon-container {
   width: 20%;
+}
+
+.not-found__icon {
+  width: 100%;
+  height: 100%;
 }
 
 .rotate {
