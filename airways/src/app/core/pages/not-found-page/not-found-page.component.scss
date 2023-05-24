@@ -1,0 +1,41 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 10% 0;
+
+  h2 {
+    padding-top: 10%;
+    color: #e63946;
+    font-size: 15vw;
+    line-height: 15vw;
+  }
+
+  h3 {
+    padding-top: 1%;
+  }
+
+  .subtitle {
+    text-transform: uppercase;
+    font-size: 5vw;
+    font-weight: 700;
+  }
+}
+
+.not-found__icon {
+  width: 20%;
+}
+
+.rotate {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: spin 10s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
