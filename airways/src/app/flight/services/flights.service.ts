@@ -24,7 +24,7 @@ export class FlightsService {
   public searchFlight(
     searchFlightsData: FlightSearchData,
   ): Observable<Flight[]> {
-    return this.http.post<Flight[]>(`${this.BASE_URL}/search/flight`, searchFlightsData).pipe(retry(3), catchError(this.handleError));
+    return this.http.post<Flight[]>(`${this.BASE_URL}/search/flight`, searchFlightsData).pipe(catchError(this.handleError));
   }
 
   public searchAirport(q: string): Observable<Airport> {
@@ -44,17 +44,10 @@ export class FlightsService {
         this.searchFlight({ ...flightSearchData, forwardDate: item }),
       );
     });
-    return forkJoin(flights$).pipe(retry(3), catchError(this.handleError));
+    return forkJoin(flights$).pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {
-    if (error.status === 0) {
-      // eslint-disable-next-line no-console
-      console.error('An error occurred:', error.error);
-    } else {
-      // eslint-disable-next-line no-console
-      console.error(`Backend returned code ${error.status}, body was: `, error.error);
-    }
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return throwError(() => new Error('Something bad happened. Please try again later.'));
   }
 }
