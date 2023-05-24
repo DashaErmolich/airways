@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ActiveUser, User } from 'src/app/shared/models/user.model';
+import { ActiveUser, User } from 'src/app/auth/models/user.model';
 
 const enum AppActionsTypes {
   AUTH_LOGIN = '[Auth] Login',

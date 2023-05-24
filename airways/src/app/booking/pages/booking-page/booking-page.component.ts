@@ -12,10 +12,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
-import { StepsEnum } from 'src/app/core/constants/steps.enum';
-import { passengerResponse } from '../../../shared/mocked/passengers-response';
-import countryInfo from '../../../../assets/country-codes.json';
-import * as BookingActions from '../../../redux/actions/booking.actions';
+import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants';
+import { passengerResponse } from 'src/app/shared/mocked/passengers-response';
+import countryInfo from 'src/assets/country-codes.json';
+import * as BookingActions from 'src/app/redux/actions/booking.actions';
 
 @Component({
   selector: 'app-booking-page',
@@ -78,7 +78,7 @@ export class BookingPageComponent implements OnInit {
     });
     this.setupForm();
 
-    this.store$.dispatch(BookingActions.setStep({ step: StepsEnum.Third }));
+    this.store$.dispatch(BookingActions.setStep({ step: BookingStepsEnum.Third }));
   }
 
   get adult() {

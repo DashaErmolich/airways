@@ -1,7 +1,7 @@
 import {
   Passengers, DatesRange, Airport, Flight,
 } from '../flight/models/flight.models';
-import { User } from '../shared/models/user.model';
+import { User } from '../auth/models/user.model';
 
 export interface AuthState {
   isAuth: boolean;

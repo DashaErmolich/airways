@@ -9,13 +9,41 @@
   z-index: $z-index-header;
 }
 
+.header_smoky {
+  background-color: rgba($color: #74767A, $alpha: 0.1);
+}
+
+.header_solid {
+  background-color: #fff;
+  border-bottom: 1px solid #D0D9DF;
+}
+
+.header_solid_small {
+  flex-direction: column;
+  align-items: unset;
+
+  .header-container {
+    width: auto;
+  }
+}
+
 .header-container {
-  min-width: $desktop-width;
+  width: $desktop-width;
   display: flex;
   flex-direction: row;
-  gap: 1rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.header-container_small {
+  gap: 0;
+}
+
+.header__logo-container {
+  display: block;
+  flex: 1;
+  flex-shrink: 1;
 }
 
 .header__logo {
@@ -23,6 +51,14 @@
   height: 40px;
 }
 
+.header__logo_small {
+  width: 40px;
+}
+
 .stepper {
   display: flex;
+}
+
+.header__user-account-button {
+  height: 56px;
 }

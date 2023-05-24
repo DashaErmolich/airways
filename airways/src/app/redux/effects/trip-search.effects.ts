@@ -3,7 +3,7 @@ import {
   Actions, createEffect, ofType,
 } from '@ngrx/effects';
 import { tap, withLatestFrom } from 'rxjs';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { Store } from '@ngrx/store';
 import * as TripSearchActions from '../actions/trip-search.actions';
 import { AppState } from '../state.models';

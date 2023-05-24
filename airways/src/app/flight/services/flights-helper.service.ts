@@ -9,4 +9,8 @@ export class FlightsHelperService {
   isReturnFlight(flightTypeIndex: number): boolean {
     return flightTypeIndex === FlightsTypesEnum.RoundTripReturnFlight;
   }
+
+  isFlightAvailable(seatsQty: number, passengersQty: number): boolean {
+    return seatsQty < passengersQty;
+  }
 }

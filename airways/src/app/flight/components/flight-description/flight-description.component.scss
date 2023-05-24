@@ -16,11 +16,19 @@
   }
 }
 
-.flight-selection__info {
+.flight-description__info {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
+}
+
+.flight-description__info_handset {
+  .flight__time {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 30px;
+  }
 }
 
 .info__duration {

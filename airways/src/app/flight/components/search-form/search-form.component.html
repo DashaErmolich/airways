@@ -1,4 +1,14 @@
-  <form [formGroup]="searchForm" [ngClass]="isSearchPage ? 'search__form' : 'selection__form'" (ngSubmit)="submitForm()">
+  <form
+    [formGroup]="searchForm"
+    [ngClass]="{
+      'search__form': isSearchPage,
+      'search__form_small': (layout.isSmall$ | async) && isSearchPage,
+      'search__form_handset': (layout.isHandset$ | async) && isSearchPage,
+      'selection__form': !isSearchPage,
+      'selection__form_small': (layout.isSmall$ | async) && !isSearchPage,
+      'selection__form_handset': (layout.isHandset$ | async) && !isSearchPage,
+    }"
+    (ngSubmit)="submitForm()">
 
     <div class="form__control">
       <mat-radio-group aria-label="Select an option" formControlName="tripType">
@@ -51,7 +61,7 @@
           <input matStartDate formControlName="start" placeholder="Start date">
           <input matEndDate formControlName="end" placeholder="End date">
         </mat-date-range-input>
-        <mat-hint>{{ dateFormat$ | async }}</mat-hint>
+        <mat-hint>{{ dateFormat$ | async }} - {{ dateFormat$ | async }}</mat-hint>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
         <mat-error
@@ -73,9 +83,9 @@
       </mat-form-field>
 
       <div class="passengers__form">
-        <mat-form-field class="example-full-width" (click)="visibleCounter()">
+        <mat-form-field class="example-full-width" (click)="visibleCounter()" appearance="fill">
           <mat-label>Passengers</mat-label>
-          <input class="passengers__info" matInput readonly [value]="getCountPassengers()" >
+          <input class="passengers__info" matInput readonly [value]="getCountPassengers()">
           <mat-icon class="passengers__btn" color="primary">arrow_drop_down</mat-icon>
         </mat-form-field>
 

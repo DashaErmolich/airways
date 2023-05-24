@@ -1,14 +1,19 @@
 @import '../../../../styles/abstracts/variables';
 
-$slides-desktop: 7;
-
 .slider-wrapper {
   position: relative;
 }
 
 .slider {
   display: grid;
-  grid-template-columns: repeat($slides-desktop, calc(100%/($slides-desktop - 2)));
+  grid-template-columns: repeat($slides-all, calc(100%/$slides-visible-default));
+  margin-bottom: 10px;
+  height: 85px;
+}
+
+.slider_small {
+  display: grid;
+  grid-template-columns: repeat($slides-all, calc(100%/$slides-visible-small));
   margin-bottom: 10px;
   height: 85px;
 }
@@ -53,6 +58,11 @@ $slides-desktop: 7;
   line-height: 20px;
 }
 
+.slide__price_handset {
+  font-size: 12px;
+  line-height: 12px;
+}
+
 .slide_active {
   border-bottom: 4px solid transparent;
 
@@ -72,6 +82,23 @@ $slides-desktop: 7;
     color: $color-primary-blue;
     font-size: 30px;
     line-height: 36px;
+  }
+}
+
+.slide_active_handset {
+  .slide__date {
+    font-size: 1rem;
+    line-height: 1rem;
+  }
+
+  .slide__weekday {
+    font-size: 12px;
+    line-height: 1rem;
+  }
+
+  .slide__price {
+    font-size: 1rem;
+    line-height: 1rem;
   }
 }
 

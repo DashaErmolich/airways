@@ -7,6 +7,7 @@ import {
 } from 'rxjs';
 import { FlightsService } from 'src/app/flight/services/flights.service';
 import { Store } from '@ngrx/store';
+import { SLIDER_CONFIG } from 'src/app/flight/constants/slider.constants';
 import * as FlightsActions from '../actions/flights.actions';
 import { AppState } from '../state.models';
 import { selectTripSearchState } from '../selectors/trip-search.selectors';
@@ -34,13 +35,13 @@ export class FlightsEffects {
   setForwardFlight$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchForwardFlightsSuccess),
     withLatestFrom(this.store$.select(selectForwardFlights)),
-    map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[3] })),
+    map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[SLIDER_CONFIG.centerSlideIndex] })),
   ));
 
   setReturnFlight$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchReturnFlightsSuccess),
     withLatestFrom(this.store$.select(selectReturnFlights)),
-    map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[3] })),
+    map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[SLIDER_CONFIG.centerSlideIndex] })),
   ));
 
   constructor(

@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/passengers.constants';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { TripSearchState } from '../state.models';
 import * as TripSearchActions from '../actions/trip-search.actions';
 

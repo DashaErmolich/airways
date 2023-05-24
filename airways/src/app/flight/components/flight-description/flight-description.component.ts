@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Flight } from 'src/app/flight/models/flight.models';
+import { LayoutService } from 'src/app/core/services/layout.service';
 import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({
@@ -14,6 +15,7 @@ export class FlightDescriptionComponent {
 
   constructor(
     private flightHelper: FlightsHelperService,
+    public layout: LayoutService,
   ) { }
 
   isReturnFlight(): boolean {

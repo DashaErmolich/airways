@@ -70,11 +70,6 @@
   gap: 1rem;
 }
 
-.flight__time {
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 2.4rem;
-}
 
 .flight__zone {
   color: $color-gray;
@@ -113,7 +108,24 @@
   padding: 27px 40px;
 }
 
+.flight-selection__data_small {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 1rem 1rem;
+}
+
 .flight-selection__flights-description {
   flex: 1;
 }
 
+.flight-price_active {
+  color: $color-primary-blue;
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+.flight-price_active_handset {
+  font-size: 24px;
+  line-height: 30px;
+}

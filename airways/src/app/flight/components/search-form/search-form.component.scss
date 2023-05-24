@@ -2,19 +2,53 @@
   width: 50%;
   margin-top: 60px;
   min-height: 200px;
-  background: rgba(255, 255, 255, 0.85);
+  background-color: #fff;
   border-radius: 8px;
   border: 1px solid grey;
   padding: 24px;
 }
 
+.search__form_small {
+  width: 100%;
+}
+
+.search__form_handset {
+  .form__control {
+    flex-direction: column;
+    width: 100%;
+
+    .dates__form,
+    .passengers__form {
+      width: 100%;
+    }
+  }
+}
+
 .selection__form {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
-  gap: 1rem;
 
-  .form__directions_btn {
-    position: relative !important;
+  .form__directions_selection,
+  .form__control_selection {
+    position: relative;
+  }
+}
+
+.selection__form_small {
+  .form__directions_selection,
+  .form__control_selection,
+  .dates__form,
+  .passengers__form {
+    width: 100%;
+  }
+}
+
+.selection__form_handset {
+  .form__directions_selection,
+  .form__control_selection {
+    flex-direction: column;
+    width: 100%;
   }
 }
 

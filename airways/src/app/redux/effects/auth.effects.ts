@@ -6,9 +6,9 @@ import {
   catchError, map, mergeMap, tap,
 } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { ActiveUser } from 'src/app/shared/models/user.model';
+import { ActiveUser } from 'src/app/auth/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import * as AuthActions from '../actions/auth.actions';
 
 @Injectable()

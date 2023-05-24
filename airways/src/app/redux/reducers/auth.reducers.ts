@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { LocalStorageKeysEnum } from 'src/app/shared/constants/local-storage-keys.enum';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { AuthState } from '../state.models';
 import * as AuthActions from '../actions/auth.actions';
-import { User } from '../../shared/models/user.model';
+import { User } from '../../auth/models/user.model';
 
 export const authReducersNode = 'auth';
 

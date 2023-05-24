@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import moment from 'moment';
 
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
+import { SLIDER_CONFIG } from '../constants/slider.constants';
 
 @Injectable({
   providedIn: 'root',
@@ -12,16 +13,17 @@ import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-inde
 export class DatesService {
   getDatesArr(activeDate: string) {
     const result = [];
+    const middle = Math.floor(SLIDER_CONFIG.totalSlidesQty / 2);
 
-    for (let i = -3; i <= 3; i += 1) {
+    for (let i = -middle; i <= middle; i += 1) {
       if (i < 0) {
-        result.push(moment(activeDate).subtract(Math.abs(i), 'days').toJSON());
+        result.push(new Date(moment(activeDate).subtract(Math.abs(i), 'days').toJSON()).toDateString());
       }
       if (i === 0) {
-        result.push(moment(activeDate).toJSON());
+        result.push(new Date(moment(activeDate).toJSON()).toDateString());
       }
       if (i > 0) {
-        result.push(moment(activeDate).add(i, 'days').toJSON());
+        result.push(new Date(moment(activeDate).add(i, 'days').toJSON()).toDateString());
       }
     }
 
@@ -29,20 +31,11 @@ export class DatesService {
   }
 
   getNextCalendarDate(date: string): string {
-    return this.formatTimezone(moment(date).add(1, 'days').toJSON());
+    return new Date(moment(date).add(1, 'days').toJSON()).toDateString();
   }
 
   getPrevCalendarDate(date: string): string {
-    return this.formatTimezone(moment(date).subtract(1, 'days').toJSON());
-  }
-
-  formatTimezone(date: Date | string): string {
-    if (typeof date === 'object') {
-      const offset = Math.abs(new Date(date).getTimezoneOffset() / 60);
-      return new Date(new Date(date).setHours(offset, 0, 0, 0)).toJSON();
-    } else {
-      return new Date((new Date(date)).toJSON().substring(0, 10)).toJSON();
-    }
+    return new Date(moment(date).subtract(1, 'days').toJSON()).toDateString();
   }
 
   private isValidFlightDate(dateOne: string, dateTwo?: string) {

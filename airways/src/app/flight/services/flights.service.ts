@@ -1,7 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 
-import { Observable, forkJoin } from 'rxjs';
+import {
+  Observable, catchError, forkJoin, retry, throwError,
+} from 'rxjs';
 
 import { Airport, Flight, FlightSearchData } from 'src/app/flight/models/flight.models';
 import { DatesService } from 'src/app/flight/services/dates.service';
@@ -10,8 +13,8 @@ import { DatesService } from 'src/app/flight/services/dates.service';
   providedIn: 'root',
 })
 export class FlightsService {
-  private BASE_URL = 'https://api.air-ways.online';
-  // private BASE_URL = 'http://localhost:3001';
+  // private BASE_URL = 'https://api.air-ways.online';
+  private BASE_URL = 'http://localhost:3001';
 
   constructor(
     private http: HttpClient,
@@ -21,7 +24,7 @@ export class FlightsService {
   public searchFlight(
     searchFlightsData: FlightSearchData,
   ): Observable<Flight[]> {
-    return this.http.post<Flight[]>(`${this.BASE_URL}/search/flight`, searchFlightsData);
+    return this.http.post<Flight[]>(`${this.BASE_URL}/search/flight`, searchFlightsData).pipe(catchError(this.handleError));
   }
 
   public searchAirport(q: string): Observable<Airport> {
@@ -41,6 +44,10 @@ export class FlightsService {
         this.searchFlight({ ...flightSearchData, forwardDate: item }),
       );
     });
-    return forkJoin(flights$);
+    return forkJoin(flights$).pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    return throwError(() => new Error('Something bad happened. Please try again later.'));
   }
 }

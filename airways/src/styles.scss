@@ -1,6 +1,7 @@
 @import './styles/abstracts/variables';
 @import './styles/components/forms';
 @import './styles/components/stepper';
+@import './styles/components/header-selects';
 
 html,
 body {
@@ -26,6 +27,11 @@ body {
   max-width: $desktop-width;
   margin: auto;
   overflow: hidden;
+
+  @media screen and (max-width: $desktop-width) {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }
 
 .content-wrapper {
@@ -70,9 +76,6 @@ body {
   color: $color-gray;
 }
 
-.flight-price_active {
-  color: $color-primary-blue;
-  font-size: 30px;
-  line-height: 36px;
-  font-weight: 700;
+.form-control-tooltip {
+  white-space: pre-line;
 }

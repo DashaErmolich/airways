@@ -1,76 +1,48 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { selectStep } from 'src/app/redux/selectors/booking.selectors';
-import { AppState } from 'src/app/redux/state.models';
-import { MatIconService } from 'src/app/shared/services/icon.service';
-import { Subscription } from 'rxjs';
-import { StepsEnum } from 'src/app/core/constants/steps.enum';
-
-interface Step {
-  number: number,
-  label: string,
-  icon: string,
-}
+import {
+  Component, Input,
+} from '@angular/core';
+import { MatIconService } from 'src/app/core/services/icon.service';
+import { LayoutService } from 'src/app/core/services/layout.service';
+import { BOOKING_STEPS_CONFIG } from 'src/app/core/constants/booking-steps.constants';
+import { BookingStepsService } from 'src/app/core/services/booking-steps.service';
 
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
 })
-export class StepperComponent implements OnInit, OnDestroy {
-  steps: Step[] = [
-    {
-      number: 1,
-      label: 'Search',
-      icon: 'one',
-    },
-    {
-      number: 2,
-      label: 'Flights',
-      icon: 'two',
-    },
-    {
-      number: 3,
-      label: 'Passengers',
-      icon: 'three',
-    },
-    {
-      number: 4,
-      label: 'Payment',
-      icon: 'four',
-    },
-  ];
+export class StepperComponent {
+  @Input() currentBookingStepNumber: number | null = null;
 
-  allSteps = Object.values(StepsEnum);
-
-  activeState!: number;
-
-  private subscription = new Subscription();
+  steps = BOOKING_STEPS_CONFIG;
 
   constructor(
     private matIconService: MatIconService,
-    private store$: Store<AppState>,
+    public layout: LayoutService,
+    private bookingStepsService: BookingStepsService,
   ) { }
 
-  ngOnInit() {
-    this.subscription = this.store$.select(selectStep).subscribe((res: number) => {
-      this.activeState = res;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
   isActive(step: number): boolean {
-    return step === this.activeState;
+    return step === this.currentBookingStepNumber;
   }
 
   isDone(step: number): boolean {
-    return step < this.activeState;
+    return step < this.currentBookingStepNumber!;
   }
 
   isFuture(step: number): boolean {
     return !this.isDone(step) && !this.isActive(step);
+  }
+
+  isStepperVisible(): boolean {
+    return this.bookingStepsService.isStepperVisible(this.currentBookingStepNumber!);
+  }
+
+  isPrimaryColor(step: number): boolean {
+    return this.isDone(step) || this.isActive(step);
+  }
+
+  isLastStep(step: number): boolean {
+    return this.bookingStepsService.isLastStep(step);
   }
 }

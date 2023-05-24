@@ -1,0 +1,17 @@
+.header {
+  .mat-mdc-form-field {
+    flex-direction: unset;
+  }
+
+  .header__date-format-select {
+    max-width: 160px;
+  }
+
+  .header__currency-select {
+    width: 90px;
+  }
+}
+
+.mat-mdc-option .mat-pseudo-checkbox-minimal {
+  margin-left: 2px !important;
+}

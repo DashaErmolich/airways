@@ -8,15 +8,16 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
+import { selectPassengersQty, selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
 import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
 import { selectCurrency, selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 
-import { MatIconService } from 'src/app/shared/services/icon.service';
+import { MatIconService } from 'src/app/core/services/icon.service';
 
 import { Flight } from 'src/app/flight/models/flight.models';
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { DatesService } from 'src/app/flight/services/dates.service';
+import { LayoutService } from 'src/app/core/services/layout.service';
 import { FlightsHelperService } from '../../services/flights-helper.service';
 
 @Component({
@@ -27,11 +28,13 @@ import { FlightsHelperService } from '../../services/flights-helper.service';
 export class FlightSelectionComponent implements OnInit, OnDestroy {
   @Input() flightTypeIndex!: number;
 
-  @Output() flightSelectedEvent = new EventEmitter<boolean>();
+  @Output() isFlightSelectedEvent = new EventEmitter<boolean>();
 
   private destroy$ = new Subject<boolean>();
 
   private searchData$!: Observable<TripSearchState>;
+
+  passengersQty$!: Observable<number>;
 
   flight: Flight | null = null;
 
@@ -41,7 +44,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   currency$!: Observable<string>;
 
-  flightSelected = false;
+  isFlightSelected = false;
 
   searchData!: TripSearchState;
 
@@ -50,6 +53,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     private matIconService: MatIconService,
     private datesService: DatesService,
     private flightHelper: FlightsHelperService,
+    public layout: LayoutService,
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +61,7 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.searchData$ = this.store$.pipe(select(selectTripSearchState));
+    this.passengersQty$ = this.store$.pipe(select(selectPassengersQty));
 
     this.store$.pipe(
       select(this.getFlightType()),
@@ -83,9 +88,13 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
       : selectReturnFlight;
   }
 
-  toggleFlightSelection() {
-    this.flightSelected = !this.flightSelected;
-    this.flightSelectedEvent.emit(this.flightSelected);
+  toggleFlightSelection(value?: boolean) {
+    if (value === undefined) {
+      this.isFlightSelected = !this.isFlightSelected;
+    } else {
+      this.isFlightSelected = value;
+    }
+    this.isFlightSelectedEvent.emit(this.isFlightSelected);
   }
 
   isValidDate(date: string) {
@@ -93,10 +102,14 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
   }
 
   isFlightNotSelected(flightTakeOffDate: string): boolean {
-    return !this.flightSelected && this.isValidDate(flightTakeOffDate);
+    return !this.isFlightSelected && this.isValidDate(flightTakeOffDate);
   }
 
   isReturnFlight(): boolean {
     return this.flightHelper.isReturnFlight(this.flightTypeIndex);
+  }
+
+  isFlightAvailable(seatsQty: number, passengersQty: number): boolean {
+    return this.flightHelper.isFlightAvailable(seatsQty, passengersQty);
   }
 }
