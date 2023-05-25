@@ -19,6 +19,9 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MomentDateModule } from '@angular/material-moment-adapter';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -46,6 +49,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
+    MatExpansionModule,
+    MatAutocompleteModule,
+    MomentDateModule,
   ],
   providers: [
     {

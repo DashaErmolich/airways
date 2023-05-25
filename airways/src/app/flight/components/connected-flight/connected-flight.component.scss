@@ -1,0 +1,25 @@
+@import 'src/styles/abstracts/variables';
+
+.mat-expansion-panel-header {
+  height: auto;
+  padding: 0;
+  margin-bottom: 2rem;
+  font-weight: inherit;
+}
+
+.mat-expansion-panel {
+  box-shadow: none;
+}
+
+app-flight-description {
+  width: 100%;
+}
+
+.flight-dots {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: calc($flex-col-3 + $c-flights-desc-gap / 2 + $c-flights-dots-border-width);
+  border-left: $c-flights-dots-border-width dotted $color-light-gray;
+}
