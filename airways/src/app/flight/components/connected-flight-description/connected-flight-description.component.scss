@@ -33,7 +33,7 @@
 
 .description-icon {
   left: calc(-1 * ($c-flights-desc-gap / 2 + $mat-icon-size / 2));
-  top: calc(50% - 26px + 1rem);
+  top: calc(50% - $mat-icon-size / 2);
 }
 
 .flight_highlight {
