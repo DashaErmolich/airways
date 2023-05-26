@@ -34,7 +34,7 @@
         mat-raised-button
         color="primary"
         routerLink="/booking"
-        *ngIf="isAuth$ | async" (click)="submitFlights()"
+        *ngIf="isAuth$ | async"
         [disabled]="!isNextStepAvailable()">
         Continue
       </button>

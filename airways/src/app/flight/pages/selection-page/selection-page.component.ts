@@ -112,10 +112,6 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  submitFlights(): void {
-    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.directFlight], forwardFlights: [this.forwardFlight] }));
-  }
-
   isNextStepAvailable() {
     return this.isFlightsSelected.every((item) => item);
   }

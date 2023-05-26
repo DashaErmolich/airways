@@ -21,16 +21,23 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MomentDateModule } from '@angular/material-moment-adapter';
+import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-adapter';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    FlightsSearchSummaryComponent,
+  ],
   imports: [
     CommonModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   exports: [
+    FlightsSearchSummaryComponent,
     MatButtonModule,
     MatSelectModule,
     MatIconModule,
@@ -52,6 +59,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatExpansionModule,
     MatAutocompleteModule,
     MomentDateModule,
+    MatMomentDateModule,
+    MatBadgeModule,
   ],
   providers: [
     {

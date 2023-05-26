@@ -1,38 +1,46 @@
 import { createReducer, on } from '@ngrx/store';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { BookingState } from '../state.models';
 import * as BookingActions from '../actions/booking.actions';
 
 export const bookingReducersNode = 'booking';
 
+type BookingDetails = Omit<BookingState, 'step'>;
+
+function getBookingState(): BookingDetails | null {
+  const user = localStorage.getItem(LocalStorageKeysEnum.BookingDetails);
+  return user ? JSON.parse(user) : null;
+}
+
 export const initialState: BookingState = {
   step: 1,
-  passengers: null,
-  forwardFlights: [],
-  returnFlights: [],
+  adult: getBookingState() ? getBookingState()!.adult : [],
+  child: getBookingState() ? getBookingState()!.child : [],
+  infant: getBookingState() ? getBookingState()!.infant : [],
+  contactDetails: {
+    countryCode: getBookingState() ? getBookingState()!.contactDetails.countryCode : null,
+    phoneNumber: getBookingState() ? getBookingState()!.contactDetails.phoneNumber : null,
+    email: getBookingState() ? getBookingState()!.contactDetails.email : null,
+  },
 };
 
 export const bookingReducers = createReducer(
   initialState,
   on(
-    BookingActions.setFlights,
+    BookingActions.setStep,
     (state, action) => ({
       ...state,
-      forwardFlights: action.directFlights,
-      returnFlights: action.forwardFlights,
+      step: action.step,
     }),
   ),
   on(
     BookingActions.setPassengers,
     (state, action) => ({
       ...state,
-      passengers: action.passengers,
-    }),
-  ),
-  on(
-    BookingActions.setStep,
-    (state, action) => ({
-      ...state,
-      step: action.step,
+      adult: action.adult,
+      child: action.child,
+      infant: action.infant,
+      contactDetails: action.contactDetails,
     }),
   ),
 );

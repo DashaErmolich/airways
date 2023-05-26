@@ -7,7 +7,6 @@ import { SelectionPageComponent } from './pages/selection-page/selection-page.co
 import { SearchFormComponent } from './components/search-form/search-form.component';
 import { FlightSelectionComponent } from './components/flight-selection/flight-selection.component';
 import { FlightAvailableSeatsDirective } from './directives/flight-available-seats.directive';
-import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 import { CurrencyValuePipe } from './pipes/currency-value.pipe';
 import { FlightTimePipe } from './pipes/flight-time.pipe';
 import { CalendarSliderComponent } from './components/calendar-slider/calendar-slider.component';
@@ -23,7 +22,6 @@ import { ConnectedFlightComponent } from './components/connected-flight/connecte
     SearchFormComponent,
     FlightSelectionComponent,
     FlightAvailableSeatsDirective,
-    FlightsSearchSummaryComponent,
     CurrencyValuePipe,
     FlightTimePipe,
     CalendarSliderComponent,
