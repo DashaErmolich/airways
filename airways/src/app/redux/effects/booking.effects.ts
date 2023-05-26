@@ -10,14 +10,14 @@ import { selectPassengers } from '../selectors/trip-search.selectors';
 
 @Injectable()
 export class BookingEffects {
-  setFlights$ = createEffect(
-    () => this.actions$.pipe(
-      ofType(BookingActions.setFlights),
-      withLatestFrom(this.store$.select(selectPassengers)),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      map(([_, passengers]) => BookingActions.setPassengers({ passengers })),
-    ),
-  );
+  // setFlights$ = createEffect(
+  //   () => this.actions$.pipe(
+  //     ofType(BookingActions.setFlights),
+  //     withLatestFrom(this.store$.select(selectPassengers)),
+  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //     map(([_, passengers]) => BookingActions.setPassengers({ passengers })),
+  //   ),
+  // );
 
   constructor(
     private actions$: Actions,

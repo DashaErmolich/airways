@@ -52,12 +52,50 @@
               {{ errorMessages.authForm.dateOfBirth.validDate }}
             </mat-error>
           </mat-form-field>
+
         </div>
-        <div class="passenger-form-lower">
-          <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
+        <!-- <div class="passenger-form-lower">
+          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
+        </div> -->
+
+        <div class="baggage-icons-container">
+          <span matBadge="1" matBadgeOverlap="false" class="demo-section">
+            <mat-icon svgIcon="cabin-bag"></mat-icon>
+          </span>
+
+          <button
+            *ngIf="getCheckedBaggage('adult', i) > 0"
+            mat-icon-button
+            color="primary"
+            (click)="decreaseCheckedBaggage('adult', i)">
+            <mat-icon>remove</mat-icon>
+          </button>
+
+          <span
+            *ngIf="getCheckedBaggage('adult', i) > 0"
+            [matBadge]="getCheckedBaggage('adult', i)"
+            matBadgeOverlap="false" class="demo-section">
+            <mat-icon svgIcon="checked-bag"></mat-icon>
+          </span>
+
+          <button
+            *ngIf="getCheckedBaggage('adult', i) > 0"
+            mat-icon-button
+            color="primary"
+            (click)="increaseCheckedBaggage('adult', i)"
+            [disabled]="getCheckedBaggage('adult', i) >= 10">
+            <mat-icon>add</mat-icon>
+          </button>
+
+          <button
+            *ngIf="getCheckedBaggage('adult', i) === 0"
+            mat-raised-button
+            color="primary"
+            (click)="increaseCheckedBaggage('adult', i)">Add checked baggage</button>
         </div>
+
       </div>
     </div>
   </div>
@@ -110,11 +148,14 @@
           </mat-error>
         </mat-form-field>
       </div>
-      <div class="passenger-form-lower">
-        <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
+
+      <!-- <div class="passenger-form-lower">
+        <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
         <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
         <span class="passenger-assistance-title">Need special assistance?</span>
-      </div>
+      </div> -->
+
+      <div matBadge="4" matBadgeOverlap="false" class="demo-section">Text with a badge</div>
     </div>
     </div>
   </div>
@@ -167,11 +208,11 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="passenger-form-lower">
-          <!-- <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle> -->
+        <!-- <div class="passenger-form-lower">
+          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

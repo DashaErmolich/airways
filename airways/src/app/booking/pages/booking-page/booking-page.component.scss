@@ -1,6 +1,6 @@
 @import '../../../../styles/abstracts/variables';
 
-.pass-form-title, 
+.pass-form-title,
 .pass-details-title {
   color: $color-primary-blue;
   padding-left: 14px;
@@ -9,10 +9,10 @@
   font-size: 24px;
   line-height: 28px;
   line-height: 100%;
-  
+
 }
 
-.pass-form-title-wrapper, 
+.pass-form-title-wrapper,
 .pass-details-title-wrapper {
   display: flex;
   align-items: center;
@@ -27,7 +27,7 @@
   margin-top: 50px;
 }
 
-.pass-form-description, 
+.pass-form-description,
 .pass-details-description {
   font-weight: normal;
   font-size: 16px;
@@ -107,4 +107,11 @@
 
 .phone-field {
   padding-right: 40px;
+}
+
+.baggage-icons-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2rem;
 }

@@ -1,5 +1,6 @@
+/* eslint-disable default-case */
 import {
-  ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit,
+  Component, Inject, OnDestroy, OnInit,
 } from '@angular/core';
 import {
   FormArray, FormBuilder, FormGroup, Validators,
@@ -22,15 +23,9 @@ import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
+import { Location } from '@angular/common';
 import { MatIconService } from '../../../core/services/icon.service';
-
-interface PassengerFormGroup {
-  firstName: string;
-  lastName: string;
-  gender: string;
-  dateOfBirth: string;
-  isNeedAssistance: boolean;
-}
+import { PassengerBooking } from '../../models/passengers-bookings.model';
 
 @Component({
   selector: 'app-booking-page',
@@ -39,7 +34,7 @@ interface PassengerFormGroup {
   providers: [
     { provide: MAT_DATE_FORMATS, useClass: UserDateFormat },
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -65,6 +60,7 @@ export class BookingPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private store$: Store<AppState>,
     private matIconService: MatIconService,
+    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -151,7 +147,7 @@ export class BookingPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private createPassenger(val?: PassengerFormGroup) {
+  private createPassenger(val?: PassengerBooking) {
     return this.fb.group({
       firstName: [
         val?.firstName || '',
@@ -175,17 +171,31 @@ export class BookingPageComponent implements OnInit, OnDestroy {
           this.formValidatorService.dateValidator(),
         ],
       ],
-      isNeedAssistance: [val?.isNeedAssistance || false, Validators.required],
+      // isNeedAssistance: [val?.isNeedAssistance || false, Validators.required],
+      cabinBag: [{
+        value: 1,
+        disabled: true,
+      },
+      ],
+      checkedBag: [
+        val?.checkedBag || 0,
+      ],
     });
   }
 
   onSubmit() {
-    // eslint-disable-next-line no-console
-    console.log(this.passengerForm.value);
+    if (this.passengerForm.valid) {
+      this.store$.dispatch(BookingActions.setPassengers({
+        adult: this.passengerForm.value.adult,
+        child: this.passengerForm.value.child,
+        infant: this.passengerForm.value.infant,
+        contactDetails: this.passengerForm.value.contactDetails,
+      }));
+    }
   }
 
   goBack() {
-    this.router.navigate(['/flights/selection']);
+    this.location.back();
   }
 
   updateDateFormatConfig(newDateFormat: string) {
@@ -197,8 +207,46 @@ export class BookingPageComponent implements OnInit, OnDestroy {
     const { value } = formArray;
 
     for (let i = 0; i <= length - 1; i += 1) {
-      formArray.removeAt(i);
-      formArray.insert(i, this.createPassenger(value[i] as PassengerFormGroup));
+      formArray.setControl(i, this.createPassenger(value[i] as PassengerBooking), { emitEvent: false });
+    }
+  }
+
+  increaseCheckedBaggage(passengerType: string, index: number) {
+    let { value } = (this.adult.at(index) as FormGroup).get('checkedBag')!;
+
+    switch (passengerType) {
+      case 'adult':
+        (this.adult.at(index) as FormGroup).get('checkedBag')?.setValue(value += 1, { emitEvent: false });
+        break;
+      case 'child':
+        (this.child.at(index) as FormGroup).get('checkedBag')?.setValue(value += 1, { emitEvent: false });
+        break;
+    }
+  }
+
+  decreaseCheckedBaggage(passengerType: string, index: number) {
+    let { value } = (this.adult.at(index) as FormGroup).get('checkedBag')!;
+
+    switch (passengerType) {
+      case 'adult':
+        (this.adult.at(index) as FormGroup).get('checkedBag')?.setValue(value -= 1, { emitEvent: false });
+        break;
+      case 'child':
+        (this.child.at(index) as FormGroup).get('checkedBag')?.setValue(value -= 1, { emitEvent: false });
+        break;
+    }
+  }
+
+  getCheckedBaggage(passengerType: string, index: number): number {
+    switch (passengerType) {
+      case 'adult':
+        return (this.adult.at(index) as FormGroup).get('checkedBag')!.value;
+        break;
+      case 'child':
+        return (this.child.at(index) as FormGroup).get('checkedBag')!.value;
+        break;
+      default:
+        return 0;
     }
   }
 }

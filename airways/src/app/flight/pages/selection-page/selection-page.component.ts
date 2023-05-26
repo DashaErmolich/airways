@@ -113,7 +113,7 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
   }
 
   submitFlights(): void {
-    this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.directFlight], forwardFlights: [this.forwardFlight] }));
+    // this.store$.dispatch(BookingActions.setFlights({ directFlights: [this.directFlight], forwardFlights: [this.forwardFlight] }));
   }
 
   isNextStepAvailable() {

@@ -22,6 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-adapter';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -53,6 +54,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatAutocompleteModule,
     MomentDateModule,
     MatMomentDateModule,
+    MatBadgeModule,
   ],
   providers: [
     {

@@ -78,5 +78,13 @@ export class MatIconService {
       'pass-assistance',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-assistance.svg'),
     );
+    this.matIconRegistry.addSvgIcon(
+      'cabin-bag',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/cabin-bag.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'checked-bag',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/checked-bag.svg'),
+    );
   }
 }

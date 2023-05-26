@@ -6,33 +6,33 @@ export const bookingReducersNode = 'booking';
 
 export const initialState: BookingState = {
   step: 1,
-  passengers: null,
-  forwardFlights: [],
-  returnFlights: [],
+  adult: [],
+  child: [],
+  infant: [],
+  contactDetails: {
+    countryCode: null,
+    phoneNumber: null,
+    email: null,
+  },
 };
 
 export const bookingReducers = createReducer(
   initialState,
   on(
-    BookingActions.setFlights,
+    BookingActions.setStep,
     (state, action) => ({
       ...state,
-      forwardFlights: action.directFlights,
-      returnFlights: action.forwardFlights,
+      step: action.step,
     }),
   ),
   on(
     BookingActions.setPassengers,
     (state, action) => ({
       ...state,
-      passengers: action.passengers,
-    }),
-  ),
-  on(
-    BookingActions.setStep,
-    (state, action) => ({
-      ...state,
-      step: action.step,
+      adult: action.adult,
+      child: action.child,
+      infant: action.infant,
+      contactDetails: action.contactDetails,
     }),
   ),
 );
