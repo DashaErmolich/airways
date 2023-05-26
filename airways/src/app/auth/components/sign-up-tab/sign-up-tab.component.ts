@@ -1,13 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  Component, Inject, OnDestroy, OnInit,
+} from '@angular/core';
+import {
+  FormBuilder, FormControl, FormGroup, Validators,
+} from '@angular/forms';
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
 import { FormValidatorService } from 'src/app/core/services/form-validator.service';
 import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { selectError } from 'src/app/redux/selectors/auth.selectors';
 import { MatIconService } from 'src/app/core/services/icon.service';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { UserDateFormat } from 'src/app/core/helpers/user-date-format';
+import * as _moment from 'moment';
+// eslint-disable-next-line import/no-named-default
+import { default as _rollupMoment } from 'moment';
+import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
+import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import countryInfo from '../../../../assets/country-codes.json';
 import { CountryInfo } from '../../models/country-code.model';
 import * as AuthActions from '../../../redux/actions/auth.actions';
@@ -15,12 +26,20 @@ import { AuthFormHelperService } from '../../auth-form-helper.service';
 import { User } from '../../models/user.model';
 import { DefaultFacebookUserEnum, DefaultGoogleUserEnum } from '../../constants/default-users.enum';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const moment = _rollupMoment || _moment;
+
 @Component({
   selector: 'app-sign-up-tab',
   templateUrl: './sign-up-tab.component.html',
   styleUrls: ['./sign-up-tab.component.scss'],
+  providers: [
+    { provide: MAT_DATE_FORMATS, useClass: UserDateFormat },
+  ],
 })
 export class SignUpTabComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<boolean>();
+
   signUpForm!: FormGroup;
 
   errorsMessages = formValidationErrorsMessages.authForm;
@@ -33,7 +52,10 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
 
   error$!: Observable<string | null>;
 
+  dateFormat$!: Observable<string>;
+
   constructor(
+    @Inject(MAT_DATE_FORMATS) private config: UserDateFormat,
     private fb: FormBuilder,
     private formValidatorService: FormValidatorService,
     private store$: Store<AppState>,
@@ -115,10 +137,21 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
         ],
       ],
     });
+
+    this.dateFormat$ = this.store$.pipe(select(selectDateFormat));
+
+    this.dateFormat$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res) => {
+      this.updateDateFormatConfig(res);
+      this.updateDateFormControl();
+    });
   }
 
   ngOnDestroy(): void {
     this.signUpForm.reset();
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
   private fillFormWithDefaultData<T>(defaultUser: { [k: string]: T }): void {
@@ -151,5 +184,16 @@ export class SignUpTabComponent implements OnInit, OnDestroy {
 
   getTooltipMessage(): string {
     return this.formHelper.getPasswordErrorsTooltipMessage(this.signUpForm.controls['password']);
+  }
+
+  updateDateFormatConfig(newDateFormat: string) {
+    this.config.dateFormat = newDateFormat as DateFormatEnum;
+  }
+
+  updateDateFormControl() {
+    const { dateOfBirth } = this.signUpForm.value;
+    this.signUpForm.removeControl('dateOfBirth');
+    this.signUpForm.addControl('dateOfBirth', new FormControl(new Date(dateOfBirth), [Validators.required,
+      this.formValidatorService.dateValidator()]));
   }
 }
