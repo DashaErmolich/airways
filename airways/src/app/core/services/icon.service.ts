@@ -62,5 +62,9 @@ export class MatIconService {
       'github',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/footer/github-mark.svg'),
     );
+    this.matIconRegistry.addSvgIcon(
+      'clock',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/flights/clock-history.svg'),
+    );
   }
 }

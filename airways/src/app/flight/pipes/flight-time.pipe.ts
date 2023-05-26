@@ -6,8 +6,8 @@ import moment from 'moment';
   name: 'flightTime',
 })
 export class FlightTimePipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: number): string {
     const time = moment.utc().startOf('day').add(value, 'minutes');
-    return `${time.format('hh')}h ${time.format('mm')}m`;
+    return `${time.format('HH')}h ${time.format('mm')}m`;
   }
 }

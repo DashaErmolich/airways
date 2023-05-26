@@ -1,0 +1,48 @@
+@import 'src/styles/abstracts/variables';
+
+.flight-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.flight-container {
+  border: 1px solid $color-light-gray;
+  border-radius: 5px;
+}
+
+.flight-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding: 0.5rem;
+  gap: 3rem;
+}
+
+.flight__date {
+  flex: $flex-col-3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.flight__info {
+  flex: $flex-col-9;
+  display: flex;
+  flex-direction: column;
+}
+
+.description-icon {
+  left: calc(-1 * ($c-flights-desc-gap / 2 + $mat-icon-size / 2));
+  top: calc(50% - $mat-icon-size / 2);
+}
+
+.flight_highlight {
+  background-color: rgb(245, 247, 249);
+  padding: 1rem 0;
+}
+
+.flight__layover {
+  padding: 1rem 0;
+}
+
+

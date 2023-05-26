@@ -13,6 +13,10 @@ export class FlightDescriptionComponent {
 
   @Input() flight!: Flight;
 
+  @Input() isDirectFlight!: boolean;
+
+  @Input() connectedFlights: Flight[] | null = null;
+
   constructor(
     private flightHelper: FlightsHelperService,
     public layout: LayoutService,

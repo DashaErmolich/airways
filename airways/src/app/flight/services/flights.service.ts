@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
@@ -29,7 +30,7 @@ export class FlightsService {
 
   public searchAirport(q: string): Observable<Airport> {
     const options = { params: new HttpParams().set('q', q) };
-    return this.http.get<Airport>(`${this.BASE_URL}/search/airport`, options);
+    return this.http.get<Airport>(`${this.BASE_URL}/search/airport`, options).pipe(catchError(this.handleError));
   }
 
   public searchMultipleFlights(

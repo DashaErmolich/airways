@@ -9,7 +9,9 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
 import { selectPassengersQty, selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
-import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
+import {
+  selectForwardConnectedFlights, selectForwardFlight, selectReturnConnectedFlights, selectReturnFlight,
+} from 'src/app/redux/selectors/flights.selectors';
 import { selectCurrency, selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 
 import { MatIconService } from 'src/app/core/services/icon.service';
@@ -48,6 +50,8 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   searchData!: TripSearchState;
 
+  connectedFlights: Flight[] | null = null;
+
   constructor(
     private store$: Store<AppState>,
     private matIconService: MatIconService,
@@ -66,14 +70,21 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
     this.store$.pipe(
       select(this.getFlightType()),
       takeUntil(this.destroy$),
-    ).subscribe((res) => {
+    ).subscribe((res: Flight | null) => {
       this.flight = res;
     });
 
     this.searchData$.pipe(
       takeUntil(this.destroy$),
-    ).subscribe((res) => {
+    ).subscribe((res: TripSearchState) => {
       this.searchData = res;
+    });
+
+    this.store$.pipe(
+      select(this.getConnectedFlightsType()),
+      takeUntil(this.destroy$),
+    ).subscribe((res: Flight[] | null) => {
+      this.connectedFlights = res;
     });
   }
 
@@ -111,5 +122,15 @@ export class FlightSelectionComponent implements OnInit, OnDestroy {
 
   isFlightAvailable(seatsQty: number, passengersQty: number): boolean {
     return this.flightHelper.isFlightAvailable(seatsQty, passengersQty);
+  }
+
+  private getConnectedFlightsType() {
+    return this.flightTypeIndex <= FlightsTypesEnum.RoundTripForwardFlight
+      ? selectForwardConnectedFlights
+      : selectReturnConnectedFlights;
+  }
+
+  isDirectFlight(): boolean {
+    return this.flightHelper.isDirectFlight(this.connectedFlights);
   }
 }

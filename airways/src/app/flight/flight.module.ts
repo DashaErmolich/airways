@@ -1,15 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatRadioModule } from '@angular/material/radio';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MomentDateModule } from '@angular/material-moment-adapter';
 import { FlightRoutingModule } from './flight-routing.module';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { SelectionPageComponent } from './pages/selection-page/selection-page.component';
@@ -21,6 +12,9 @@ import { CurrencyValuePipe } from './pipes/currency-value.pipe';
 import { FlightTimePipe } from './pipes/flight-time.pipe';
 import { CalendarSliderComponent } from './components/calendar-slider/calendar-slider.component';
 import { FlightDescriptionComponent } from './components/flight-description/flight-description.component';
+import { SharedModule } from '../shared/shared.module';
+import { ConnectedFlightDescriptionComponent } from './components/connected-flight-description/connected-flight-description.component';
+import { ConnectedFlightComponent } from './components/connected-flight/connected-flight.component';
 
 @NgModule({
   declarations: [
@@ -34,19 +28,13 @@ import { FlightDescriptionComponent } from './components/flight-description/flig
     FlightTimePipe,
     CalendarSliderComponent,
     FlightDescriptionComponent,
+    ConnectedFlightDescriptionComponent,
+    ConnectedFlightComponent,
   ],
   imports: [
     CommonModule,
     FlightRoutingModule,
-    MatRadioModule,
-    MatButtonModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MomentDateModule,
+    SharedModule,
   ],
 })
 export class FlightModule { }
