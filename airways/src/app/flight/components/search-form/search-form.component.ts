@@ -34,6 +34,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
 import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
+import { UserDateFormat } from 'src/app/core/helpers/user-date-format';
 import { LayoutService } from '../../../core/services/layout.service';
 
 const moment = _rollupMoment || _moment;
@@ -41,18 +42,6 @@ const moment = _rollupMoment || _moment;
 enum TripTypesEnum {
   OneWayTrip = 'one-way-trip',
   RoundTrip = 'round-trip',
-}
-
-export class UserDateFormat {
-  dateFormat = DateFormatEnum.DD_MM_YYYY;
-
-  get display() {
-    return { dateInput: this.dateFormat };
-  }
-
-  get parse() {
-    return { dateInput: this.dateFormat };
-  }
 }
 
 @Component({
