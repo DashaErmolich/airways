@@ -263,6 +263,13 @@
 
   <div class="booking-btn-wrapper" align="end">
     <button class="booking-btn" mat-button extended (click)="goBack()">Back</button>
-    <button class="booking-btn" type="submit" mat-raised-button extended color="primary" [disabled]="passengerForm.invalid">Continue</button>
+    <button
+      class="booking-btn"
+      type="submit"
+      mat-raised-button extended
+      color="primary"
+      [disabled]="passengerForm.invalid"
+      routerLink="/booking/summary"
+      >Continue</button>
   </div>
 </form>
