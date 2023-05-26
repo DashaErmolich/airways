@@ -25,13 +25,19 @@ import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-
 import { MatBadgeModule } from '@angular/material/badge';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    FlightsSearchSummaryComponent,
+  ],
   imports: [
     CommonModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   exports: [
+    FlightsSearchSummaryComponent,
     MatButtonModule,
     MatSelectModule,
     MatIconModule,
