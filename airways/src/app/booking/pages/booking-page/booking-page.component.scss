@@ -1,117 +1,61 @@
-@import '../../../../styles/abstracts/variables';
+@import 'src/styles/abstracts/variables';
 
-.pass-form-title,
-.pass-details-title {
+$form-gap: 40px;
+
+.passengers-form {
+  padding: $form-gap 0;
+  display: flex;
+  flex-direction: column;
+  gap: $form-gap;
+}
+
+.passengers-form__title {
   color: $color-primary-blue;
-  padding-left: 14px;
-  margin: 0;
   font-weight: bold;
   font-size: 24px;
-  line-height: 28px;
   line-height: 100%;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.passengers-form__subtitle {
+  color: #49454F;
+  font-size: 1rem;
+  line-height: 1.5rem;
 
 }
 
-.pass-form-title-wrapper,
-.pass-details-title-wrapper {
+.form-section-container {
+  background-color: #fff;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 2rem 1.5rem;
+}
+
+.passengers-container {
   display: flex;
+  flex-direction: column;
+  gap: $form-gap;
+}
+
+.passenger-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $form-gap / 2;
+}
+
+.passenger__form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
 }
 
-.passenger-form {
-  max-width: 1127px;
-  margin: 50px auto 0px auto;
-}
-
-.pass-details-title-wrapper {
-  margin-top: 50px;
-}
-
-.pass-form-description,
-.pass-details-description {
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
-  line-height: 128%;
-  letter-spacing: 0.5px;
-  margin-top: 8px;
-}
-
-.pass-form-item-container {
-  margin-top: 20px;
-  border: 1px solid gray;
-  background-color: rgba(137, 135, 135, 0.101);
-}
-.pass-form-item {
-  margin: 32px 45px 43px 45px;
-}
-.pass-form-item-content {
-  margin-top: 25px;
-}
-.pass-form-item-title {
-  color: $color-primary-deep-blue;
-  font-weight: bold;
-  font-size: 24px;
-  line-height: 28px;
-  line-height: 100%;
-  margin: 0;
-}
-
-.passenger-form-lower {
-  display: flex;
-  align-items: center;
-}
-
-.passenger-assistance-svg {
-  margin: 0px 7px 0px 10px;
-}
-
-.passenger-assistance-title {
-  font-size: 12px;
-  line-height: 16px;
-  line-height: 114%;
-  letter-spacing: 0.4px;
-}
-
-.pass-details-item {
-  margin-bottom: 20px;
-}
-
-.booking-btn-wrapper {
-  margin: 40px 0px 200px 0px;
-}
-
-.passenger-form-upper {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-}
-
-.first-name-field,
-.last-name-field,
-.country-field,
-.phone-field,
-.email-field {
-  width: 250px;
-  padding-right: 20px;
-}
-
-.date-name-field {
-  padding-left: 20px;
-}
-
-.gender-name-field {
-  min-height: 57px;
-  border: 0.3px solid rgba(116, 118, 122, 0.181);
-}
-
-.phone-field {
-  padding-right: 40px;
-}
-
-.baggage-icons-container {
+.bag-container {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: 2rem;
 }
+

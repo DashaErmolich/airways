@@ -1,275 +1,312 @@
-<form [formGroup]="passengerForm" (submit)="onSubmit()" class="passenger-form">
-  <div class="pass-form-title-wrapper">
-    <mat-icon svgIcon="pass-icon"></mat-icon>
-    <h2 class="pass-form-title">Passengers</h2>
-  </div>
-  <p class="pass-form-description">Enter the passenger's names as they appear on document (passport or ID).</p>
+<div class="container">
+  <form [formGroup]="passengerForm" (submit)="onSubmit()" class="passengers-form">
+    <section>
+      <h2 class="passengers-form__title">
+        <mat-icon svgIcon="pass-icon"></mat-icon>
+        <span>Passengers</span>
+      </h2>
 
-  <div class="pass-form-item-container" *ngIf="adult.controls.length">
-    <div class="pass-form-item">
-      <h3 class="pass-form-item-title">Adult</h3>
-      <div class="pass-form-item-content" formArrayName="adult" *ngFor="let item of adult.controls; let i = index">
-        <div class="passenger-form-upper" [formGroupName]="i">
-          <mat-form-field class="first-name-field">
-            <mat-label>First name</mat-label>
-            <input matInput type="text" formControlName="firstName">
-            <mat-icon matSuffix>info_edit</mat-icon>
-            <mat-error *ngIf="this.adult.controls[i]?.get('firstName')?.hasError('required')">
-              {{  errorMessages.authForm.firstName.required }}
-            </mat-error>
-            <mat-error *ngIf="this.adult.controls[i]?.get('firstName')?.hasError('pattern')">
-              {{  errorMessages.passengersForm.firstName.pattern }}
-            </mat-error>
-          </mat-form-field>
+      <p class="passengers-form__subtitle">Enter the passenger's names as they appear on document (passport or ID).</p>
 
-          <mat-form-field class="last-name-field">
-            <mat-label>Last name</mat-label>
-            <input matInput type="text" formControlName="lastName">
-            <mat-icon matSuffix>info_edit</mat-icon>
-            <mat-error *ngIf="this.adult.controls[i]?.get('lastName')?.hasError('required')">
-              {{  errorMessages.authForm.lastName.required }}
-            </mat-error>
-            <mat-error *ngIf="this.adult.controls[i]?.get('lastName')?.hasError('pattern')">
-              {{  errorMessages.authForm.lastName.pattern }}
-            </mat-error>
-          </mat-form-field>
+      <div class="passengers-container">
+        <section class="form-section-container" *ngIf="adult.controls.length">
+          <h3 class="passengers-form__title">Adult</h3>
+          <div class="passengers-container">
+            <article class="passenger-wrapper" formArrayName="adult" *ngFor="let item of adult.controls; let i = index">
+              <div class="passenger__form" [formGroupName]="i">
+                <mat-form-field>
+                  <mat-label>First name</mat-label>
+                  <input matInput type="text" formControlName="firstName">
+                  <mat-icon matSuffix>info_edit</mat-icon>
+                  <mat-error *ngIf="this.adult.controls[i]?.get('firstName')?.hasError('required')">
+                    {{  errorMessages.authForm.firstName.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.adult.controls[i]?.get('firstName')?.hasError('pattern')">
+                    {{  errorMessages.passengersForm.firstName.pattern }}
+                  </mat-error>
+                </mat-form-field>
 
-          <mat-button-toggle-group formControlName="gender" class="gender-name-field">
-            <mat-button-toggle value="Male">Male</mat-button-toggle>
-            <mat-button-toggle value="Female">Female</mat-button-toggle>
-          </mat-button-toggle-group>
+                <mat-form-field>
+                  <mat-label>Last name</mat-label>
+                  <input matInput type="text" formControlName="lastName">
+                  <mat-icon matSuffix>info_edit</mat-icon>
+                  <mat-error *ngIf="this.adult.controls[i]?.get('lastName')?.hasError('required')">
+                    {{  errorMessages.authForm.lastName.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.adult.controls[i]?.get('lastName')?.hasError('pattern')">
+                    {{  errorMessages.authForm.lastName.pattern }}
+                  </mat-error>
+                </mat-form-field>
 
-          <mat-form-field class="date-name-field">
-            <mat-label>Date of birth</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
-            <mat-hint>{{ dateFormat$ | async }}</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError('required')">
-              {{ errorMessages.authForm.dateOfBirth.required }}
-            </mat-error>
-            <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
-              {{ errorMessages.authForm.dateOfBirth.validDate }}
-            </mat-error>
-          </mat-form-field>
+                <mat-radio-group formControlName="gender">
+                  <mat-radio-button value="male">Male</mat-radio-button>
+                  <mat-radio-button value="female">Female</mat-radio-button>
+                </mat-radio-group>
 
-        </div>
-        <!-- <div class="passenger-form-lower">
-          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
-          <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
-          <span class="passenger-assistance-title">Need special assistance?</span>
-        </div> -->
+                <mat-form-field>
+                  <mat-label>Date of birth</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                  <mat-hint>{{ dateFormat$ | async }}</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError('required')">
+                    {{ errorMessages.authForm.dateOfBirth.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
+                    {{ errorMessages.authForm.dateOfBirth.validDate }}
+                  </mat-error>
+                </mat-form-field>
 
-        <div class="baggage-icons-container">
-          <span matBadge="1" matBadgeOverlap="false" class="demo-section">
-            <mat-icon svgIcon="cabin-bag"></mat-icon>
-          </span>
+              </div>
 
-          <button
-            *ngIf="getCheckedBaggage('adult', i) > 0"
-            mat-icon-button
-            color="primary"
-            (click)="decreaseCheckedBaggage('adult', i)">
-            <mat-icon>remove</mat-icon>
-          </button>
+              <div class="bag-container">
+                <span matBadge="1" matBadgeOverlap="false" class="demo-section">
+                  <mat-icon svgIcon="cabin-bag"></mat-icon>
+                </span>
 
-          <span
-            *ngIf="getCheckedBaggage('adult', i) > 0"
-            [matBadge]="getCheckedBaggage('adult', i)"
-            matBadgeOverlap="false" class="demo-section">
-            <mat-icon svgIcon="checked-bag"></mat-icon>
-          </span>
+                <button
+                  *ngIf="isCheckedBaggage('adult', i)"
+                  mat-icon-button
+                  color="primary"
+                  type="button"
+                  (click)="decreaseCheckedBaggage('adult', i)">
+                  <mat-icon>remove</mat-icon>
+                </button>
 
-          <button
-            *ngIf="getCheckedBaggage('adult', i) > 0"
-            mat-icon-button
-            color="primary"
-            (click)="increaseCheckedBaggage('adult', i)"
-            [disabled]="getCheckedBaggage('adult', i) >= 10">
-            <mat-icon>add</mat-icon>
-          </button>
+                <span
+                  *ngIf="isCheckedBaggage('adult', i)"
+                  [matBadge]="getCheckedBaggage('adult', i)"
+                  matBadgeOverlap="false" class="demo-section">
+                  <mat-icon svgIcon="checked-bag"></mat-icon>
+                </span>
 
-          <button
-            *ngIf="getCheckedBaggage('adult', i) === 0"
-            mat-raised-button
-            color="primary"
-            (click)="increaseCheckedBaggage('adult', i)">Add checked baggage</button>
-        </div>
+                <button
+                  *ngIf="isCheckedBaggage('adult', i)"
+                  mat-icon-button
+                  color="primary"
+                  type="button"
+                  (click)="increaseCheckedBaggage('adult', i)"
+                  [disabled]="isMaxCheckedBaggageReached('adult', i)">
+                  <mat-icon>add</mat-icon>
+                </button>
 
+                <button
+                  *ngIf="!isCheckedBaggage('adult', i)"
+                  mat-raised-button
+                  color="basic"
+                  type="button"
+                  (click)="increaseCheckedBaggage('adult', i)">Add checked baggage</button>
+              </div>
+
+            </article>
+          </div>
+        </section>
+
+        <section  class="form-section-container" *ngIf="child.controls.length">
+          <h3 class="passengers-form__title">Child</h3>
+          <div class="passengers-container">
+            <article class="passenger-wrapper" formArrayName="child" *ngFor="let item of child.controls; let i = index">
+              <div class="passenger__form" [formGroupName]="i">
+                <mat-form-field>
+                  <mat-label>First name</mat-label>
+                  <input matInput type="text" formControlName="firstName">
+                  <mat-icon matSuffix>info_edit</mat-icon>
+                  <mat-error *ngIf="child.controls[i]?.get('firstName')?.hasError('required')">
+                    {{  errorMessages.authForm.firstName.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.child.controls[i]?.get('firstName')?.hasError('pattern')">
+                    {{  errorMessages.passengersForm.firstName.pattern }}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Last name</mat-label>
+                  <input matInput type="text" formControlName="lastName">
+                  <mat-icon matSuffix>info_edit</mat-icon>
+                  <mat-error *ngIf="this.child.controls[i]?.get('lastName')?.hasError('required')">
+                    {{  errorMessages.authForm.lastName.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.child.controls[i]?.get('lastName')?.hasError('pattern')">
+                    {{  errorMessages.authForm.lastName.pattern }}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-radio-group formControlName="gender">
+                  <mat-radio-button value="male">Male</mat-radio-button>
+                  <mat-radio-button value="female">Female</mat-radio-button>
+                </mat-radio-group>
+
+                <mat-form-field class="date-name-field">
+                  <mat-label>Date of birth</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                  <mat-hint>{{ dateFormat$ | async }}</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError('required')">
+                    {{ errorMessages.authForm.dateOfBirth.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
+                    {{ errorMessages.authForm.dateOfBirth.validDate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="bag-container">
+                <span matBadge="1" matBadgeOverlap="false" class="demo-section">
+                  <mat-icon svgIcon="cabin-bag"></mat-icon>
+                </span>
+
+                <button
+                  *ngIf="isCheckedBaggage('child', i)"
+                  mat-icon-button
+                  color="primary"
+                  type="button"
+                  (click)="decreaseCheckedBaggage('child', i)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+
+                <span
+                  *ngIf="isCheckedBaggage('child', i)"
+                  [matBadge]="getCheckedBaggage('child', i)"
+                  matBadgeOverlap="false" class="demo-section">
+                  <mat-icon svgIcon="checked-bag"></mat-icon>
+                </span>
+
+                <button
+                  *ngIf="isCheckedBaggage('child', i)"
+                  mat-icon-button
+                  color="primary"
+                  type="button"
+                  (click)="increaseCheckedBaggage('child', i)"
+                  [disabled]="isMaxCheckedBaggageReached('child', i)">
+                  <mat-icon>add</mat-icon>
+                </button>
+
+                <button
+                  *ngIf="!isCheckedBaggage('child', i)"
+                  mat-raised-button
+                  color="basic"
+                  type="button"
+                  (click)="increaseCheckedBaggage('child', i)">Add checked baggage</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="form-section-container" *ngIf="infant.controls.length">
+          <h3 class="passengers-form__title">Infant</h3>
+          <div class="passengers-container">
+            <article class="passenger-wrapper" formArrayName="infant" *ngFor="let item of infant.controls; let i = index">
+              <div class="passenger__form" [formGroupName]="i">
+                <mat-form-field>
+                  <mat-label>First name</mat-label>
+                  <input matInput type="text" formControlName="firstName">
+                  <mat-icon matSuffix>info_edit</mat-icon>
+                  <mat-error *ngIf="this.infant.controls[i]?.get('firstName')?.hasError('required')">
+                    {{  errorMessages.authForm.firstName.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.infant.controls[i]?.get('firstName')?.hasError('pattern')">
+                    {{  errorMessages.passengersForm.firstName.pattern }}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                  <mat-label>Last name</mat-label>
+                  <input matInput type="text" formControlName="lastName">
+                  <mat-icon matSuffix>info_edit</mat-icon>
+                  <mat-error *ngIf="this.infant.controls[i]?.get('lastName')?.hasError('required')">
+                    {{  errorMessages.authForm.lastName.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.infant.controls[i]?.get('lastName')?.hasError('pattern')">
+                    {{  errorMessages.authForm.lastName.pattern }}
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-radio-group formControlName="gender">
+                  <mat-radio-button value="male">Male</mat-radio-button>
+                  <mat-radio-button value="female">Female</mat-radio-button>
+                </mat-radio-group>
+
+                <mat-form-field>
+                  <mat-label>Date of birth</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                  <mat-hint>{{ dateFormat$ | async }}</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError('required')">
+                    {{ errorMessages.authForm.dateOfBirth.required }}
+                  </mat-error>
+                  <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
+                    {{ errorMessages.authForm.dateOfBirth.validDate }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
-    </div>
-  </div>
+    </section>
 
-  <div class="pass-form-item-container" *ngIf="child.controls.length">
-    <div class="pass-form-item">
-      <h3 class="pass-form-item-title">Child</h3>
-    <div class="pass-form-item-content" formArrayName="child" *ngFor="let item of child.controls; let i = index">
-      <div class="passenger-form-upper"[formGroupName]="i">
-        <mat-form-field class="first-name-field">
-          <mat-label>First name</mat-label>
-          <input matInput type="text" formControlName="firstName">
-          <mat-icon matSuffix>info_edit</mat-icon>
-          <mat-error *ngIf="child.controls[i]?.get('firstName')?.hasError('required')">
-            {{  errorMessages.authForm.firstName.required }}
-          </mat-error>
-          <mat-error *ngIf="this.child.controls[i]?.get('firstName')?.hasError('pattern')">
-            {{  errorMessages.passengersForm.firstName.pattern }}
-          </mat-error>
-        </mat-form-field>
+    <section>
+      <h2 class="passengers-form__title">
+        <mat-icon svgIcon="pass-details"></mat-icon>
+        <span class="pass-details-title">Contact details</span>
+      </h2>
 
-        <mat-form-field class="last-name-field">
-          <mat-label>Last name</mat-label>
-          <input matInput type="text" formControlName="lastName">
-          <mat-icon matSuffix>info_edit</mat-icon>
-          <mat-error *ngIf="this.child.controls[i]?.get('lastName')?.hasError('required')">
-            {{  errorMessages.authForm.lastName.required }}
-          </mat-error>
-          <mat-error *ngIf="this.child.controls[i]?.get('lastName')?.hasError('pattern')">
-            {{  errorMessages.authForm.lastName.pattern }}
-          </mat-error>
-        </mat-form-field>
+      <p class="passengers-form__subtitle">We need contact details to be able to deliver the latest information regarding your flight.</p>
 
-        <mat-button-toggle-group formControlName="gender" class="gender-name-field">
-          <mat-button-toggle value="Male">Male</mat-button-toggle>
-          <mat-button-toggle value="Female">Female</mat-button-toggle>
-        </mat-button-toggle-group>
+      <article class="form-section-container">
+        <div class="passenger__form" formGroupName="contactDetails">
+          <mat-form-field>
+            <mat-label>Country code</mat-label>
+              <mat-select formControlName="countryCode">
+                <mat-option *ngFor="let code of COUNTRY_INFO" [value]="code.dial_code">
+                  {{ code.name }} ({{ code.dial_code }})
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="contactDetails.controls['countryCode'].hasError('required')">
+                {{ errorMessages.authForm.countryCode.required}}
+              </mat-error>
+          </mat-form-field>
 
-        <mat-form-field class="date-name-field">
-          <mat-label>Date of birth</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
-          <mat-hint>{{ dateFormat$ | async }}</mat-hint>
-          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError('required')">
-            {{ errorMessages.authForm.dateOfBirth.required }}
-          </mat-error>
-          <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
-            {{ errorMessages.authForm.dateOfBirth.validDate }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <!-- <div class="passenger-form-lower">
-        <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
-        <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
-        <span class="passenger-assistance-title">Need special assistance?</span>
-      </div> -->
-
-      <div matBadge="4" matBadgeOverlap="false" class="demo-section">Text with a badge</div>
-    </div>
-    </div>
-  </div>
-
-  <div class="pass-form-item-container" *ngIf="infant.controls.length">
-    <div class="pass-form-item">
-      <h3 class="pass-form-item-title">Infant</h3>
-      <div class="pass-form-item-content" formArrayName="infant" *ngFor="let item of infant.controls; let i = index">
-        <div class="passenger-form-upper" [formGroupName]="i">
-          <mat-form-field class="first-name-field">
-            <mat-label>First name</mat-label>
-            <input matInput type="text" formControlName="firstName">
-            <mat-icon matSuffix>info_edit</mat-icon>
-            <mat-error *ngIf="this.infant.controls[i]?.get('firstName')?.hasError('required')">
-              {{  errorMessages.authForm.firstName.required }}
+          <mat-form-field>
+            <mat-label>Mobile phone number</mat-label>
+            <input matInput formControlName="phoneNumber">
+            <mat-error *ngIf="contactDetails.controls['phoneNumber'].hasError('required')">
+              {{ errorMessages.authForm.phoneNumber.required }}
             </mat-error>
-            <mat-error *ngIf="this.infant.controls[i]?.get('firstName')?.hasError('pattern')">
-              {{  errorMessages.passengersForm.firstName.pattern }}
+            <mat-error *ngIf="contactDetails.controls['phoneNumber'].hasError('pattern')">
+              {{ errorMessages.authForm.phoneNumber.pattern }}
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field class="last-name-field">
-            <mat-label>Last name</mat-label>
-            <input matInput type="text" formControlName="lastName">
-            <mat-icon matSuffix>info_edit</mat-icon>
-            <mat-error *ngIf="this.infant.controls[i]?.get('lastName')?.hasError('required')">
-              {{  errorMessages.authForm.lastName.required }}
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+            <mat-error *ngIf="contactDetails.controls['email'].hasError('required')">
+              {{ errorMessages.authForm.email.required }}
             </mat-error>
-            <mat-error *ngIf="this.infant.controls[i]?.get('lastName')?.hasError('pattern')">
-              {{  errorMessages.authForm.lastName.pattern }}
-            </mat-error>
-          </mat-form-field>
-
-          <mat-button-toggle-group formControlName="gender" class="gender-name-field">
-            <mat-button-toggle value="Male">Male</mat-button-toggle>
-            <mat-button-toggle value="Female">Female</mat-button-toggle>
-          </mat-button-toggle-group>
-
-          <mat-form-field class="date-name-field">
-            <mat-label>Date of birth</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
-            <mat-hint>{{ dateFormat$ | async }}</mat-hint>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError('required')">
-              {{ errorMessages.authForm.dateOfBirth.required }}
-            </mat-error>
-            <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
-              {{ errorMessages.authForm.dateOfBirth.validDate }}
+            <mat-error *ngIf="contactDetails.controls['email'].hasError('email')">
+              {{ errorMessages.authForm.email.email }}
             </mat-error>
           </mat-form-field>
         </div>
-        <!-- <div class="passenger-form-lower">
-          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
-          <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
-          <span class="passenger-assistance-title">Need special assistance?</span>
-        </div> -->
-      </div>
+      </article>
+    </section>
+
+    <div align="end">
+      <button
+        mat-button extended
+        (click)="goBack()">
+          Back
+      </button>
+
+      <button
+        type="submit"
+        mat-raised-button extended
+        color="primary"
+        [disabled]="passengerForm.invalid"
+        >Continue</button>
     </div>
-  </div>
-
-  <div class="pass-details-title-wrapper">
-    <mat-icon svgIcon="pass-details"></mat-icon>
-  <h2 class="pass-details-title">Contact details</h2>
-  </div>
-  <p class="pass-details-description">We need contact details to be able to deliver the latest information regarding your flight.</p>
-
-  <div class="pass-form-item-container" formGroupName="contactDetails">
-    <div class="pass-form-item pass-details-item">
-      <mat-form-field class="country-field">
-        <mat-label>Country code</mat-label>
-          <mat-select formControlName="countryCode">
-            <mat-option *ngFor="let code of COUNTRY_INFO" [value]="code.dial_code">
-              {{ code.name }} ({{ code.dial_code }})
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="contactDetails.controls['countryCode'].hasError('required')">
-            {{ errorMessages.authForm.countryCode.required}}
-          </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="phone-field">
-        <mat-label>Mobile phone number</mat-label>
-        <input matInput formControlName="phoneNumber">
-        <mat-error *ngIf="contactDetails.controls['phoneNumber'].hasError('required')">
-          {{ errorMessages.authForm.phoneNumber.required }}
-        </mat-error>
-        <mat-error *ngIf="contactDetails.controls['phoneNumber'].hasError('pattern')">
-          {{ errorMessages.authForm.phoneNumber.pattern }}
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field class="email-field">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email">
-        <mat-error *ngIf="contactDetails.controls['email'].hasError('required')">
-          {{ errorMessages.authForm.email.required }}
-        </mat-error>
-        <mat-error *ngIf="contactDetails.controls['email'].hasError('email')">
-          {{ errorMessages.authForm.email.email }}
-        </mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="booking-btn-wrapper" align="end">
-    <button class="booking-btn" mat-button extended (click)="goBack()">Back</button>
-    <button
-      class="booking-btn"
-      type="submit"
-      mat-raised-button extended
-      color="primary"
-      [disabled]="passengerForm.invalid"
-      routerLink="/booking/summary"
-      >Continue</button>
-  </div>
-</form>
+  </form>
+</div>

@@ -1,5 +1,6 @@
 /* eslint-disable default-case */
 import {
+  ChangeDetectionStrategy,
   Component, Inject, OnDestroy, OnInit,
 } from '@angular/core';
 import {
@@ -27,6 +28,8 @@ import { Location } from '@angular/common';
 import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
 
+const MAX_CHECKED_BAG = 5;
+
 @Component({
   selector: 'app-booking-page',
   templateUrl: './booking-page.component.html',
@@ -34,7 +37,7 @@ import { PassengerBooking } from '../../models/passengers-bookings.model';
   providers: [
     { provide: MAT_DATE_FORMATS, useClass: UserDateFormat },
   ],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookingPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -163,7 +166,7 @@ export class BookingPageComponent implements OnInit, OnDestroy {
           Validators.pattern('^[a-zA-Z]+$'),
         ],
       ],
-      gender: [val?.gender || 'Male', Validators.required],
+      gender: [val?.gender || 'male', Validators.required],
       dateOfBirth: [
         (val?.dateOfBirth) || '',
         [
@@ -171,7 +174,6 @@ export class BookingPageComponent implements OnInit, OnDestroy {
           this.formValidatorService.dateValidator(),
         ],
       ],
-      // isNeedAssistance: [val?.isNeedAssistance || false, Validators.required],
       cabinBag: [{
         value: 1,
         disabled: true,
@@ -191,6 +193,7 @@ export class BookingPageComponent implements OnInit, OnDestroy {
         infant: this.passengerForm.value.infant,
         contactDetails: this.passengerForm.value.contactDetails,
       }));
+      this.router.navigate(['booking', 'summary']);
     }
   }
 
@@ -212,7 +215,9 @@ export class BookingPageComponent implements OnInit, OnDestroy {
   }
 
   increaseCheckedBaggage(passengerType: string, index: number) {
-    let { value } = (this.adult.at(index) as FormGroup).get('checkedBag')!;
+    let { value } = passengerType === 'adult'
+      ? (this.adult.at(index) as FormGroup).get('checkedBag')!
+      : (this.child.at(index) as FormGroup).get('checkedBag')!;
 
     switch (passengerType) {
       case 'adult':
@@ -225,7 +230,9 @@ export class BookingPageComponent implements OnInit, OnDestroy {
   }
 
   decreaseCheckedBaggage(passengerType: string, index: number) {
-    let { value } = (this.adult.at(index) as FormGroup).get('checkedBag')!;
+    let { value } = passengerType === 'adult'
+      ? (this.adult.at(index) as FormGroup).get('checkedBag')!
+      : (this.child.at(index) as FormGroup).get('checkedBag')!;
 
     switch (passengerType) {
       case 'adult':
@@ -241,12 +248,18 @@ export class BookingPageComponent implements OnInit, OnDestroy {
     switch (passengerType) {
       case 'adult':
         return (this.adult.at(index) as FormGroup).get('checkedBag')!.value;
-        break;
       case 'child':
         return (this.child.at(index) as FormGroup).get('checkedBag')!.value;
-        break;
       default:
         return 0;
     }
+  }
+
+  isCheckedBaggage(passengerType: string, index: number) {
+    return this.getCheckedBaggage(passengerType, index) > 0;
+  }
+
+  isMaxCheckedBaggageReached(passengerType: string, index: number) {
+    return this.getCheckedBaggage(passengerType, index) >= MAX_CHECKED_BAG;
   }
 }
