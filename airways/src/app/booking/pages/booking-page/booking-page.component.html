@@ -42,7 +42,7 @@
           <mat-form-field class="date-name-field">
             <mat-label>Date of birth</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
-            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-hint>{{ dateFormat$ | async }}</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError('required')">
@@ -99,7 +99,7 @@
         <mat-form-field class="date-name-field">
           <mat-label>Date of birth</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
-          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-hint>{{ dateFormat$ | async }}</mat-hint>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
           <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError('required')">
@@ -156,7 +156,7 @@
           <mat-form-field class="date-name-field">
             <mat-label>Date of birth</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
-            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-hint>{{ dateFormat$ | async }}</mat-hint>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError('required')">

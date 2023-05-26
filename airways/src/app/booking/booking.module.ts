@@ -14,6 +14,7 @@ import { BookingPageComponent } from './pages/booking-page/booking-page.componen
 import { SummaryPageComponent } from './pages/summary-page/summary-page.component';
 import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-cart-page.component';
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { UserAccountPageComponent } from './pages/user-account-page/user-account
     MatSelectModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
+    SharedModule,
   ],
 })
 export class BookingModule { }
