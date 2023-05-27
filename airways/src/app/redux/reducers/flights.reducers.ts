@@ -67,4 +67,10 @@ export const flightsReducers = createReducer(
       returnFlight: action.returnFlight,
     }),
   ),
+  on(
+    FlightsActions.reset,
+    () => ({
+      ...initialState,
+    }),
+  ),
 );

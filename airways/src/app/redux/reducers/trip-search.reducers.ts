@@ -11,7 +11,7 @@ function getSearchParams(): TripSearchState | null {
   return searchParams ? JSON.parse(searchParams) : null;
 }
 
-export const initialState: TripSearchState = {
+const initialState: TripSearchState = {
   isRoundTrip: !!getSearchParams()?.isRoundTrip,
   isOneWayTrip: !!getSearchParams()?.isOneWayTrip,
   from: getSearchParams() ? getSearchParams()!.from : null,
@@ -79,6 +79,12 @@ export const flightsSearchReducers = createReducer(
       ...state,
       isOneWayTrip: action.isOneWayTrip,
       isRoundTrip: action.isRoundTrip,
+    }),
+  ),
+  on(
+    TripSearchActions.reset,
+    () => ({
+      ...initialState,
     }),
   ),
 );

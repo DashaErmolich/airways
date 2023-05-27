@@ -12,7 +12,7 @@ function getBookingState(): BookingDetails | null {
   return user ? JSON.parse(user) : null;
 }
 
-export const initialState: BookingState = {
+const initialState: BookingState = {
   step: 1,
   adult: getBookingState() ? getBookingState()!.adult : [],
   child: getBookingState() ? getBookingState()!.child : [],
@@ -41,6 +41,12 @@ export const bookingReducers = createReducer(
       child: action.child,
       infant: action.infant,
       contactDetails: action.contactDetails,
+    }),
+  ),
+  on(
+    BookingActions.reset,
+    () => ({
+      ...initialState,
     }),
   ),
 );
