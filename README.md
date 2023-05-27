@@ -13,16 +13,18 @@
 
 ## Getting started
 
+### Frontend
+
 - Clone frontend repo
 
 ```
 git clone https://github.com/DashaErmolich/airways.git
 ```
 
-- Switch to the ```develop``` branch
+- Go to the project folder
 
 ```
-git checkout develop
+cd airways/airways
 ```
 
 - Install ```node modules```
@@ -37,10 +39,18 @@ npm install
 npm run db
 ```
 
+### Backend
+
 - Clone backend repo
 
 ```
 git clone https://github.com/DashaErmolich/airways-backend.git
+```
+
+- Go to the project folder
+
+```
+cd airways-backend
 ```
 
 - Install ```node modules```
@@ -57,7 +67,7 @@ npm start
 
 ## App usage
 
-- Go to the [Airways App](https://dashaermolich-rs-clone.netlify.app/)
+- Go to the [Airways App](https://dashaermolich-airways.netlify.app)
 
 - Create your account or use app as anonymous user (not all features are available in this way)
 
