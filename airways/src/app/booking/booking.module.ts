@@ -8,6 +8,8 @@ import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-c
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { PassengersFormComponent } from './components/passengers-form/passengers-form.component';
+import { BookingFinishedComponent } from './components/booking-finished/booking-finished.component';
+import { TotalPricePipe } from './pipes/total-price.pipe';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,8 @@ import { PassengersFormComponent } from './components/passengers-form/passengers
     ShoppingCartPageComponent,
     UserAccountPageComponent,
     PassengersFormComponent,
+    BookingFinishedComponent,
+    TotalPricePipe,
   ],
   imports: [
     CommonModule,

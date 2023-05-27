@@ -32,13 +32,13 @@ export class FlightsEffects {
     )),
   ));
 
-  setForwardFlight$ = createEffect(() => this.actions$.pipe(
+  searchForwardFlightsSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchForwardFlightsSuccess),
     withLatestFrom(this.store$.select(selectForwardFlights)),
     map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[SLIDER_CONFIG.centerSlideIndex] })),
   ));
 
-  setReturnFlight$ = createEffect(() => this.actions$.pipe(
+  searchReturnFlightsSuccess$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchReturnFlightsSuccess),
     withLatestFrom(this.store$.select(selectReturnFlights)),
     map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[SLIDER_CONFIG.centerSlideIndex] })),

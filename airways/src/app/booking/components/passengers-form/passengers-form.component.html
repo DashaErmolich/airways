@@ -1,6 +1,6 @@
 <form [formGroup]="passengerForm" (submit)="onSubmit()" class="passengers-form">
   <section>
-    <h2 class="passengers-form__title">
+    <h2 class="booking__title">
       <mat-icon svgIcon="pass-icon"></mat-icon>
       <span>Passengers</span>
     </h2>
@@ -9,7 +9,7 @@
 
     <div class="passengers-container">
       <section class="form-section-container" *ngIf="adult.controls.length">
-        <h3 class="passengers-form__title">Adult</h3>
+        <h3 class="booking__title">Adult</h3>
         <div class="passengers-container">
           <article class="passenger-wrapper" formArrayName="adult" *ngFor="let item of adult.controls; let i = index">
             <div class="passenger__form" [formGroupName]="i">
@@ -44,7 +44,7 @@
 
               <mat-form-field>
                 <mat-label>Date of birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="unavailableDate">
                 <mat-hint>{{ dateFormat$ | async }}</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -53,6 +53,9 @@
                 </mat-error>
                 <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
+                </mat-error>
+                <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.AdultAge)">
+                  Adult must be more than 14 years old
                 </mat-error>
               </mat-form-field>
 
@@ -97,12 +100,14 @@
                 (click)="increaseCheckedBaggage('adult', i)">Add checked baggage</button>
             </div>
 
+            <span *ngIf="isCheckedBaggage('adult', i)" class="error-message">Flight price will be increased due to additional baggage</span>
+
           </article>
         </div>
       </section>
 
       <section  class="form-section-container" *ngIf="child.controls.length">
-        <h3 class="passengers-form__title">Child</h3>
+        <h3 class="booking__title">Child</h3>
         <div class="passengers-container">
           <article class="passenger-wrapper" formArrayName="child" *ngFor="let item of child.controls; let i = index">
             <div class="passenger__form" [formGroupName]="i">
@@ -137,7 +142,7 @@
 
               <mat-form-field class="date-name-field">
                 <mat-label>Date of birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="unavailableDate">
                 <mat-hint>{{ dateFormat$ | async }}</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -146,6 +151,9 @@
                 </mat-error>
                 <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
+                </mat-error>
+                <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ChildAge)">
+                  Child must be from 2 to 14 years old
                 </mat-error>
               </mat-form-field>
             </div>
@@ -188,12 +196,14 @@
                 type="button"
                 (click)="increaseCheckedBaggage('child', i)">Add checked baggage</button>
             </div>
+
+            <span *ngIf="isCheckedBaggage('child', i)" class="error-message">Flight price will be increased due to additional baggage</span>
           </article>
         </div>
       </section>
 
       <section class="form-section-container" *ngIf="infant.controls.length">
-        <h3 class="passengers-form__title">Infant</h3>
+        <h3 class="booking__title">Infant</h3>
         <div class="passengers-container">
           <article class="passenger-wrapper" formArrayName="infant" *ngFor="let item of infant.controls; let i = index">
             <div class="passenger__form" [formGroupName]="i">
@@ -228,7 +238,7 @@
 
               <mat-form-field>
                 <mat-label>Date of birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="unavailableDate">
                 <mat-hint>{{ dateFormat$ | async }}</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -237,6 +247,9 @@
                 </mat-error>
                 <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
+                </mat-error>
+                <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.InfantAge)">
+                  Infant must be from 0 to 2 years old
                 </mat-error>
               </mat-form-field>
             </div>
@@ -247,9 +260,9 @@
   </section>
 
   <section>
-    <h2 class="passengers-form__title">
+    <h2 class="booking__title">
       <mat-icon svgIcon="pass-details"></mat-icon>
-      <span class="pass-details-title">Contact details</span>
+      <span>Contact details</span>
     </h2>
 
     <p class="passengers-form__subtitle">We need contact details to be able to deliver the latest information regarding your flight.</p>
@@ -293,13 +306,8 @@
     </article>
   </section>
 
-  <div align="end">
-    <button
-      mat-button extended
-      type="button"
-      (click)="goBack()">
-        Back
-    </button>
+  <div class="page-actions">
+    <app-go-back-button></app-go-back-button>
 
     <button
       type="submit"

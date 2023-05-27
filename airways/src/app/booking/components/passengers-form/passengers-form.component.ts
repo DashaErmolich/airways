@@ -12,7 +12,7 @@ import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { AppState } from 'src/app/redux/state.models';
+import { AppState, BookingState } from 'src/app/redux/state.models';
 import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants';
 import countryInfo from 'src/assets/country-codes.json';
 import * as BookingActions from 'src/app/redux/actions/booking.actions';
@@ -23,10 +23,13 @@ import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
-import { Location } from '@angular/common';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import { selectBookingState } from 'src/app/redux/selectors/booking.selectors';
+import { DatesService } from 'src/app/flight/services/dates.service';
 import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
-import { MAX_CHECKED_BAGGAGE } from '../../constants/baggage.constant';
+import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.constant';
+import { PassengerCategory } from '../../pages/summary-page/summary-page.component';
 
 @Component({
   selector: 'app-passengers-form',
@@ -38,6 +41,8 @@ import { MAX_CHECKED_BAGGAGE } from '../../constants/baggage.constant';
 })
 export class PassengersFormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+
+  private bookingState!: BookingState;
 
   passengerForm!: FormGroup;
 
@@ -60,25 +65,36 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private store$: Store<AppState>,
     private matIconService: MatIconService,
-    private location: Location,
+    private localStorage: LocalStorageService,
+    private datesService: DatesService,
   ) { }
 
   ngOnInit(): void {
+    this.store$.pipe(
+      takeUntil(this.destroy$),
+      select(selectBookingState),
+    ).subscribe((res: BookingState) => {
+      this.bookingState = res;
+    });
+
     this.passengerForm = this.fb.group({
       adult: this.fb.array([]),
       child: this.fb.array([]),
       infant: this.fb.array([]),
       contactDetails: this.fb.group({
-        countryCode: ['', Validators.required],
+        countryCode: [
+          this.bookingState.contactDetails.countryCode || '',
+          Validators.required,
+        ],
         phoneNumber: [
-          '',
+          this.bookingState.contactDetails.phoneNumber || '',
           [
             Validators.required,
             Validators.pattern('[0-9]+'),
           ],
         ],
         email: [
-          '',
+          this.bookingState.contactDetails.email || '',
           [
             Validators.required,
             Validators.email,
@@ -94,9 +110,9 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     ).subscribe((res) => {
       this.dateFormat = res;
       this.updateDateFormatConfig(res);
-      this.updatePassengerForm(this.adult);
-      this.updatePassengerForm(this.child);
-      this.updatePassengerForm(this.infant);
+      this.updatePassengerForm(this.adult, 'adult');
+      this.updatePassengerForm(this.child, 'child');
+      this.updatePassengerForm(this.infant, 'infant');
     });
 
     this.store$.pipe(
@@ -134,20 +150,20 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
 
   private setupForm() {
     for (let i = 0; i < this.passengers.adult; i += 1) {
-      const item = this.createPassenger();
+      const item = this.createPassenger(this.bookingState.adult[i], 'adult');
       this.adult.push(item);
     }
     for (let i = 0; i < this.passengers.child; i += 1) {
-      const item = this.createPassenger();
+      const item = this.createPassenger(this.bookingState.child[i], 'child');
       this.child.push(item);
     }
     for (let i = 0; i < this.passengers.infant; i += 1) {
-      const item = this.createPassenger();
+      const item = this.createPassenger(this.bookingState.infant[i], 'infant');
       this.infant.push(item);
     }
   }
 
-  private createPassenger(val?: PassengerBooking) {
+  private createPassenger(val: PassengerBooking, passengerCategory: PassengerCategory) {
     return this.fb.group({
       firstName: [
         val?.firstName || '',
@@ -169,12 +185,11 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
         [
           Validators.required,
           this.formValidatorService.dateValidator(),
+          this.formValidatorService.isBirthDayInGroupRange(passengerCategory),
         ],
       ],
-      cabinBag: [{
-        value: 1,
-        disabled: true,
-      },
+      cabinBag: [
+        MIN_CABIN_BAGGAGE,
       ],
       checkedBag: [
         val?.checkedBag || 0,
@@ -194,20 +209,16 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     }
   }
 
-  goBack() {
-    this.location.back();
-  }
-
   updateDateFormatConfig(newDateFormat: string) {
     this.config.dateFormat = newDateFormat as DateFormatEnum;
   }
 
-  updatePassengerForm(formArray: FormArray) {
+  updatePassengerForm(formArray: FormArray, passengerType: PassengerCategory) {
     const { length } = formArray.controls;
     const { value } = formArray;
 
     for (let i = 0; i <= length - 1; i += 1) {
-      formArray.setControl(i, this.createPassenger(value[i] as PassengerBooking), { emitEvent: false });
+      formArray.setControl(i, this.createPassenger((value[i] as PassengerBooking), passengerType), { emitEvent: false });
     }
   }
 
@@ -258,5 +269,15 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
 
   isMaxCheckedBaggageReached(passengerType: string, index: number) {
     return this.getCheckedBaggage(passengerType, index) >= MAX_CHECKED_BAGGAGE;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  unavailableDate(calendarDate: Date | null): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(calendarDate!) && new Date(calendarDate!).getTime() === today.getTime()) return true;
+    // eslint-disable-next-line no-constant-condition
+    if (new Date(calendarDate!)) return new Date(calendarDate!) < today;
+    return true;
   }
 }

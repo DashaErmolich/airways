@@ -4,6 +4,7 @@ import { BookingContactDetails, PassengerBooking } from 'src/app/booking/models/
 const enum BookingActionsTypes {
   BOOKING_SET_STEP = '[Booking] Set Step',
   BOOKING_SET_PASSENGERS = '[Booking] Set Passengers',
+  BOOKING_RESET = '[Booking] Reset',
 }
 
 export const setStep = createAction(
@@ -19,4 +20,8 @@ export const setPassengers = createAction(
     infant: PassengerBooking[],
     contactDetails: BookingContactDetails,
   }>(),
+);
+
+export const reset = createAction(
+  BookingActionsTypes.BOOKING_RESET,
 );

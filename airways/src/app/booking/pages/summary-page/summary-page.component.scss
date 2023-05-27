@@ -1,0 +1,72 @@
+@import 'src/styles/abstracts/variables';
+
+$row-gap: 2rem;
+
+.flight-container {
+  padding: 1rem;
+}
+
+.summary-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.passengers-container {
+  display: flex;
+  flex-direction: row;
+  gap: $row-gap;
+}
+
+.flight {
+  flex-basis: 50%;
+}
+
+.flight-wrapper {
+  background-color: #fff;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.colored-border {
+  border-top: 3px solid $color-primary-blue;
+}
+
+.flight__item_highlight {
+  background-color: #F1F3F6;
+}
+
+.passenger__header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.baggage-container {
+  padding-left: 1rem;
+}
+
+.passenger {
+  padding: 0.5rem;
+}
+
+.total-payment {
+  font-size: large;
+  padding: 1rem 0 0 0;
+}
+
+.payment-details {
+  width: calc(50% - $row-gap / 2);
+  align-self: flex-end;
+}
+
+.price-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
