@@ -43,7 +43,7 @@
   background-color: rgba(137, 135, 135, 0.101);
 }
 .pass-form-item {
-  margin: 32px 45px 43px 45px;
+  margin: 32px 45px 25px 45px;
 }
 .pass-form-item-content {
   margin-top: 25px;
@@ -60,6 +60,7 @@
 .passenger-form-lower {
   display: flex;
   align-items: center;
+  margin-top: 10px;
 }
 
 .passenger-assistance-svg {
@@ -107,4 +108,23 @@
 
 .phone-field {
   padding-right: 40px;
+}
+
+.passenger-luggage-checker {
+  margin-left: 100px;
+}
+
+.passenger-luggage-count-wrapper {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.luggage-field {
+  padding-top: 15px;
+  max-width: 120px !important;
+}
+
+.luggage-field-title {
+  margin-right: 15px;
 }

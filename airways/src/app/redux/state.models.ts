@@ -1,6 +1,7 @@
 import {
   Passengers, DatesRange, Airport, Flight,
 } from '../flight/models/flight.models';
+import { BookingPassengersInfo } from '../flight/models/passengers.models';
 import { User } from '../shared/models/user.model';
 
 export interface AuthState {
@@ -36,9 +37,10 @@ export interface FlightsState {
 
 export interface BookingState {
   step: number;
-  passengers: Passengers | null;
+  passengers: Passengers | null,
   forwardFlights: Flight[],
   returnFlights: Flight[] | null,
+  passengersInfo: BookingPassengersInfo | null,
 }
 
 export interface AppState {

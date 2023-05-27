@@ -146,12 +146,14 @@ export class BookingPageComponent implements OnInit {
         ],
       ],
       isNeedAssistance: [false, Validators.required],
+      extraLuggage: [false, Validators.required],
+      extraLuggageCount: [1],
     });
   }
 
   onSubmit() {
-    // eslint-disable-next-line no-console
-    console.log(this.passengerForm.value);
+    this.store$.dispatch(BookingActions.setPassengersInfo({ passengersInfo: this.passengerForm.value }));
+    this.router.navigate(['/booking/summary']);
   }
 
   goBack() {

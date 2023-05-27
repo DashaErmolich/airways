@@ -66,5 +66,8 @@ export const formValidationErrorsMessages = {
     firstName: {
       pattern: 'Must not contain numbers',
     },
+    luggageCount: {
+      outOfRange: 'Must be 1-10',
+    },
   },
 };

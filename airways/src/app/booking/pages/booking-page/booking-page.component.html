@@ -12,7 +12,7 @@
         <div class="passenger-form-upper" [formGroupName]="i">
           <mat-form-field class="first-name-field">
             <mat-label>First name</mat-label>
-            <input matInput type="text" formControlName="firstName">
+            <input matInput type="text" formControlName="firstName" autocomplete="firstName">
             <mat-icon matSuffix>info_edit</mat-icon>
             <mat-error *ngIf="this.adult.controls[i]?.get('firstName')?.hasError('required')">
               {{  errorMessages.authForm.firstName.required }}
@@ -54,9 +54,24 @@
           </mat-form-field>
         </div>
         <div class="passenger-form-lower" [formGroupName]="i">
-          <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
+          <mat-slide-toggle formControlName="isNeedAssistance" class="passenger-assistance-checker"></mat-slide-toggle>
           <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
           <span class="passenger-assistance-title">Need special assistance?</span>
+
+          <mat-slide-toggle formControlName="extraLuggage" class="passenger-luggage-checker"></mat-slide-toggle>
+          <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
+          <span class="passenger-assistance-title">Checked-in baggage?</span>
+        </div>
+
+        <div 
+        class="passenger-luggage-count-wrapper" 
+        *ngIf="this.adult.controls[i]?.get('extraLuggage')?.value" 
+        [formGroupName]="i" >
+          <span class="passenger-assistance-title luggage-field-title">Amount of baggage units(+23 kg each): </span>
+          <mat-form-field class="luggage-field">
+            <input matInput type="number" formControlName="extraLuggageCount" min="1" max="10">
+            <mat-error> {{ errorMessages.passengersForm.luggageCount.outOfRange }} </mat-error>
+          </mat-form-field>
         </div>
       </div>
     </div>
@@ -114,7 +129,21 @@
         <mat-slide-toggle formControlName="isNeedAssistance"></mat-slide-toggle>
         <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
         <span class="passenger-assistance-title">Need special assistance?</span>
+
+        <mat-slide-toggle formControlName="extraLuggage" class="passenger-luggage-checker"></mat-slide-toggle>
+        <mat-icon svgIcon="pass-assistance" class="passenger-assistance-svg"></mat-icon>
+        <span class="passenger-assistance-title">Checked-in baggage?</span>
       </div>
+      <div 
+        class="passenger-luggage-count-wrapper" 
+        *ngIf="this.child.controls[i]?.get('extraLuggage')?.value" 
+        [formGroupName]="i" >
+          <span class="passenger-assistance-title luggage-field-title">Amount of baggage units(+23 kg each): </span>
+          <mat-form-field class="luggage-field">
+            <input matInput type="number" formControlName="extraLuggageCount" min="1" max="10">
+            <mat-error> {{ errorMessages.passengersForm.luggageCount.outOfRange }} </mat-error>
+          </mat-form-field>
+        </div>
     </div>
     </div>
   </div>

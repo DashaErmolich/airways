@@ -9,6 +9,7 @@ export const initialState: BookingState = {
   passengers: null,
   forwardFlights: [],
   returnFlights: [],
+  passengersInfo: null,
 };
 
 export const bookingReducers = createReducer(
@@ -33,6 +34,13 @@ export const bookingReducers = createReducer(
     (state, action) => ({
       ...state,
       step: action.step,
+    }),
+  ),
+  on(
+    BookingActions.setPassengersInfo,
+    (state, action) => ({
+      ...state,
+      passengersInfo: action.passengersInfo,
     }),
   ),
 );

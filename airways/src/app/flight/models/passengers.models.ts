@@ -1,18 +1,20 @@
 import { GenderType, PassengerType } from 'src/app/shared/enums/passenger-details';
 
-export interface PassengersDetails {
-  [PassengerType.Adult]: PassengerData[],
-  [PassengerType.Child]: PassengerData[],
-  [PassengerType.Infant]: PassengerData[],
+export interface BookingPassengersInfo {
+  [PassengerType.Adult]: BookingPassenger[],
+  [PassengerType.Child]: BookingPassenger[],
+  [PassengerType.Infant]: BookingPassenger[],
   contactDetails: ContactDetails,
 }
 
-export interface PassengerData {
+export interface BookingPassenger {
   firstName: string,
   lastName: string,
   gender: GenderType,
   dateOfBirth: string,
   isNeedAssistance: boolean,
+  extraLuggage: boolean,
+  extraLuggageCount: number,
 }
 
 export interface ContactDetails {

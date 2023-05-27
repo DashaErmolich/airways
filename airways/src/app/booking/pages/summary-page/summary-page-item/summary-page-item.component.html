@@ -1,8 +1,10 @@
-<p>summary-page-item works!</p>
-<div class="flight-to-container flight-info-container">
-  <div class="flight-details">
-    <div class="flight-details-location"></div>
-    <div class="flight-details-time"></div>
+<div class="summary-item-container">
+  <div class="summary-flight">
+    <div class="summary-flight-about">
+      <p class="summary-flight-about-flight_num">{{ currentFlight?.flightNumber}}</p>
+      <p class="summary-flight-about-location">{{ currentFlight?.form?.city }} - {{ currentFlight?.to?.city }}</p>
+    </div>
+    <div class="summary-details-time"></div>
   </div>
-  <div class="flight-passengers"></div>
+  <div class="summary-passengers"></div>
 </div>
