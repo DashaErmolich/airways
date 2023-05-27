@@ -55,9 +55,18 @@ $row-gap: 2rem;
 
 .total-payment {
   font-size: large;
+  padding: 1rem 0 0 0;
 }
 
 .payment-details {
   width: calc(50% - $row-gap / 2);
   align-self: flex-end;
+}
+
+.price-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
