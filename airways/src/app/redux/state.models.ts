@@ -43,10 +43,22 @@ export interface BookingState {
   contactDetails: BookingContactDetails;
 }
 
+export interface Order {
+  flightsSearch: TripSearchState;
+  flights: FlightsState;
+  booking: BookingState;
+}
+
+export interface OrdersState {
+  orders: Order[];
+}
+
 export interface AppState {
   auth: AuthState;
   settings: SettingsState;
   flightsSearch: TripSearchState;
   flights: FlightsState;
   booking: BookingState;
+  shoppingCart: OrdersState;
+  finishedOrders: OrdersState;
 }

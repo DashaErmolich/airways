@@ -43,3 +43,8 @@ export const selectReturnConnectedFlights = createSelector(
   selectFlightsFeature,
   (state) => (state.returnFlight?.connectedFlights.length ? state.returnFlight.connectedFlights : null),
 );
+
+export const selectFlightsState = createSelector(
+  selectFlightsFeature,
+  (state) => state,
+);

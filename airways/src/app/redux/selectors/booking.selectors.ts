@@ -22,3 +22,8 @@ export const selectInfant = createSelector(
   selectFeature,
   (state) => state.infant,
 );
+
+export const selectBookingState = createSelector(
+  selectFeature,
+  (state) => state,
+);

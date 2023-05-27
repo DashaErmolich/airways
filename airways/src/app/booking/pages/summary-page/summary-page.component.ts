@@ -5,6 +5,8 @@ import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/redux/state.models';
 import * as BookingActions from 'src/app/redux/actions/booking.actions';
+import * as ShoppingCartActions from 'src/app/redux/actions/shopping-cart.actions';
+import * as UserTripsActions from 'src/app/redux/actions/user-trips.actions';
 import {
   Observable, Subject, combineLatest, take, takeUntil,
 } from 'rxjs';
@@ -14,11 +16,11 @@ import { selectAdult, selectChild } from 'src/app/redux/selectors/booking.select
 import { selectForwardFlight, selectReturnFlight } from 'src/app/redux/selectors/flights.selectors';
 import { selectCurrency } from 'src/app/redux/selectors/settings.selectors';
 import { CurrencyValuePipe } from 'src/app/shared/pipes/currency-value.pipe';
+import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { selectInfant } from '../../../redux/selectors/booking.selectors';
 import { BOOKING_PRICE_CONFIG } from '../../constants/price.constant';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BookingFinishedComponent } from '../../componants/booking-finished/booking-finished.component';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-summary-page',
@@ -102,13 +104,13 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
       this.infant = res;
     });
 
-    combineLatest(this.adult$, this.child$, this.infant$).pipe(
+    combineLatest([this.adult$, this.child$, this.infant$]).pipe(
       takeUntil(this.destroy$),
     ).subscribe((res: [PassengerBooking[], PassengerBooking[], PassengerBooking[]]) => {
       this.passengers = res.flat();
     });
 
-    combineLatest(this.forwardFlight$, this.returnFlight$).pipe(
+    combineLatest([this.forwardFlight$, this.returnFlight$]).pipe(
       takeUntil(this.destroy$),
     ).subscribe((res: [Flight | null, Flight | null]) => {
       this.flights = res.flat();
@@ -179,12 +181,14 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
 
     finishOrderDialog.afterClosed().pipe(
       take(1),
-    ).subscribe(() => this.router.navigateByUrl('/'));
-
-    
+    ).subscribe(() => {
+      this.store$.dispatch(UserTripsActions.addOrderUserTrips());
+      this.router.navigateByUrl('/');
+    });
   }
 
   addToCart() {
-    console.log(2)
+    this.store$.dispatch(ShoppingCartActions.addOrderToCart());
+    this.router.navigate(['booking', 'cart']);
   }
 }
