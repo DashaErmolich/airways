@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import {
   Actions, createEffect, ofType,
 } from '@ngrx/effects';
-import { tap, withLatestFrom } from 'rxjs';
+import {
+  map, tap, withLatestFrom,
+} from 'rxjs';
 import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { Store } from '@ngrx/store';
 import * as TripSearchActions from '../actions/trip-search.actions';
+import * as FlightActions from '../actions/flights.actions';
 import { AppState } from '../state.models';
 import { selectTripSearchState } from '../selectors/trip-search.selectors';
 
@@ -14,9 +17,11 @@ export class TripSearchEffects {
   searchFormSubmit$ = createEffect(
     () => this.actions$.pipe(
       ofType(TripSearchActions.searchFormSubmit),
-      tap(({ flightsSearchData }) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify(flightsSearchData))),
+      map(
+        () => FlightActions.setReturnFlight({ returnFlight: null }),
+        tap(({ flightsSearchData }) => localStorage.setItem(LocalStorageKeysEnum.SearchParams, JSON.stringify(flightsSearchData))),
+      ),
     ),
-    { dispatch: false },
   );
 
   setTripDate$ = createEffect(

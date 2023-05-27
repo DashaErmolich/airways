@@ -27,8 +27,8 @@
       *ngIf="(searchData$ | async)!.isRoundTrip">
     </app-flight-selection>
 
-    <div class="">
-      <button mat-raised-button (click)="goBack()">Back</button>
+    <div class="page-actions">
+      <app-go-back-button></app-go-back-button>
 
       <button
         mat-raised-button

@@ -3,4 +3,6 @@ export enum LocalStorageKeysEnum {
   User = 'user',
   SearchParams = 'searchParams',
   BookingDetails = 'booking-details',
+  ForwardFlight = 'forward-flight',
+  ReturnFlight = 'return-flight',
 }

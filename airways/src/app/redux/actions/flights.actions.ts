@@ -32,7 +32,7 @@ export const searchAllFlightsFailure = createAction(
 
 export const setReturnFlight = createAction(
   FlightsActionsTypes.FLIGHT_SET_RETURN,
-  props<({ returnFlight: Flight })>(),
+  props<({ returnFlight: Flight | null })>(),
 );
 
 export const setForwardFlight = createAction(

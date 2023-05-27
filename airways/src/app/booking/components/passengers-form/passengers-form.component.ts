@@ -23,10 +23,9 @@ import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
-import { Location } from '@angular/common';
 import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
-import { MAX_CHECKED_BAGGAGE } from '../../constants/baggage.constant';
+import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.constant';
 
 @Component({
   selector: 'app-passengers-form',
@@ -60,7 +59,6 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private store$: Store<AppState>,
     private matIconService: MatIconService,
-    private location: Location,
   ) { }
 
   ngOnInit(): void {
@@ -171,10 +169,8 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
           this.formValidatorService.dateValidator(),
         ],
       ],
-      cabinBag: [{
-        value: 1,
-        disabled: true,
-      },
+      cabinBag: [
+        MIN_CABIN_BAGGAGE,
       ],
       checkedBag: [
         val?.checkedBag || 0,
@@ -192,10 +188,6 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
       }));
       this.router.navigate(['booking', 'summary']);
     }
-  }
-
-  goBack() {
-    this.location.back();
   }
 
   updateDateFormatConfig(newDateFormat: string) {

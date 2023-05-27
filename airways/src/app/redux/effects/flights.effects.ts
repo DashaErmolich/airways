@@ -3,11 +3,12 @@ import {
   Actions, createEffect, ofType,
 } from '@ngrx/effects';
 import {
-  catchError, map, mergeMap, withLatestFrom,
+  catchError, map, mergeMap, tap, withLatestFrom,
 } from 'rxjs';
 import { FlightsService } from 'src/app/flight/services/flights.service';
 import { Store } from '@ngrx/store';
 import { SLIDER_CONFIG } from 'src/app/flight/constants/slider.constants';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import * as FlightsActions from '../actions/flights.actions';
 import { AppState } from '../state.models';
 import { selectTripSearchState } from '../selectors/trip-search.selectors';
@@ -36,12 +37,14 @@ export class FlightsEffects {
     ofType(FlightsActions.searchForwardFlightsSuccess),
     withLatestFrom(this.store$.select(selectForwardFlights)),
     map(([{ forwardFlights }]) => FlightsActions.setForwardFlight({ forwardFlight: forwardFlights[SLIDER_CONFIG.centerSlideIndex] })),
+    tap(({ forwardFlight }) => localStorage.setItem(LocalStorageKeysEnum.ForwardFlight, JSON.stringify(forwardFlight))),
   ));
 
   setReturnFlight$ = createEffect(() => this.actions$.pipe(
     ofType(FlightsActions.searchReturnFlightsSuccess),
     withLatestFrom(this.store$.select(selectReturnFlights)),
     map(([{ returnFlights }]) => FlightsActions.setReturnFlight({ returnFlight: returnFlights[SLIDER_CONFIG.centerSlideIndex] })),
+    tap(({ returnFlight }) => localStorage.setItem(LocalStorageKeysEnum.ReturnFlight, JSON.stringify(returnFlight))),
   ));
 
   constructor(

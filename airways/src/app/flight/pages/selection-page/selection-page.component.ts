@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import {
   Component, OnDestroy, OnInit,
 } from '@angular/core';
@@ -55,7 +54,6 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store<AppState>,
-    private location: Location,
     private datesService: DatesService,
     private flightsUpdateService: FlightsUpdateService,
   ) { }
@@ -106,10 +104,6 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   toggleReturnFlightSelection(isSelected: boolean) {
     this.isFlightsSelected = [...this.isFlightsSelected.slice(0, -1), isSelected];
-  }
-
-  goBack(): void {
-    this.location.back();
   }
 
   isNextStepAvailable() {

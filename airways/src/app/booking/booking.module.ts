@@ -8,6 +8,7 @@ import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-c
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { PassengersFormComponent } from './components/passengers-form/passengers-form.component';
+import { BookingFinishedComponent } from './componants/booking-finished/booking-finished.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { PassengersFormComponent } from './components/passengers-form/passengers
     ShoppingCartPageComponent,
     UserAccountPageComponent,
     PassengersFormComponent,
+    BookingFinishedComponent,
   ],
   imports: [
     CommonModule,

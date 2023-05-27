@@ -27,9 +27,14 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 
+import { CurrencyValuePipe } from './pipes/currency-value.pipe';
+import { GoBackButtonComponent } from './components/go-back-button/go-back-button.component';
+
 @NgModule({
   declarations: [
     FlightsSearchSummaryComponent,
+    CurrencyValuePipe,
+    GoBackButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -61,6 +66,8 @@ import { FlightsSearchSummaryComponent } from './components/search-summary/searc
     MomentDateModule,
     MatMomentDateModule,
     MatBadgeModule,
+    CurrencyValuePipe,
+    GoBackButtonComponent,
   ],
   providers: [
     {
