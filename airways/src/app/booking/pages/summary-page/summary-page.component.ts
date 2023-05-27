@@ -175,27 +175,29 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['booking', 'cart']);
   }
 
-  getPriceWithKoef(koefficient: number = BOOKING_PRICE_CONFIG.ADULT): number {
+  getPriceWithCoefficient(coefficient: number = BOOKING_PRICE_CONFIG.ADULT): number {
     const price = this.forwardFlight !== null && this.returnFlight !== null
       ? this.getPrice(this.forwardFlight!.price)
           + this.getPrice(this.returnFlight!.price)
       : this.getPrice(this.forwardFlight!.price);
-    return price * koefficient;
+    return price * coefficient;
   }
 
   setPriceForCategories(): void {
-    const totalPrice = this.getPriceWithKoef(BOOKING_PRICE_CONFIG.TOTAL);
-    const basicPrice = (totalPrice) / (this.adult.length * BOOKING_PRICE_CONFIG.ADULT
-      + this.child.length * BOOKING_PRICE_CONFIG.CHILD + this.infant.length * BOOKING_PRICE_CONFIG.INFANT);
+    if (this.passengers.length) {
+      const totalPrice = this.getPriceWithCoefficient(BOOKING_PRICE_CONFIG.TOTAL);
+      const basicPrice = (totalPrice) / (this.adult.length * BOOKING_PRICE_CONFIG.ADULT
+        + this.child.length * BOOKING_PRICE_CONFIG.CHILD + this.infant.length * BOOKING_PRICE_CONFIG.INFANT);
 
-    for (const key in this.totalPriceByCat) {
-      const element = this.totalPriceByCat[key as keyof PriceByPassengerCategory];
-      element.fare = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] * (BOOKING_PRICE_CONFIG.TOTAL - BOOKING_PRICE_CONFIG.TAXES);
-      element.taxes = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] - element.fare;
-      element.baggage = totalPrice * BOOKING_PRICE_CONFIG.BAGGAGE * this[key as keyof PriceByPassengerCategory].reduce(
-        (sum, passenger) => sum + passenger.checkedBag,
-        0,
-      );
+      for (const key in this.totalPriceByCat) {
+        const element = this.totalPriceByCat[key as keyof PriceByPassengerCategory];
+        element.fare = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] * (BOOKING_PRICE_CONFIG.TOTAL - BOOKING_PRICE_CONFIG.TAXES);
+        element.taxes = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] - element.fare;
+        element.baggage = totalPrice * BOOKING_PRICE_CONFIG.BAGGAGE * this[key as keyof PriceByPassengerCategory].reduce(
+          (sum, passenger) => sum + passenger.checkedBag,
+          0,
+        );
+      }
     }
   }
 }

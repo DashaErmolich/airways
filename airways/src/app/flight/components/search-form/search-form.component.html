@@ -30,6 +30,9 @@
         <mat-error *ngIf="searchForm.get('directions')?.get('departureFrom')?.hasError('required')">
           Please select from
         </mat-error>
+        <mat-error *ngIf="searchForm.get('directions')?.get('departureFrom')?.hasError(customErrors.ValidAirport)">
+          Choose airport from the list
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="example-full-width" appearance="fill">
@@ -43,6 +46,9 @@
         </mat-autocomplete>
         <mat-error *ngIf="searchForm.get('directions')?.get('destinationTo')?.hasError('required')">
           Please select destination
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('directions')?.get('destinationTo')?.hasError(customErrors.ValidAirport)">
+          Choose airport from the list
         </mat-error>
       </mat-form-field>
 
@@ -93,7 +99,7 @@
           <div class="passengers__option">
             <div class="option__info">
               <span class="option__name">Adult</span>
-              <span class="option__age">14+ years</span>
+              <span class="option__age">{{ getIntervalDescription('adult') }}</span>
             </div>
             <div class="option__counter">
               <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('adult')"
@@ -107,7 +113,7 @@
           <div class="passengers__option">
             <div class="option__info">
               <span class="option__name">Child</span>
-              <span class="option__age">2-14 years</span>
+              <span class="option__age">{{ getIntervalDescription('child') }}</span>
             </div>
             <div class="option__counter">
               <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('child')"
@@ -121,7 +127,7 @@
           <div class="passengers__option">
             <div class="option__info">
               <span class="option__name">Infant</span>
-              <span class="option__age">0-2 years</span>
+              <span class="option__age">{{ getIntervalDescription('infant') }}</span>
             </div>
             <div class="option__counter">
               <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('infant')"

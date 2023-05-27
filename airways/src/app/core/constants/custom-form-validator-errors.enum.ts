@@ -4,4 +4,8 @@ export enum CustomFormValidatorErrorsEnum {
   HasSpecialChar = 'hasSpecialChar',
   ValidDate = 'validPublicationDate',
   ValidUrl = 'validUrl',
+  ValidAirport = 'validAirport',
+  AdultAge = 'adultAge',
+  ChildAge = 'childAge',
+  InfantAge = 'infantAge',
 }

@@ -25,9 +25,11 @@ import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
 import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { selectBookingState } from 'src/app/redux/selectors/booking.selectors';
+import { DatesService } from 'src/app/flight/services/dates.service';
 import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
 import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.constant';
+import { PassengerCategory } from '../../pages/summary-page/summary-page.component';
 
 @Component({
   selector: 'app-passengers-form',
@@ -64,6 +66,7 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     private store$: Store<AppState>,
     private matIconService: MatIconService,
     private localStorage: LocalStorageService,
+    private datesService: DatesService,
   ) { }
 
   ngOnInit(): void {
@@ -107,9 +110,9 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     ).subscribe((res) => {
       this.dateFormat = res;
       this.updateDateFormatConfig(res);
-      this.updatePassengerForm(this.adult);
-      this.updatePassengerForm(this.child);
-      this.updatePassengerForm(this.infant);
+      this.updatePassengerForm(this.adult, 'adult');
+      this.updatePassengerForm(this.child, 'child');
+      this.updatePassengerForm(this.infant, 'infant');
     });
 
     this.store$.pipe(
@@ -147,20 +150,20 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
 
   private setupForm() {
     for (let i = 0; i < this.passengers.adult; i += 1) {
-      const item = this.createPassenger(this.bookingState.adult[i]);
+      const item = this.createPassenger(this.bookingState.adult[i], 'adult');
       this.adult.push(item);
     }
     for (let i = 0; i < this.passengers.child; i += 1) {
-      const item = this.createPassenger(this.bookingState.child[i]);
+      const item = this.createPassenger(this.bookingState.child[i], 'child');
       this.child.push(item);
     }
     for (let i = 0; i < this.passengers.infant; i += 1) {
-      const item = this.createPassenger(this.bookingState.infant[i]);
+      const item = this.createPassenger(this.bookingState.infant[i], 'infant');
       this.infant.push(item);
     }
   }
 
-  private createPassenger(val?: PassengerBooking) {
+  private createPassenger(val: PassengerBooking, passengerCategory: PassengerCategory) {
     return this.fb.group({
       firstName: [
         val?.firstName || '',
@@ -182,6 +185,7 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
         [
           Validators.required,
           this.formValidatorService.dateValidator(),
+          this.formValidatorService.isBirthDayInGroupRange(passengerCategory),
         ],
       ],
       cabinBag: [
@@ -209,12 +213,12 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     this.config.dateFormat = newDateFormat as DateFormatEnum;
   }
 
-  updatePassengerForm(formArray: FormArray) {
+  updatePassengerForm(formArray: FormArray, passengerType: PassengerCategory) {
     const { length } = formArray.controls;
     const { value } = formArray;
 
     for (let i = 0; i <= length - 1; i += 1) {
-      formArray.setControl(i, this.createPassenger(value[i] as PassengerBooking), { emitEvent: false });
+      formArray.setControl(i, this.createPassenger((value[i] as PassengerBooking), passengerType), { emitEvent: false });
     }
   }
 
@@ -265,5 +269,15 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
 
   isMaxCheckedBaggageReached(passengerType: string, index: number) {
     return this.getCheckedBaggage(passengerType, index) >= MAX_CHECKED_BAGGAGE;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  unavailableDate(calendarDate: Date | null): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(calendarDate!) && new Date(calendarDate!).getTime() === today.getTime()) return true;
+    // eslint-disable-next-line no-constant-condition
+    if (new Date(calendarDate!)) return new Date(calendarDate!) < today;
+    return true;
   }
 }

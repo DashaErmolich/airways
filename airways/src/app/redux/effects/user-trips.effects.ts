@@ -6,6 +6,7 @@ import {
   catchError, map, withLatestFrom,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { selectBookingState } from '../selectors/booking.selectors';
 import * as UserTripsActions from '../actions/user-trips.actions';
 import { selectTripSearchState } from '../selectors/trip-search.selectors';
@@ -21,13 +22,16 @@ export class UserTripsEffects {
       withLatestFrom(this.store$.select(selectFlightsState)),
       withLatestFrom(this.store$.select(selectBookingState)),
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      map(([[[_, tripSearchState], flightsState], bookingState]) => UserTripsActions.addOrderUserTripsSuccess({
-        order: {
-          flightsSearch: tripSearchState,
-          flights: flightsState,
-          booking: bookingState,
-        },
-      })),
+      map(([[[_, tripSearchState], flightsState], bookingState]) => {
+        localStorage.setItem(LocalStorageKeysEnum.UserTrips, JSON.stringify({ tripSearchState, flightsState, bookingState }));
+        return UserTripsActions.addOrderUserTripsSuccess({
+          order: {
+            flightsSearch: tripSearchState,
+            flights: flightsState,
+            booking: bookingState,
+          },
+        });
+      }),
       catchError(async () => UserTripsActions.addOrderUserTripsFailure()),
     ),
   );

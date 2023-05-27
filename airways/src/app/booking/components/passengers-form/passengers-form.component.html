@@ -44,7 +44,7 @@
 
               <mat-form-field>
                 <mat-label>Date of birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="unavailableDate">
                 <mat-hint>{{ dateFormat$ | async }}</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -53,6 +53,9 @@
                 </mat-error>
                 <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
+                </mat-error>
+                <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.AdultAge)">
+                  Adult must be more than 14 years old
                 </mat-error>
               </mat-form-field>
 
@@ -139,7 +142,7 @@
 
               <mat-form-field class="date-name-field">
                 <mat-label>Date of birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="unavailableDate">
                 <mat-hint>{{ dateFormat$ | async }}</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -148,6 +151,9 @@
                 </mat-error>
                 <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
+                </mat-error>
+                <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ChildAge)">
+                  Child must be from 2 to 14 years old
                 </mat-error>
               </mat-form-field>
             </div>
@@ -232,7 +238,7 @@
 
               <mat-form-field>
                 <mat-label>Date of birth</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth">
+                <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [matDatepickerFilter]="unavailableDate">
                 <mat-hint>{{ dateFormat$ | async }}</mat-hint>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
@@ -241,6 +247,9 @@
                 </mat-error>
                 <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ValidDate)">
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
+                </mat-error>
+                <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.InfantAge)">
+                  Infant must be from 0 to 2 years old
                 </mat-error>
               </mat-form-field>
             </div>

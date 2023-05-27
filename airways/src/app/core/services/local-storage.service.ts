@@ -28,6 +28,10 @@ export class LocalStorageService {
     }));
   }
 
+  resetBookingDetails() {
+    localStorage.removeItem(LocalStorageKeysEnum.BookingDetails);
+  }
+
   getBookingDetails(): BookingDetails | null {
     const data = localStorage.getItem(LocalStorageKeysEnum.BookingDetails);
     return data ? JSON.parse(data) : null;

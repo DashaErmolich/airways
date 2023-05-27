@@ -53,10 +53,9 @@
     </article>
     <span class="font-weight-bold total-payment">TOTAL: {{ totalPriceByCat | totalPrice:'adult':'total' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
 </section>
-</div>
-
 <div class="page-actions">
   <app-go-back-button></app-go-back-button>
   <button mat-raised-button color="primary" (click)="buyNow()">Buy now</button>
   <button mat-raised-button color="primary" (click)="addToCart()">Add to cart</button>
+</div>
 </div>

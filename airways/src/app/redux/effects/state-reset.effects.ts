@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   Actions, createEffect, ofType,
 } from '@ngrx/effects';
-import { map, tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 
 import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import * as ShoppingCartActions from '../actions/shopping-cart.actions';
@@ -17,14 +17,37 @@ export class ResetStateEffects {
   resetState$ = createEffect(
     () => this.actions$.pipe(
       ofType(ShoppingCartActions.addOrderToCartSuccess, UserTripsActions.addOrderUserTripsSuccess),
-      tap(() => localStorage.removeItem(LocalStorageKeysEnum.SearchParams)),
+      switchMap(() => [
+        TripSearchActions.reset(),
+        FlightActions.reset(),
+        BookingActions.reset(),
+      ]),
+    ),
+  );
+
+  resetBookingState$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(BookingActions.reset),
       tap(() => localStorage.removeItem(LocalStorageKeysEnum.BookingDetails)),
+    ),
+    { dispatch: false },
+  );
+
+  resetFlightsState$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(FlightActions.reset),
       tap(() => localStorage.removeItem(LocalStorageKeysEnum.ReturnFlight)),
       tap(() => localStorage.removeItem(LocalStorageKeysEnum.ForwardFlight)),
-      map(() => BookingActions.reset()),
-      map(() => FlightActions.reset()),
-      map(() => TripSearchActions.reset()),
     ),
+    { dispatch: false },
+  );
+
+  resetTripSearchState$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(TripSearchActions.reset),
+      tap(() => localStorage.removeItem(LocalStorageKeysEnum.SearchParams)),
+    ),
+    { dispatch: false },
   );
 
   constructor(
