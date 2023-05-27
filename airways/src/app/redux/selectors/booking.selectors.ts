@@ -22,3 +22,8 @@ export const selectStep = createSelector(
   selectFeature,
   (state) => state.step,
 );
+
+export const selectPassengersInfo = createSelector(
+  selectFeature,
+  (state) => state.passengersInfo,
+);

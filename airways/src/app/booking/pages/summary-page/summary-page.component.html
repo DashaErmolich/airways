@@ -4,8 +4,8 @@
 </div>
 
 <div class="flight-data-container">
-  <app-summary-page-item [currentFlight]="forwardFlight"></app-summary-page-item>
-  <app-summary-page-item [currentFlight]="returnFlight"></app-summary-page-item>
+  <app-summary-page-item [currentFlight]="forwardFlight" [passengers]="passengersArray"></app-summary-page-item>
+  <app-summary-page-item [currentFlight]="returnFlight" [passengers]="passengersArray"></app-summary-page-item>
   <!-- <div class="flight-to-container flight-info-container">
     <div class="flight-details">
       <div class="flight-details-location"></div>

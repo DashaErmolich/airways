@@ -1,10 +1,31 @@
 <div class="summary-item-container">
   <div class="summary-flight">
     <div class="summary-flight-about">
-      <p class="summary-flight-about-flight_num">{{ currentFlight?.flightNumber}}</p>
-      <p class="summary-flight-about-location">{{ currentFlight?.form?.city }} - {{ currentFlight?.to?.city }}</p>
+      <span class="summary-flight-about_flight_num">{{ currentFlight?.flightNumber}}</span>
+      <span class="summary-flight-about_location">{{ currentFlight?.form?.city }} - {{ currentFlight?.to?.city }}</span>
     </div>
-    <div class="summary-details-time"></div>
+
+    <div class="summary-flight-date">
+      <span class="summary-flight-date_day">
+        {{ currentFlight?.takeoffDate | date : 'fullDate'}}
+      </span>
+      <span class="summary-flight-date_time">
+        {{ currentFlight?.takeoffDate | date:'H' }}:{{currentFlight?.takeoffDate | date:'mm' }} - {{ currentFlight?.landingDate | date:'H' }}:{{ currentFlight?.landingDate | date:'mm' }}
+      </span>
+    </div>  
   </div>
-  <div class="summary-passengers"></div>
+
+  <div class="summary-passengers" *ngFor="let passenger of passengers">
+    <h2>{{ passenger.firstName | uppercase }} {{ passenger.lastName | uppercase }}</h2>
+    <p>
+      1 checked bag (total 23kg) included
+    </p>
+    <p *ngIf="passenger.extraLuggage">
+      {{ passenger.extraLuggageCount }} extra bags (total {{ passenger.extraLuggageCount * 23 }} kg) included
+    </p>
+    <p>
+      1 cabin bag + 1 personal item (max. 8 kg) included
+    </p>
+    <p>_______________</p>
+  </div>
 </div>

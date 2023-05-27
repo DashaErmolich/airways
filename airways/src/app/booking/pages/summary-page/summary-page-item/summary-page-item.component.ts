@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Flight } from 'src/app/flight/models/flight.models';
+import { BookingPassenger } from 'src/app/flight/models/passengers.models';
 
 @Component({
   selector: 'app-summary-page-item',
@@ -8,4 +9,6 @@ import { Flight } from 'src/app/flight/models/flight.models';
 })
 export class SummaryPageItemComponent {
   @Input() currentFlight!: Flight | null;
+
+  @Input() passengers!: BookingPassenger[];
 }
