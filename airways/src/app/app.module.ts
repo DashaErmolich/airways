@@ -15,6 +15,9 @@ import { FlightsEffects } from './redux/effects/flights.effects';
 import { BookingEffects } from './redux/effects/booking.effects';
 import { TripSearchEffects } from './redux/effects/trip-search.effects';
 import { AuthEffects } from './redux/effects/auth.effects';
+import { ShoppingCartEffects } from './redux/effects/shopping-cart.effects';
+import { UserTripsEffects } from './redux/effects/user-trips.effects';
+import { ResetStateEffects } from './redux/effects/state-reset.effects';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,15 @@ import { AuthEffects } from './redux/effects/auth.effects';
     StoreModule.forRoot(reducers, {
       metaReducers,
     }),
-    EffectsModule.forRoot([AuthEffects, FlightsEffects, BookingEffects, TripSearchEffects]),
+    EffectsModule.forRoot([
+      AuthEffects,
+      FlightsEffects,
+      BookingEffects,
+      TripSearchEffects,
+      ShoppingCartEffects,
+      UserTripsEffects,
+      ResetStateEffects,
+    ]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     CoreModule,
     AuthModule,

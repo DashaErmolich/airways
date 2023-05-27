@@ -19,15 +19,30 @@ import { MatMenuModule } from '@angular/material/menu';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-adapter';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
+
+import { CurrencyValuePipe } from './pipes/currency-value.pipe';
+import { GoBackButtonComponent } from './components/go-back-button/go-back-button.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    FlightsSearchSummaryComponent,
+    CurrencyValuePipe,
+    GoBackButtonComponent,
+  ],
   imports: [
     CommonModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   exports: [
+    FlightsSearchSummaryComponent,
     MatButtonModule,
     MatSelectModule,
     MatIconModule,
@@ -46,6 +61,13 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatMenuModule,
     MatDividerModule,
     MatTooltipModule,
+    MatExpansionModule,
+    MatAutocompleteModule,
+    MomentDateModule,
+    MatMomentDateModule,
+    MatBadgeModule,
+    CurrencyValuePipe,
+    GoBackButtonComponent,
   ],
   providers: [
     {

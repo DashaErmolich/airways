@@ -72,10 +72,54 @@ body {
   transform: rotateY(180deg);
 }
 
+.icon_rotate-90 {
+  transform: rotate(90deg);
+}
+
 .color-gray {
   color: $color-gray;
 }
 
 .form-control-tooltip {
   white-space: pre-line;
+}
+
+.mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.p-relative {
+  position: relative;
+}
+
+.p-absolute {
+  position: absolute;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.color-primary-blue {
+  color: $color-primary-blue;
+}
+
+.page-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 2rem 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
 }

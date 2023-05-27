@@ -1,23 +1,27 @@
 import { createAction, props } from '@ngrx/store';
-import { Flight, Passengers } from 'src/app/flight/models/flight.models';
+import { BookingContactDetails, PassengerBooking } from 'src/app/booking/models/passengers-bookings.model';
 
 const enum BookingActionsTypes {
-  BOOKING_SET_FLIGHTS = '[Booking] Set Flights',
-  BOOKING_SET_PASSENGERS = '[Booking] Set Passengers',
   BOOKING_SET_STEP = '[Booking] Set Step',
+  BOOKING_SET_PASSENGERS = '[Booking] Set Passengers',
+  BOOKING_RESET = '[Booking] Reset',
 }
-
-export const setFlights = createAction(
-  BookingActionsTypes.BOOKING_SET_FLIGHTS,
-  props<{ directFlights: Flight[], forwardFlights: Flight[] }>(),
-);
-
-export const setPassengers = createAction(
-  BookingActionsTypes.BOOKING_SET_PASSENGERS,
-  props<{ passengers: Passengers }>(),
-);
 
 export const setStep = createAction(
   BookingActionsTypes.BOOKING_SET_STEP,
   props<{ step: number }>(),
+);
+
+export const setPassengers = createAction(
+  BookingActionsTypes.BOOKING_SET_PASSENGERS,
+  props<{
+    adult: PassengerBooking[],
+    child: PassengerBooking[],
+    infant: PassengerBooking[],
+    contactDetails: BookingContactDetails,
+  }>(),
+);
+
+export const reset = createAction(
+  BookingActionsTypes.BOOKING_RESET,
 );

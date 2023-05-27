@@ -18,9 +18,10 @@ import {
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
 import * as TripSearchActions from 'src/app/redux/actions/trip-search.actions';
+import * as BookingActions from 'src/app/redux/actions/booking.actions';
 
 import { DatesService } from 'src/app/flight/services/dates.service';
-import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/passengers.constants';
+import { PASSENGERS_DEFAULT, PASSENGERS_MAX } from 'src/app/flight/constants/passengers.constants';
 import { AIRPORTS } from 'src/app/flight/constants/airports.constants';
 import { Airport, Passengers } from 'src/app/flight/models/flight.models';
 import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
@@ -34,6 +35,13 @@ import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
 import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
+import { UserDateFormat } from 'src/app/core/helpers/user-date-format';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import { FormValidatorService } from 'src/app/core/services/form-validator.service';
+import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-messages';
+import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
+import { getFormIntervalDescription } from 'src/app/core/helpers/birth-date-helper';
+import { PassengerCategory } from 'src/app/booking/pages/summary-page/summary-page.component';
 import { LayoutService } from '../../../core/services/layout.service';
 
 const moment = _rollupMoment || _moment;
@@ -41,18 +49,6 @@ const moment = _rollupMoment || _moment;
 enum TripTypesEnum {
   OneWayTrip = 'one-way-trip',
   RoundTrip = 'round-trip',
-}
-
-export class UserDateFormat {
-  dateFormat = DateFormatEnum.DD_MM_YYYY;
-
-  get display() {
-    return { dateInput: this.dateFormat };
-  }
-
-  get parse() {
-    return { dateInput: this.dateFormat };
-  }
 }
 
 @Component({
@@ -83,14 +79,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
 
   dateFormat$!: Observable<string>;
 
+  customErrors = CustomFormValidatorErrorsEnum;
+
   constructor(
     @Inject(MAT_DATE_FORMATS) private config: UserDateFormat,
     private store$: Store<AppState>,
     private router: Router,
     private route: ActivatedRoute,
-    private datesService: DatesService,
     private flightsUpdateService: FlightsUpdateService,
     public layout: LayoutService,
+    private formValidatorService: FormValidatorService,
+    private datesService: DatesService,
   ) {}
 
   ngOnInit(): void {
@@ -172,18 +171,12 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       countPassengers -= 1;
     }
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-
-    this.store$.dispatch(TripSearchActions.setPassengers({ passengers: this.searchForm.value.passengers }));
-    this.flightsUpdateService.setIsUpdate(false);
   }
 
   increment(typePassenger: keyof Passengers) {
     let countPassengers = Number(this.searchForm.get('passengers')?.get(typePassenger)?.value);
     countPassengers += 1;
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-
-    this.store$.dispatch(TripSearchActions.setPassengers({ passengers: this.searchForm.value.passengers }));
-    this.flightsUpdateService.setIsUpdate(false);
   }
 
   getCountPassengers() {
@@ -223,6 +216,7 @@ export class SearchFormComponent implements OnInit, OnDestroy {
     this.saveCurrentState();
     this.toggleSearchFormVisibilityEvent.emit(false);
     this.flightsUpdateService.setIsUpdate(true);
+    this.store$.dispatch(BookingActions.reset());
     this.router.navigate(['flights', 'selection']);
   }
 
@@ -277,11 +271,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       directions: new FormGroup({
         departureFrom: new FormControl(
           this.searchState.from || '',
-          [Validators.required],
+          [
+            Validators.required,
+            this.formValidatorService.correctAirport(),
+          ],
         ),
         destinationTo: new FormControl(
           this.searchState.to || '',
-          [Validators.required],
+          [
+            Validators.required,
+            this.formValidatorService.correctAirport(),
+          ],
         ),
       }, { validators: this.sameDirectionsValidator }),
       range: new FormGroup({
@@ -316,5 +316,17 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       } : null,
       passengers: this.searchForm.value.passengers,
     };
+  }
+
+  isIncreaseDisabled(passengerType: string): boolean {
+    return this.searchForm.get('passengers')?.get(passengerType)!.value >= PASSENGERS_MAX[passengerType as keyof typeof PASSENGERS_MAX];
+  }
+
+  isDecreaseDisabled(passengerType: string): boolean {
+    return this.searchForm.get('passengers')?.get(passengerType)!.value === PASSENGERS_DEFAULT[passengerType as keyof typeof PASSENGERS_DEFAULT];
+  }
+
+  getIntervalDescription(passengerCategory: PassengerCategory): string {
+    return getFormIntervalDescription(passengerCategory);
   }
 }

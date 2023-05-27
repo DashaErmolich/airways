@@ -10,6 +10,7 @@ const enum FlightsActionsTypes {
   SEARCH_SET_START_TRIP_DATE = '[Search] Set Date',
   SEARCH_SET_RANGE_TRIP_DATES = '[Search] Set Dates Range',
   SEARCH_SET_PASSENGERS = '[Search] Set Passengers',
+  SEARCH_RESET = '[Search] Reset',
 }
 
 export const searchFormSubmit = createAction(
@@ -45,4 +46,8 @@ export const setStartTripDate = createAction(
 export const setPassengers = createAction(
   FlightsActionsTypes.SEARCH_SET_PASSENGERS,
   props<{ passengers: Passengers }>(),
+);
+
+export const reset = createAction(
+  FlightsActionsTypes.SEARCH_RESET,
 );

@@ -18,10 +18,18 @@
 
   <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)" [ngClass]="{'flight-selection__data_small': layout.isSmall$ | async}">
     <div class="flight-selection__flights-description">
-      <app-flight-description
+      <app-flight-description *ngIf="isDirectFlight()"
         [flight]="flight"
         [flightTypeIndex]="flightTypeIndex"
+        [isDirectFlight]="isDirectFlight()"
       ></app-flight-description>
+
+      <app-connected-flight *ngIf="connectedFlights"
+        [connectedFlights]="connectedFlights"
+        [flight]="flight"
+        [flightTypeIndex]="flightTypeIndex"
+        ></app-connected-flight>
+
     </div>
 
     <div class="flight-price-container">

@@ -3,13 +3,24 @@ $desktop-width: 1128px;
 $header-height: 88px;
 $footer-height: 88px;
 
-$color-primary-blue: #11397E;
+$color-primary-blue: #2b387c;
 $color-gray: #74767A;
-$color-primary-deep-blue: #10264C;
-$color-secondary-blue: #0090BD;
+$color-light-gray: #D0D9DF;
+$color-primary-deep-blue: #1e2756;
+$color-secondary-blue: #3f51b5;
 
 $z-index-header: 2;
 
 $slides-all: 7;
 $slides-visible-default: 5;
 $slides-visible-small: 3;
+
+$flex-col-3: (3/12)* 100%;
+$flex-col-9: (9/12)* 100%;
+
+$c-flights-dots-border-width: 3px;
+$c-flights-desc-gap: 2rem;
+$c-flights-border-width: 1px;
+
+
+$mat-icon-size: 24px;

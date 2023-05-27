@@ -3,22 +3,27 @@ import { AppState } from '../state.models';
 
 export const selectFeature = (state: AppState) => state.booking;
 
-export const selectDirectFlights = createSelector(
-  selectFeature,
-  (state) => state.forwardFlights,
-);
-
-export const selectForwardFlights = createSelector(
-  selectFeature,
-  (state) => state.returnFlights,
-);
-
-export const selectBookingPassengers = createSelector(
-  selectFeature,
-  (state) => state.passengers,
-);
-
 export const selectStep = createSelector(
   selectFeature,
   (state) => state.step,
+);
+
+export const selectAdult = createSelector(
+  selectFeature,
+  (state) => state.adult,
+);
+
+export const selectChild = createSelector(
+  selectFeature,
+  (state) => state.child,
+);
+
+export const selectInfant = createSelector(
+  selectFeature,
+  (state) => state.infant,
+);
+
+export const selectBookingState = createSelector(
+  selectFeature,
+  (state) => state,
 );

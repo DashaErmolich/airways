@@ -39,7 +39,7 @@ export interface Flight {
   to: Airport;
   takeoffDate: string;
   landingDate: string;
-  timeMins: string;
+  timeMins: number;
   seats: FlightSeats;
   price: FlightPrices;
   otherFlights: {
@@ -55,6 +55,8 @@ export interface Flight {
     '-1': Flight;
   }
   flightNumber: string;
+  connectedFlights: Flight[];
+  layoverTime: number;
 }
 
 export interface FlightSeats {

@@ -1,7 +1,9 @@
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
+import { PassengerCategory } from 'src/app/booking/pages/summary-page/summary-page.component';
 import { CustomFormValidatorErrorsEnum } from '../constants/custom-form-validator-errors.enum';
+import { validateBirthDateByCategory } from '../helpers/birth-date-helper';
 
 @Injectable({
   providedIn: 'root',
@@ -106,6 +108,78 @@ export class FormValidatorService {
       return !validUrl
         ? {
           [CustomFormValidatorErrorsEnum.ValidUrl]: { value: control.value },
+        }
+        : null;
+    };
+  }
+
+  correctAirport(): ValidatorFn {
+    return (control: AbstractControl) : ValidationErrors | null => {
+      const { value } = control;
+
+      if (!value) {
+        return null;
+      }
+
+      return typeof value !== 'object'
+        ? {
+          [CustomFormValidatorErrorsEnum.ValidAirport]: { value: control.value },
+        }
+        : null;
+    };
+  }
+
+  isBirthDayInGroupRange(passengerCategory: PassengerCategory): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const { value } = control;
+
+      if (!value) {
+        return null;
+      }
+
+      const ageIntervalByCategory: number[] = validateBirthDateByCategory(passengerCategory);
+
+      let dateValid = true;
+
+      if (ageIntervalByCategory.length === 1) {
+        const minValue = new Date(
+          new Date().setFullYear(
+            new Date().getFullYear() - ageIntervalByCategory[0],
+          ),
+        );
+        dateValid = value.isBefore(minValue);
+      } else if (ageIntervalByCategory.length === 2) {
+        const minValue = new Date(
+          new Date().setFullYear(
+            new Date().getFullYear() - ageIntervalByCategory[0],
+          ),
+        );
+        const maxValue = new Date(
+          new Date().setFullYear(
+            new Date().getFullYear() - ageIntervalByCategory[1],
+          ),
+        );
+        dateValid = value.isBetween(maxValue, minValue);
+      } else dateValid = true;
+
+      let errorKey: CustomFormValidatorErrorsEnum;
+
+      switch (passengerCategory) {
+        case 'child':
+          errorKey = CustomFormValidatorErrorsEnum.ChildAge;
+          break;
+        case 'infant':
+          errorKey = CustomFormValidatorErrorsEnum.InfantAge;
+          break;
+        default:
+          errorKey = CustomFormValidatorErrorsEnum.AdultAge;
+      }
+
+      return !dateValid
+        ? {
+          [errorKey]: {
+            value: control.value,
+          },
         }
         : null;
     };

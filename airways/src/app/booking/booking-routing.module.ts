@@ -4,15 +4,23 @@ import { BookingPageComponent } from './pages/booking-page/booking-page.componen
 import { SummaryPageComponent } from './pages/summary-page/summary-page.component';
 import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-cart-page.component';
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
+import { BookingGuard } from '../core/guards/booking.guard';
+import { BookingSummaryGuard } from '../core/guards/booking-summary.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: BookingPageComponent,
+    canActivate: [
+      BookingGuard,
+    ],
   },
   {
     path: 'summary',
     component: SummaryPageComponent,
+    canActivate: [
+      BookingSummaryGuard,
+    ],
   },
   {
     path: 'cart',

@@ -13,7 +13,7 @@
     <span class="line-outside">
       <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': isReturnFlight()}"></mat-icon>
     </span>
-    <span>Direct</span>
+    <span>{{ isDirectFlight ? 'Direct' : 'Connected' }}</span>
   </div>
 
   <div class="info__flight info__flight_right flight">
@@ -25,5 +25,6 @@
     <span class="flight__city">{{ flight.to.city }}</span>
   </div>
 
-  <span><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
+  <span *ngIf="isDirectFlight"><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
+  <span *ngIf="connectedFlights"><span class="color-gray">Flights no. </span>{{ connectedFlights[0].flightNumber }}, {{ connectedFlights[1].flightNumber }}</span>
 </div>

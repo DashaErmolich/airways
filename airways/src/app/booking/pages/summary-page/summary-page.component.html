@@ -1,1 +1,100 @@
-<p>summary-page works!</p>
+<app-search-summary></app-search-summary>
+
+<div class="container summary-container">
+  <div class="passengers-container">
+    <section *ngFor="let flight of flights" class="flight">
+      <section *ngIf="flight" class="flight-wrapper flight colored-border">
+        <article class="flight__item_highlight flight-container">
+          <div class="passenger__header">
+            <p class="color-primary-blue">{{ flight.flightNumber }}</p>
+            <p>{{ flight.form.city }} - {{ flight.to.city }}</p>
+          </div>
+            <p>{{ flight.takeoffDate | date:'full' }}</p>
+            <p>{{ flight.landingDate | date:'full' }}</p>
+        </article>
+
+        <article class="passengers-details">
+          <div *ngFor="let passenger of passengers" class="passenger flight-container">
+            <p>{{ passenger.firstName | uppercase }} {{ passenger.lastName | uppercase }}</p>
+            <div class="baggage-container">
+              <p>{{ passenger.cabinBag }} x Cabin baggage</p>
+              <p *ngIf="passenger.checkedBag">{{ passenger.checkedBag }} x Checked baggage</p>
+            </div>
+          </div>
+        </article>
+      </section>
+    </section>
+  </div>
+
+  <section class="payment-details flight-container flight-wrapper">
+    <article class="">
+      <div class="font-weight-bold price-row">
+        <span>Adult fare </span>
+        <span>{{ totalPriceByCat | totalPrice:'adult':'total-category' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+      </div>
+      <div class="baggage-container">
+        <div class="price-row">
+          <span>Fare</span>
+          <span>{{ totalPriceByCat | totalPrice:'adult':'fare' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+        <div class="price-row">
+          <span>Tax & Service Charge</span>
+          <span> {{ totalPriceByCat | totalPrice:'adult':'taxes' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+        <div *ngIf="totalPriceByCat.adult.baggage !== 0" class="price-row">
+          <span>Additional baggage</span>
+          <span>{{ totalPriceByCat | totalPrice:'adult':'baggage' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="" *ngIf="child.length">
+      <div class="font-weight-bold price-row">
+        <span>Child fare</span>
+        <span>{{ totalPriceByCat | totalPrice:'child':'total-category' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+      </div>
+      <div class="baggage-container">
+        <div class="price-row">
+          <span>Fare</span>
+          <span>{{ totalPriceByCat | totalPrice:'child':'fare'  | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+        <div class="price-row">
+          <span>Tax & Service Charge</span>
+          <span>{{ totalPriceByCat | totalPrice:'child':'taxes' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+        <div *ngIf="totalPriceByCat.child.baggage !== 0" class="price-row">
+          <span>Additional baggage </span>
+          <span>{{ totalPriceByCat | totalPrice:'child':'baggage' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+      </div>
+    </article>
+    <article class="" *ngIf="infant.length">
+      <div class="font-weight-bold price-row">
+        <span>Infant fare</span>
+        <span>{{ totalPriceByCat | totalPrice:'infant':'total-category' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+      </div>
+      <div class="baggage-container">
+        <div class="price-row">
+          <span>Fare</span>
+          <span>{{ totalPriceByCat | totalPrice:'infant':'fare' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+        <div class="price-row">
+          <span>Tax & Service Charge</span>
+          <span>{{ totalPriceByCat | totalPrice:'infant':'taxes'  | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+        <div *ngIf="totalPriceByCat.infant.baggage !== 0" class="price-row">
+          <span>Additional baggage</span>
+          <span>{{ totalPriceByCat | totalPrice:'infant':'baggage' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+        </div>
+      </div>
+    </article>
+    <div class="font-weight-bold total-payment price-row">
+      <span>TOTAL:</span>
+      <span>{{ totalPriceByCat | totalPrice:'adult':'total' | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
+    </div>
+</section>
+<div class="page-actions">
+  <app-go-back-button></app-go-back-button>
+  <button mat-raised-button color="primary" (click)="buyNow()">Buy now</button>
+  <button mat-raised-button color="primary" (click)="addToCart()">Add to cart</button>
+</div>
+</div>

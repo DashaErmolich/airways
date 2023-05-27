@@ -6,6 +6,7 @@ import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants
 
 import { AppState } from 'src/app/redux/state.models';
 import * as BookingActions from 'src/app/redux/actions/booking.actions';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 
 @Component({
   selector: 'app-search-page',
@@ -16,9 +17,11 @@ import * as BookingActions from 'src/app/redux/actions/booking.actions';
 export class SearchPageComponent implements OnInit {
   constructor(
     private store$: Store<AppState>,
+    private localStorage: LocalStorageService,
   ) { }
 
   ngOnInit(): void {
     this.store$.dispatch(BookingActions.setStep({ step: BookingStepsEnum.First }));
+    this.localStorage.resetFlightsSelection();
   }
 }

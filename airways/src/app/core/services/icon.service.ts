@@ -62,5 +62,29 @@ export class MatIconService {
       'github',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/footer/github-mark.svg'),
     );
+    this.matIconRegistry.addSvgIcon(
+      'clock',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/flights/clock-history.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'pass-icon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-icon.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'pass-details',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-details.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'pass-assistance',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-assistance.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'cabin-bag',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/cabin-bag.svg'),
+    );
+    this.matIconRegistry.addSvgIcon(
+      'checked-bag',
+      this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/checked-bag.svg'),
+    );
   }
 }

@@ -21,7 +21,7 @@
       <mat-icon> person</mat-icon>
     </div>
 
-    <button mat-button color="primary" (click)="toggleSearchFormVisibility()">Edit</button>
+    <button *ngIf="isSearchFormVisible !== undefined" mat-button color="primary" (click)="toggleSearchFormVisibility()">Edit</button>
   </div>
 </div>
 

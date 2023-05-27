@@ -10,7 +10,7 @@ import { selectTripSearchState, selectPassengersQty } from 'src/app/redux/select
 import { AppState, TripSearchState } from 'src/app/redux/state.models';
 
 import { MatIconService } from 'src/app/core/services/icon.service';
-import { LayoutService } from '../../../core/services/layout.service';
+import { LayoutService } from 'src/app/core/services/layout.service';
 
 @Component({
   selector: 'app-search-summary',
@@ -20,7 +20,7 @@ import { LayoutService } from '../../../core/services/layout.service';
 export class FlightsSearchSummaryComponent implements OnInit {
   @Output() toggleSearchFormVisibilityEvent = new EventEmitter<boolean>();
 
-  @Input() isSearchFormVisible!:boolean;
+  @Input() isSearchFormVisible?:boolean;
 
   searchData$!: Observable<TripSearchState>;
 

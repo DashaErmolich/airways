@@ -33,3 +33,18 @@ export const selectReturnFlight = createSelector(
   selectFlightsFeature,
   (state) => state.returnFlight,
 );
+
+export const selectForwardConnectedFlights = createSelector(
+  selectFlightsFeature,
+  (state) => (state.forwardFlight?.connectedFlights.length ? state.forwardFlight.connectedFlights : null),
+);
+
+export const selectReturnConnectedFlights = createSelector(
+  selectFlightsFeature,
+  (state) => (state.returnFlight?.connectedFlights.length ? state.returnFlight.connectedFlights : null),
+);
+
+export const selectFlightsState = createSelector(
+  selectFlightsFeature,
+  (state) => state,
+);

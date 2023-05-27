@@ -8,6 +8,7 @@ const enum FlightsActionsTypes {
   FLIGHTS_SEARCH_ALL_FAILURE = '[Flights] Search All Failure',
   FLIGHT_SET_RETURN = '[Flight] Set Return',
   FLIGHT_SET_FORWARD = '[Flight] Set Forward',
+  FLIGHTS_RESET = '[Flights] Reset',
 }
 
 export const searchAllFlights = createAction(
@@ -32,10 +33,14 @@ export const searchAllFlightsFailure = createAction(
 
 export const setReturnFlight = createAction(
   FlightsActionsTypes.FLIGHT_SET_RETURN,
-  props<({ returnFlight: Flight })>(),
+  props<({ returnFlight: Flight | null })>(),
 );
 
 export const setForwardFlight = createAction(
   FlightsActionsTypes.FLIGHT_SET_FORWARD,
   props<({ forwardFlight: Flight })>(),
+);
+
+export const reset = createAction(
+  FlightsActionsTypes.FLIGHTS_RESET,
 );
