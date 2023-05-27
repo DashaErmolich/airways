@@ -25,6 +25,12 @@ git clone https://github.com/DashaErmolich/airways.git
 git checkout develop
 ```
 
+- Install ```node modules```
+
+```
+npm install
+```
+
 - Run json-server and json-server-auth
 
 ```
@@ -37,6 +43,12 @@ npm run db
 git clone https://github.com/DashaErmolich/airways-backend.git
 ```
 
+- Install ```node modules```
+
+```
+npm install
+```
+
 - Run server
 
 ```
@@ -45,6 +57,13 @@ npm start
 
 ## App usage
 
-- Go to [Airways App](https://dashaermolich-rs-clone.netlify.app/)
+- Go to the [Airways App](https://dashaermolich-rs-clone.netlify.app/)
 
 - Create your account or use app as anonymous user (not all features are available in this way)
+
+### Notes
+
+- Backed returns random flight data, thats why after flight selection page refresh your receive new data every time
+- Adults, child and infant passengers takes seats
+- On flight selection page dates carousel disable all dates out of selected dates range (if trip is round). Change dates range start and end values by clicking on carousel or set new values in edit section
+- You can go to the next booking process step page only after submit data on previous one
