@@ -1,11 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
 import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
-import { BookingState } from '../state.models';
+import { BookingDetails, BookingState } from '../state.models';
 import * as BookingActions from '../actions/booking.actions';
 
 export const bookingReducersNode = 'booking';
-
-type BookingDetails = Omit<BookingState, 'step'>;
 
 function getBookingState(): BookingDetails | null {
   const user = localStorage.getItem(LocalStorageKeysEnum.BookingDetails);

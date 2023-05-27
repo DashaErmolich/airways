@@ -20,7 +20,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { selectInfant } from '../../../redux/selectors/booking.selectors';
 import { BOOKING_PRICE_CONFIG } from '../../constants/price.constant';
-import { BookingFinishedComponent } from '../../componants/booking-finished/booking-finished.component';
+import { BookingFinishedComponent } from '../../components/booking-finished/booking-finished.component';
+
+export type PassengerCategory = 'adult' | 'child' | 'infant';
+
+export interface PriceCategory {
+  fare: number;
+  taxes: number;
+  baggage: number;
+}
+
+export interface PriceByPassengerCategory {
+  adult: PriceCategory;
+  child: PriceCategory;
+  infant: PriceCategory;
+}
 
 @Component({
   selector: 'app-summary-page',
@@ -32,6 +46,8 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
 
   private adult$!: Observable<PassengerBooking[]>;
+
+  adult!: PassengerBooking[];
 
   child$!: Observable<PassengerBooking[]>;
 
@@ -56,6 +72,12 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
   passengers!: PassengerBooking[];
 
   flights!: (Flight | null)[];
+
+  totalPriceByCat: PriceByPassengerCategory = {
+    adult: { baggage: 0, fare: 0, taxes: 0 },
+    child: { baggage: 0, fare: 0, taxes: 0 },
+    infant: { baggage: 0, fare: 0, taxes: 0 },
+  };
 
   constructor(
     private store$: Store<AppState>,
@@ -92,6 +114,12 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
       this.returnFlight = res;
     });
 
+    this.adult$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res: PassengerBooking[]) => {
+        this.adult = res;
+      });
+
     this.child$.pipe(
       takeUntil(this.destroy$),
     ).subscribe((res: PassengerBooking[]) => {
@@ -108,6 +136,7 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
     ).subscribe((res: [PassengerBooking[], PassengerBooking[], PassengerBooking[]]) => {
       this.passengers = res.flat();
+      this.setPriceForCategories();
     });
 
     combineLatest([this.forwardFlight$, this.returnFlight$]).pipe(
@@ -126,54 +155,8 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
     return !!flight.connectedFlights.length;
   }
 
-  getTotalPice(): number {
-    switch (true) {
-      case this.forwardFlight !== null && this.returnFlight !== null:
-        return this.getPrice(this.forwardFlight!.price) + this.getPrice(this.returnFlight!.price);
-      default:
-        return this.getPrice(this.forwardFlight!.price);
-    }
-  }
-
   private getPrice(prices: FlightPrices) {
     return this.currencyValuePipe.transform(prices, this.currency);
-  }
-
-  getAdultFare() {
-    switch (true) {
-      case !!this.child.length && !!this.infant.length:
-        return (this.getTotalPice() * BOOKING_PRICE_CONFIG.ADULT.WITH_CHILD_AND_INFANT) * (1 - BOOKING_PRICE_CONFIG.TAXES);
-      case !!this.child.length && !(this.infant.length):
-        return (this.getTotalPice() * BOOKING_PRICE_CONFIG.ADULT.WITH_CHILD) * (1 - BOOKING_PRICE_CONFIG.TAXES);
-      case !(this.child.length) && !!this.infant.length:
-        return (this.getTotalPice() * BOOKING_PRICE_CONFIG.ADULT.WITH_INFANT) * (1 - BOOKING_PRICE_CONFIG.TAXES);
-      default:
-        return (this.getTotalPice() * BOOKING_PRICE_CONFIG.ADULT.DEFAULT) * (1 - BOOKING_PRICE_CONFIG.TAXES);
-    }
-  }
-
-  getChildFare() {
-    return (this.getTotalPice() * BOOKING_PRICE_CONFIG.CHILD) * BOOKING_PRICE_CONFIG.TAXES;
-  }
-
-  getInfantFare() {
-    return (this.getTotalPice() * BOOKING_PRICE_CONFIG.INFANT) * BOOKING_PRICE_CONFIG.TAXES;
-  }
-
-  getTax() {
-    return (this.getTotalPice() * BOOKING_PRICE_CONFIG.TAXES) / this.passengers.length;
-  }
-
-  getInfantTotal() {
-    return this.getInfantFare() + this.getTax();
-  }
-
-  getAdultTotal() {
-    return this.getAdultFare() + this.getTax();
-  }
-
-  getChildTotal() {
-    return this.getChildFare() + this.getTax();
   }
 
   buyNow() {
@@ -190,5 +173,29 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
   addToCart() {
     this.store$.dispatch(ShoppingCartActions.addOrderToCart());
     this.router.navigate(['booking', 'cart']);
+  }
+
+  getPriceWithKoef(koefficient: number = BOOKING_PRICE_CONFIG.ADULT): number {
+    const price = this.forwardFlight !== null && this.returnFlight !== null
+      ? this.getPrice(this.forwardFlight!.price)
+          + this.getPrice(this.returnFlight!.price)
+      : this.getPrice(this.forwardFlight!.price);
+    return price * koefficient;
+  }
+
+  setPriceForCategories(): void {
+    const totalPrice = this.getPriceWithKoef(BOOKING_PRICE_CONFIG.TOTAL);
+    const basicPrice = (totalPrice) / (this.adult.length * BOOKING_PRICE_CONFIG.ADULT
+      + this.child.length * BOOKING_PRICE_CONFIG.CHILD + this.infant.length * BOOKING_PRICE_CONFIG.INFANT);
+
+    for (const key in this.totalPriceByCat) {
+      const element = this.totalPriceByCat[key as keyof PriceByPassengerCategory];
+      element.fare = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] * (BOOKING_PRICE_CONFIG.TOTAL - BOOKING_PRICE_CONFIG.TAXES);
+      element.taxes = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] - element.fare;
+      element.baggage = totalPrice * BOOKING_PRICE_CONFIG.BAGGAGE * this[key as keyof PriceByPassengerCategory].reduce(
+        (sum, passenger) => sum + passenger.checkedBag,
+        0,
+      );
+    }
   }
 }

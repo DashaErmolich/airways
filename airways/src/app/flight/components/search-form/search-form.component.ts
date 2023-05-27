@@ -20,7 +20,7 @@ import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selec
 import * as TripSearchActions from 'src/app/redux/actions/trip-search.actions';
 
 import { DatesService } from 'src/app/flight/services/dates.service';
-import { PASSENGERS_DEFAULT } from 'src/app/flight/constants/passengers.constants';
+import { PASSENGERS_DEFAULT, PASSENGERS_MAX } from 'src/app/flight/constants/passengers.constants';
 import { AIRPORTS } from 'src/app/flight/constants/airports.constants';
 import { Airport, Passengers } from 'src/app/flight/models/flight.models';
 import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
@@ -161,18 +161,12 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       countPassengers -= 1;
     }
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-
-    this.store$.dispatch(TripSearchActions.setPassengers({ passengers: this.searchForm.value.passengers }));
-    this.flightsUpdateService.setIsUpdate(false);
   }
 
   increment(typePassenger: keyof Passengers) {
     let countPassengers = Number(this.searchForm.get('passengers')?.get(typePassenger)?.value);
     countPassengers += 1;
     this.searchForm.get('passengers')?.get(typePassenger)?.setValue(countPassengers);
-
-    this.store$.dispatch(TripSearchActions.setPassengers({ passengers: this.searchForm.value.passengers }));
-    this.flightsUpdateService.setIsUpdate(false);
   }
 
   getCountPassengers() {
@@ -305,5 +299,13 @@ export class SearchFormComponent implements OnInit, OnDestroy {
       } : null,
       passengers: this.searchForm.value.passengers,
     };
+  }
+
+  isIncreaseDisabled(passengerType: string): boolean {
+    return this.searchForm.get('passengers')?.get(passengerType)!.value >= PASSENGERS_MAX[passengerType as keyof typeof PASSENGERS_MAX];
+  }
+
+  isDecreaseDisabled(passengerType: string): boolean {
+    return this.searchForm.get('passengers')?.get(passengerType)!.value === PASSENGERS_DEFAULT[passengerType as keyof typeof PASSENGERS_DEFAULT];
   }
 }

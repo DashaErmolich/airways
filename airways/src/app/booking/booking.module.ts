@@ -8,7 +8,8 @@ import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-c
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
 import { SharedModule } from '../shared/shared.module';
 import { PassengersFormComponent } from './components/passengers-form/passengers-form.component';
-import { BookingFinishedComponent } from './componants/booking-finished/booking-finished.component';
+import { BookingFinishedComponent } from './components/booking-finished/booking-finished.component';
+import { TotalPricePipe } from './pipes/total-price.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { BookingFinishedComponent } from './componants/booking-finished/booking-
     UserAccountPageComponent,
     PassengersFormComponent,
     BookingFinishedComponent,
+    TotalPricePipe,
   ],
   imports: [
     CommonModule,

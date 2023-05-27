@@ -43,6 +43,8 @@ export interface BookingState {
   contactDetails: BookingContactDetails;
 }
 
+export type BookingDetails = Omit<BookingState, 'step'>;
+
 export interface Order {
   flightsSearch: TripSearchState;
   flights: FlightsState;

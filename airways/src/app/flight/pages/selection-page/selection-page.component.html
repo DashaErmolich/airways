@@ -27,25 +27,25 @@
       *ngIf="(searchData$ | async)!.isRoundTrip">
     </app-flight-selection>
 
+    <p *ngIf="(isAuth$ | async) === false" class="error-message">
+      You must be signed in the app to continue
+    </p>
+
+    <p *ngIf="!isNextStepAvailable()" class="error-message">
+      You must select flights to continue
+    </p>
+
     <div class="page-actions">
       <app-go-back-button></app-go-back-button>
 
       <button
         mat-raised-button
         color="primary"
-        routerLink="/booking"
         *ngIf="isAuth$ | async"
-        [disabled]="!isNextStepAvailable()">
+        [disabled]="!isNextStepAvailable()"
+        (click)="saveSelectedFlights()">
         Continue
       </button>
-
-      <p *ngIf="(isAuth$ | async) === false" class="error-message">
-        You must be signed in the app to continue
-      </p>
-
-      <p *ngIf="!isNextStepAvailable()" class="error-message">
-        You must select flights to continue
-      </p>
     </div>
   </div>
 

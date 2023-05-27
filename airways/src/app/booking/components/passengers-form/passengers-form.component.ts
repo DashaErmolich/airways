@@ -12,7 +12,7 @@ import { formValidationErrorsMessages } from 'src/assets/form-validation-errors-
 import { CustomFormValidatorErrorsEnum } from 'src/app/core/constants/custom-form-validator-errors.enum';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { AppState } from 'src/app/redux/state.models';
+import { AppState, BookingState } from 'src/app/redux/state.models';
 import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants';
 import countryInfo from 'src/assets/country-codes.json';
 import * as BookingActions from 'src/app/redux/actions/booking.actions';
@@ -23,6 +23,8 @@ import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import { selectBookingState } from 'src/app/redux/selectors/booking.selectors';
 import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
 import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.constant';
@@ -37,6 +39,8 @@ import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.
 })
 export class PassengersFormComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+
+  private bookingState!: BookingState;
 
   passengerForm!: FormGroup;
 
@@ -59,24 +63,35 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private store$: Store<AppState>,
     private matIconService: MatIconService,
+    private localStorage: LocalStorageService,
   ) { }
 
   ngOnInit(): void {
+    this.store$.pipe(
+      takeUntil(this.destroy$),
+      select(selectBookingState),
+    ).subscribe((res: BookingState) => {
+      this.bookingState = res;
+    });
+
     this.passengerForm = this.fb.group({
       adult: this.fb.array([]),
       child: this.fb.array([]),
       infant: this.fb.array([]),
       contactDetails: this.fb.group({
-        countryCode: ['', Validators.required],
+        countryCode: [
+          this.bookingState.contactDetails.countryCode || '',
+          Validators.required,
+        ],
         phoneNumber: [
-          '',
+          this.bookingState.contactDetails.phoneNumber || '',
           [
             Validators.required,
             Validators.pattern('[0-9]+'),
           ],
         ],
         email: [
-          '',
+          this.bookingState.contactDetails.email || '',
           [
             Validators.required,
             Validators.email,
@@ -132,15 +147,15 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
 
   private setupForm() {
     for (let i = 0; i < this.passengers.adult; i += 1) {
-      const item = this.createPassenger();
+      const item = this.createPassenger(this.bookingState.adult[i]);
       this.adult.push(item);
     }
     for (let i = 0; i < this.passengers.child; i += 1) {
-      const item = this.createPassenger();
+      const item = this.createPassenger(this.bookingState.child[i]);
       this.child.push(item);
     }
     for (let i = 0; i < this.passengers.infant; i += 1) {
-      const item = this.createPassenger();
+      const item = this.createPassenger(this.bookingState.infant[i]);
       this.infant.push(item);
     }
   }

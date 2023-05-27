@@ -5,3 +5,9 @@ export const PASSENGERS_DEFAULT: Passengers = {
   child: 0,
   infant: 0,
 };
+
+export const PASSENGERS_MAX: Passengers = {
+  adult: 5,
+  child: 5,
+  infant: 5,
+};

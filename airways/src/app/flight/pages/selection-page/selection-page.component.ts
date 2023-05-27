@@ -12,7 +12,9 @@ import {
   AppState, TripSearchState,
 } from 'src/app/redux/state.models';
 import { selectIsAuth } from 'src/app/redux/selectors/auth.selectors';
-import { selectSelectedFlightError, selectSelectedFlightIsLoading } from 'src/app/redux/selectors/flights.selectors';
+import {
+  selectForwardFlight, selectReturnFlight, selectSelectedFlightError, selectSelectedFlightIsLoading,
+} from 'src/app/redux/selectors/flights.selectors';
 import { selectTripSearchState } from 'src/app/redux/selectors/trip-search.selectors';
 import * as FlightsActions from 'src/app/redux/actions/flights.actions';
 import * as BookingActions from 'src/app/redux/actions/booking.actions';
@@ -21,8 +23,9 @@ import { BookingStepsEnum } from 'src/app/core/constants/booking-steps.constants
 
 import { FlightsTypesEnum } from 'src/app/flight/constants/flights-response-indexes.enum';
 import { Flight } from 'src/app/flight/models/flight.models';
-import { DatesService } from 'src/app/flight/services/dates.service';
 import { FlightsUpdateService } from 'src/app/flight/services/flights-update.service';
+import { LocalStorageService } from 'src/app/core/services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-selection-page',
@@ -30,6 +33,14 @@ import { FlightsUpdateService } from 'src/app/flight/services/flights-update.ser
   styleUrls: ['./selection-page.component.scss'],
 })
 export class SelectionPageComponent implements OnInit, OnDestroy {
+  private forwardFlight: Flight | null = null;
+
+  private returnFlight: Flight | null = null;
+
+  private searchData!: TripSearchState;
+
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+
   isSearchFormVisible = false;
 
   flightsTypes = FlightsTypesEnum;
@@ -42,20 +53,13 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   isAuth$!: Observable<boolean>;
 
-  forwardFlight!: Flight;
-
-  directFlight!: Flight;
-
   isFlightsSelected: boolean[] = [];
-
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
-  searchData!: TripSearchState;
 
   constructor(
     private store$: Store<AppState>,
-    private datesService: DatesService,
     private flightsUpdateService: FlightsUpdateService,
+    private localStorage: LocalStorageService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -86,7 +90,23 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.store$.pipe(
+      takeUntil(this.destroy$),
+      select(selectForwardFlight),
+    ).subscribe((res: Flight | null) => {
+      this.forwardFlight = res;
+    });
+
+    this.store$.pipe(
+      takeUntil(this.destroy$),
+      select(selectReturnFlight),
+    ).subscribe((res: Flight | null) => {
+      this.returnFlight = res;
+    });
+
     this.store$.dispatch(BookingActions.setStep({ step: BookingStepsEnum.Second }));
+
+    this.localStorage.resetFlightsSelection();
   }
 
   ngOnDestroy(): void {
@@ -108,5 +128,17 @@ export class SelectionPageComponent implements OnInit, OnDestroy {
 
   isNextStepAvailable() {
     return this.isFlightsSelected.every((item) => item);
+  }
+
+  saveSelectedFlights() {
+    if (this.forwardFlight) {
+      this.localStorage.setForwardFlight(this.forwardFlight);
+    }
+
+    if (this.returnFlight) {
+      this.localStorage.setReturnFlight(this.returnFlight);
+    }
+
+    this.router.navigateByUrl('/booking');
   }
 }

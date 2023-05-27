@@ -96,11 +96,11 @@
               <span class="option__age">14+ years</span>
             </div>
             <div class="option__counter">
-              <button class="option__counter_btn" type="button"
-                (click)="decrement('adult')"><mat-icon>remove</mat-icon></button>
+              <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('adult')"
+                (click)="decrement('adult')"><mat-icon [color]="isDecreaseDisabled('adult') ? 'warn' : 'primary'">remove</mat-icon></button>
               <input class="option__count" type="text" readonly formControlName="adult">
-              <button class="option__counter_btn" type="button"
-                (click)="increment('adult')"><mat-icon>add</mat-icon></button>
+              <button class="option__counter_btn" type="button" [disabled]="isIncreaseDisabled('adult')"
+                (click)="increment('adult')"><mat-icon [color]="isIncreaseDisabled('adult') ? 'warn' : 'primary'">add</mat-icon></button>
             </div>
           </div>
 
@@ -110,11 +110,11 @@
               <span class="option__age">2-14 years</span>
             </div>
             <div class="option__counter">
-              <button class="option__counter_btn" type="button"
-                (click)="decrement('child')"><mat-icon>remove</mat-icon></button>
+              <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('child')"
+                (click)="decrement('child')"><mat-icon [color]="isDecreaseDisabled('child') ? 'warn' : 'primary'">remove</mat-icon></button>
               <input class="option__count" type="text" readonly formControlName="child">
-              <button class="option__counter_btn" type="button"
-                (click)="increment('child')"><mat-icon>add</mat-icon></button>
+              <button class="option__counter_btn" type="button" [disabled]="isIncreaseDisabled('child')"
+                (click)="increment('child')"><mat-icon [color]="isIncreaseDisabled('child') ? 'warn' : 'primary'">add</mat-icon></button>
             </div>
           </div>
 
@@ -124,11 +124,11 @@
               <span class="option__age">0-2 years</span>
             </div>
             <div class="option__counter">
-              <button class="option__counter_btn" type="button"
-                (click)="decrement('infant')"><mat-icon>remove</mat-icon></button>
+              <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('infant')"
+                (click)="decrement('infant')"><mat-icon [color]="isDecreaseDisabled('infant') ? 'warn' : 'primary'">remove</mat-icon></button>
               <input class="option__count" type="text" readonly formControlName="infant">
-              <button class="option__counter_btn" type="button"
-                (click)="increment('infant')"><mat-icon>add</mat-icon></button>
+              <button class="option__counter_btn" type="button" [disabled]="isIncreaseDisabled('infant')"
+                (click)="increment('infant')"><mat-icon [color]="isIncreaseDisabled('infant') ? 'warn' : 'primary'">add</mat-icon></button>
             </div>
           </div>
         </div>

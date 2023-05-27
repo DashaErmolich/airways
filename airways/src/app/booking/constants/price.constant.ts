@@ -1,12 +1,8 @@
 export const BOOKING_PRICE_CONFIG = {
-  ADULT: {
-    DEFAULT: 0.9,
-    WITH_CHILD: 0.7,
-    WITH_INFANT: 0.8,
-    WITH_CHILD_AND_INFANT: 0.6,
-  },
-  CHILD: 0.2,
-  INFANT: 0.1,
+  ADULT: 0.7,
+  CHILD: 0.15,
+  INFANT: 0.05,
   TAXES: 0.1,
   TOTAL: 1,
+  BAGGAGE: 0.1,
 };
