@@ -15,6 +15,7 @@ import { SummaryPageComponent } from './pages/summary-page/summary-page.componen
 import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-cart-page.component';
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
 import { SummaryPageItemComponent } from './pages/summary-page/summary-page-item/summary-page-item.component';
+import { BookingCurrencyValue } from './pages/pipes/currency.pipe';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SummaryPageItemComponent } from './pages/summary-page/summary-page-item
     ShoppingCartPageComponent,
     UserAccountPageComponent,
     SummaryPageItemComponent,
+    BookingCurrencyValue,
   ],
   imports: [
     CommonModule,

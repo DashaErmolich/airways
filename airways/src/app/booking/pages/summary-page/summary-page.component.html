@@ -3,24 +3,65 @@
   <h2 class="summary-title">Summary</h2>
 </div>
 
-<div class="flight-data-container">
+<div class="summary-flight-container">
   <app-summary-page-item [currentFlight]="forwardFlight" [passengers]="passengersArray"></app-summary-page-item>
-  <app-summary-page-item [currentFlight]="returnFlight" [passengers]="passengersArray"></app-summary-page-item>
-  <!-- <div class="flight-to-container flight-info-container">
-    <div class="flight-details">
-      <div class="flight-details-location"></div>
-      <div class="flight-details-time"></div>
-    </div>
-    <div class="flight-passengers"></div>
-  </div> -->
-
-  <!-- <div class="flight-from-container flight-info-container">
-    <div class="flight-details">
-      <div class="flight-details-location"></div>
-      <div class="flight-details-time"></div>
-    </div>
-    <div class="flight-passengers"></div>
-  </div> -->
+  <app-summary-page-item *ngIf="!isOneWay" [currentFlight]="returnFlight" [passengers]="passengersArray"></app-summary-page-item>
 </div>
 
-<div class="flight-prices-container"></div>
+<div class="summary-price-container">
+  <div class="flight-price-adult" *ngIf="adults > 0">
+    <div class="flight-price-title">
+      <span>{{ adults }} x Adult Fare</span>
+      <span>{{ pricesDetails.adultsPrice | bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+    <div class="flight-price-fare">
+      <span>Fare</span>
+      <span>{{ pricesDetails.adultsFare| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+    <div class="flight-price-tax">
+      <span>Tax &  Service Charge</span>
+      <span>{{ pricesDetails.adultsTax| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+  </div>
+  
+  <div class="flight-price-child" *ngIf="child > 0">
+    <div class="flight-price-title">
+      <span>{{ child }} x Child Fare</span>
+      <span>{{ pricesDetails.childPrice| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+    <div class="flight-price-fare">
+      <span>Fare</span>
+      <span>{{ pricesDetails.childFare| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+    <div class="flight-price-tax">
+      <span>Tax &  Service Charge</span>
+      <span>{{ pricesDetails.childTax| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+  </div>
+
+  <div class="flight-price-infant" *ngIf="infants > 0">
+    <div class="flight-price-title">
+      <span>{{ infants }} x Infant Fare</span>
+      <span>{{ pricesDetails.infantPrice| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+    <div class="flight-price-fare">
+      <span>Fare</span>
+      <span>{{ pricesDetails.infantFare| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+    <div class="flight-price-tax">
+      <span>Tax &  Service Charge</span>
+      <span>{{ pricesDetails.infantTax| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+    </div>
+  </div>
+
+  <div class="flight-price-total">
+    <span>TOTAL:</span>
+    <span>{{ totalPrice| bookingCurrValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol' : '1.2-2' }}</span>
+  </div>
+</div>
+
+<div class="summary-buttons-wrapper">
+  <button mat-button color="primary">Back</button>
+  <button mat-stroked-button color="primary">Add to order cart</button>
+  <button mat-raised-button color="primary">Buy now</button>
+</div>
