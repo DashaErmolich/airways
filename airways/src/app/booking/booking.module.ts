@@ -14,6 +14,7 @@ import { BookingPageComponent } from './pages/booking-page/booking-page.componen
 import { SummaryPageComponent } from './pages/summary-page/summary-page.component';
 import { ShoppingCartPageComponent } from './pages/shopping-cart-page/shopping-cart-page.component';
 import { UserAccountPageComponent } from './pages/user-account-page/user-account-page.component';
+import { SummaryPageItemComponent } from './pages/summary-page/summary-page-item/summary-page-item.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { UserAccountPageComponent } from './pages/user-account-page/user-account
     SummaryPageComponent,
     ShoppingCartPageComponent,
     UserAccountPageComponent,
+    SummaryPageItemComponent,
   ],
   imports: [
     CommonModule,

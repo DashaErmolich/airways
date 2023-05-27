@@ -11,11 +11,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppState } from 'src/app/redux/state.models';
 import { StepsEnum } from 'src/app/core/constants/steps.enum';
-import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { selectBookingPassengers } from 'src/app/redux/selectors/booking.selectors';
 import { Passengers } from 'src/app/flight/models/flight.models';
-import { selectPassengers } from 'src/app/redux/selectors/flights.selectors';
+import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
+import { PassengerType } from 'src/app/shared/enums/passenger-details';
 import countryInfo from '../../../../assets/country-codes.json';
 import * as BookingActions from '../../../redux/actions/booking.actions';
 // import { passengerResponse } from '../../../shared/mocked/passengers-response';
@@ -36,8 +35,6 @@ export class BookingPageComponent implements OnInit {
 
   customErrors = CustomFormValidatorErrorsEnum;
 
-  passengers$: Observable<Passengers | null>;
-
   constructor(
     private fb: FormBuilder,
     private formValidatorService: FormValidatorService,
@@ -46,7 +43,6 @@ export class BookingPageComponent implements OnInit {
     private router: Router,
     private store$: Store<AppState>,
   ) {
-    this.passengers$ = this.store$.pipe(select(selectBookingPassengers));
     this.matIconRegistry.addSvgIcon(
       'pass-icon',
       this.domSanitizer.bypassSecurityTrustResourceUrl('assets/icons/passengers/passengers-icon.svg'),
@@ -66,9 +62,9 @@ export class BookingPageComponent implements OnInit {
       this.passengersInfo = data;
     });
     this.passengerForm = this.fb.group({
-      adult: this.fb.array([]),
-      child: this.fb.array([]),
-      infant: this.fb.array([]),
+      [PassengerType.Adult]: this.fb.array([]),
+      [PassengerType.Child]: this.fb.array([]),
+      [PassengerType.Infant]: this.fb.array([]),
       contactDetails: this.fb.group({
         countryCode: ['', Validators.required],
         phoneNumber: [

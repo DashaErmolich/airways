@@ -1,5 +1,10 @@
 export enum PassengerType {
-  Adult,
-  Child,
-  Infant,
+  Adult = 'adult',
+  Child = 'child',
+  Infant = 'infant',
+}
+
+export enum GenderType {
+  Male = 'male',
+  Female = 'female',
 }
