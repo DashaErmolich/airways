@@ -157,7 +157,8 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
   }
 
   private getPrice(prices: FlightPrices) {
-    return this.currencyValuePipe.transform(prices, this.currency);
+    const price = this.currencyValuePipe.transform(prices, this.currency);
+    return (price === undefined) ? 0 : price;
   }
 
   buyNow() {

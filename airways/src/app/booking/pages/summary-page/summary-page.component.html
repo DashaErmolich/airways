@@ -9,8 +9,8 @@
               <p class="color-primary-blue">{{ connectedFlight.flightNumber }}</p>
               <p>{{ connectedFlight.form.city }} - {{ connectedFlight.to.city }}</p>
             </div>
-              <p>{{ connectedFlight.takeoffDate | date:'full' }}</p>
-              <p>{{ connectedFlight.landingDate | date:'full' }}</p>
+              <p>Departure: {{ connectedFlight.takeoffDate | date:'medium' }}</p>
+              <p>Arrival: {{ connectedFlight.landingDate | date:'medium' }}</p>
           </article>
 
             <article class="flight__item_highlight flight-container" *ngIf="!flight.connectedFlights.length">
@@ -18,8 +18,8 @@
                 <p class="color-primary-blue">{{ flight.flightNumber }}</p>
                 <p>{{ flight.form.city }} - {{ flight.to.city }}</p>
               </div>
-                <p>{{ flight.takeoffDate | date:'full' }}</p>
-                <p>{{ flight.landingDate | date:'full' }}</p>
+                <p>Departure: {{ flight.takeoffDate | date:'medium' }}</p>
+                <p>Arrival: {{ flight.landingDate | date:'medium' }}</p>
             </article>
 
         <article class="passengers-details">
