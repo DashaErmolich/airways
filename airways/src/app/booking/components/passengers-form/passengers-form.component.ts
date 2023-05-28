@@ -28,6 +28,7 @@ import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
 import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.constant';
 import { PassengerCategory } from '../../pages/summary-page/summary-page.component';
+import { LayoutService } from '../../../core/services/layout.service';
 
 @Component({
   selector: 'app-passengers-form',
@@ -63,6 +64,7 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private store$: Store<AppState>,
     private matIconService: MatIconService,
+    public layout: LayoutService,
   ) { }
 
   ngOnInit(): void {

@@ -47,8 +47,14 @@ $form-gap: 40px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+}
+
+.passenger__form_handset {
+  * {
+    width: 100%;
+  }
 }
 
 .bag-container {

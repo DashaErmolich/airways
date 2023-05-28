@@ -16,10 +16,11 @@ $row-gap: 2rem;
   display: flex;
   flex-direction: row;
   gap: $row-gap;
+  justify-content: flex-end;
 }
 
 .flight {
-  flex-basis: 50%;
+  flex-basis: calc(50% - $row-gap / 2);;
 }
 
 .flight-wrapper {
