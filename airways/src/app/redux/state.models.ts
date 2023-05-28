@@ -64,6 +64,6 @@ export interface AppState {
   flightsSearch: TripSearchState;
   flights: FlightsState;
   booking: BookingState;
-  shoppingCart: Order[];
+  shoppingCart: Orders;
   userTrips: UserTripsState;
 }

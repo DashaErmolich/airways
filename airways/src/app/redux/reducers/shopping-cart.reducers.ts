@@ -1,3 +1,4 @@
+import { Orders } from 'src/app/redux/state.models';
 import { createReducer, on } from '@ngrx/store';
 import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
 import { Order } from '../state.models';
@@ -10,7 +11,9 @@ function getOrders(): Order[] {
   return orders ? JSON.parse(orders) : null;
 }
 
-export const initialState = getOrders() ? getOrders() : [];
+export const initialState: Orders = {
+  orders: getOrders() ? getOrders() : [],
+};
 
 export const shoppingCartReducers = createReducer(
   initialState,
@@ -18,7 +21,7 @@ export const shoppingCartReducers = createReducer(
     ShoppingCartActions.addOrderToCartSuccess,
     (state, action) => ({
       ...state,
-      orders: [...state, action.order],
+      orders: [...state.orders, action.order],
     }),
   ),
 );

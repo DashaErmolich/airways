@@ -1,1 +1,77 @@
-<p>shopping-cart-page works!</p>
+<div class="container">
+  <h2>Cart</h2>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()">
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)">
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef>No.</th>
+      <td mat-cell *matCellDef="let element">
+        <p *ngIf="!element.no.forwardFlight.connectedFlights.length">{{ element.no.forwardFlight.flightNumber }}</p>
+        <p *ngIf="element.no.forwardFlight.connectedFlights.length">{{ element.no.forwardFlight.connectedFlights[0].flightNumber }}</p>
+        <p *ngIf="element.no.forwardFlight.connectedFlights.length">{{ element.no.forwardFlight.connectedFlights[1].flightNumber }}</p>
+        <p *ngIf="element.no.returnFlight && !element.no.returnFlight.connectedFlights.length">{{ element.no.returnFlight.flightNumber }}</p>
+        <p *ngIf="element.no.returnFlight && element.no.returnFlight.connectedFlights.length">{{ element.no.returnFlight.connectedFlights[0].flightNumber }}</p>
+        <p *ngIf="element.no.returnFlight && element.no.returnFlight.connectedFlights.length">{{ element.no.returnFlight.connectedFlights[1].flightNumber }}</p>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="flight">
+      <th mat-header-cell *matHeaderCellDef>Flight</th>
+      <td mat-cell *matCellDef="let element">
+        <p>{{ element.flight.forwardFlight.form.city }} - {{ element.flight.forwardFlight.to.city }}</p>
+        <p *ngIf="element.flight.returnFlight">{{ element.flight.returnFlight.form.city }} - {{ element.flight.returnFlight.to.city }}</p>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="trip">
+      <th mat-header-cell *matHeaderCellDef>Trip type</th>
+      <td mat-cell *matCellDef="let element">
+        {{element.trip}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date & time</th>
+      <td mat-cell *matCellDef="let element">
+        <p>{{element.date.forwardFlight.takeoffDate | date : 'medium'}} - {{element.date.forwardFlight.landingDate | date : 'short'}}</p>
+        <p *ngIf="element.date.returnFlight">{{element.date.returnFlight.takeoffDate | date : 'medium'}} - {{element.date.returnFlight.landingDate | date : 'short'}}</p>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="passengers">
+      <th mat-header-cell *matHeaderCellDef>Passengers</th>
+      <td mat-cell *matCellDef="let element">
+        <p>{{ element.passengers.adult }} x Adult</p>
+        <p *ngIf="element.passengers.child">{{ element.passengers.child }} X Child</p>
+        <p *ngIf="element.passengers.infant">{{ element.passengers.infant }} X Infant</p>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let element"> {{element.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

@@ -1,7 +1,7 @@
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
 import { isDevMode } from '@angular/core';
 import {
-  AuthState, BookingState, FlightsState, Order, SettingsState, TripSearchState, UserTripsState,
+  AuthState, BookingState, FlightsState, SettingsState, Orders, TripSearchState, UserTripsState,
 } from '../state.models';
 import { authReducers, authReducersNode } from './auth.reducers';
 import { bookingReducers, bookingReducersNode } from './booking.reducers';
@@ -17,7 +17,7 @@ export interface State {
   [tripSearchReducersNode]: TripSearchState,
   [flightsReducersNode]: FlightsState,
   [bookingReducersNode]: BookingState,
-  // [shoppingCartReducersNode]: Order[],
+  [shoppingCartReducersNode]: Orders,
   [userTripsReducersNode]: UserTripsState,
 }
 
@@ -27,7 +27,7 @@ export const reducers: ActionReducerMap<State> = {
   [tripSearchReducersNode]: flightsSearchReducers,
   [flightsReducersNode]: flightsReducers,
   [bookingReducersNode]: bookingReducers,
-  // [shoppingCartReducersNode]: shoppingCartReducers,
+  [shoppingCartReducersNode]: shoppingCartReducers,
   [userTripsReducersNode]: userTripsReducers,
 };
 
