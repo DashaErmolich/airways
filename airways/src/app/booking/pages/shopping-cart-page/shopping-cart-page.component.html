@@ -3,8 +3,8 @@
 
   <h3 *ngIf="!orders.length">Your cart is empty</h3>
 
-  <section class="table-container">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="orders.length">
+  <section class="table-container" *ngIf="orders.length">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
@@ -91,14 +91,14 @@
       </table>
   </section>
 
-  <h3 class="cart-total">
+  <h3 class="cart-total" *ngIf="orders.length">
     <span class="color-primary-blue">TOTAL: </span>
     <span class="color-primary-blue">{{ getCartTotal() | currency:(currency$ | async)! : 'symbol-narrow' }}</span>
   </h3>
 
   <div class="page-actions">
     <button mat-raised-button color="basic" routerLink="/booking/user">Return to Account</button>
-    <button mat-raised-button color="primary" (click)="buyProductsFromCart()" [disabled]="!getSelectedItemsIds().length">Continue to Payment</button>
+    <button *ngIf="orders.length" mat-raised-button color="primary" (click)="buyProductsFromCart()" [disabled]="!getSelectedItemsIds().length">Continue to Payment</button>
   </div>
 
 </div>

@@ -3,8 +3,8 @@
 
   <h3 *ngIf="!orders.length">Your trips list is empty</h3>
 
-  <section class="table-container">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="orders.length">
+  <section class="table-container" *ngIf="orders.length">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <ng-container matColumnDef="no">
           <th mat-header-cell *matHeaderCellDef>No.</th>
