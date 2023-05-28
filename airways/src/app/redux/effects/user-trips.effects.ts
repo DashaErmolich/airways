@@ -17,22 +17,28 @@ import { AppState } from '../state.models';
 export class UserTripsEffects {
   addOrderToUserTrips$ = createEffect(
     () => this.actions$.pipe(
-      ofType(UserTripsActions.addOrderUserTrips),
-      withLatestFrom(this.store$.select(selectTripSearchState)),
-      withLatestFrom(this.store$.select(selectFlightsState)),
-      withLatestFrom(this.store$.select(selectBookingState)),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      map(([[[_, tripSearchState], flightsState], bookingState]) => {
-        localStorage.setItem(LocalStorageKeysEnum.UserTrips, JSON.stringify({ tripSearchState, flightsState, bookingState }));
-        return UserTripsActions.addOrderUserTripsSuccess({
-          order: {
-            flightsSearch: tripSearchState,
-            flights: flightsState,
-            booking: bookingState,
-          },
-        });
-      }),
-      catchError(async () => UserTripsActions.addOrderUserTripsFailure()),
+      () => this.actions$.pipe(
+        ofType(UserTripsActions.addOrderUserTrips),
+        withLatestFrom(this.store$.select(selectTripSearchState)),
+        withLatestFrom(this.store$.select(selectFlightsState)),
+        withLatestFrom(this.store$.select(selectBookingState)),
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        map(([[[_, tripSearchState], flightsState], bookingState]) => {
+          const orders: string | null = localStorage.getItem(LocalStorageKeysEnum.UserTrips);
+          let newOrders = orders !== null ? JSON.parse(orders) : [];
+          newOrders = [...newOrders, { tripSearchState, flightsState, bookingState }];
+          localStorage.setItem(LocalStorageKeysEnum.UserTrips, JSON.stringify(newOrders));
+
+          return UserTripsActions.addOrderUserTripsSuccess({
+            order: {
+              tripSearchState,
+              flightsState,
+              bookingState,
+            },
+          });
+        }),
+        catchError(async () => UserTripsActions.addOrderUserTripsFailure()),
+      ),
     ),
   );
 

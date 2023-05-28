@@ -23,12 +23,16 @@ export class ShoppingCartEffects {
       withLatestFrom(this.store$.select(selectBookingState)),
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       map(([[[_, tripSearchState], flightsState], bookingState]) => {
-        localStorage.setItem(LocalStorageKeysEnum.CartOrders, JSON.stringify({ tripSearchState, flightsState, bookingState }));
+        const orders: string | null = localStorage.getItem(LocalStorageKeysEnum.CartOrders);
+        let newOrders = orders !== null ? JSON.parse(orders) : [];
+        newOrders = [...newOrders, { tripSearchState, flightsState, bookingState }];
+        localStorage.setItem(LocalStorageKeysEnum.CartOrders, JSON.stringify(newOrders));
+
         return ShoppingCartActions.addOrderToCartSuccess({
           order: {
-            flightsSearch: tripSearchState,
-            flights: flightsState,
-            booking: bookingState,
+            tripSearchState,
+            flightsState,
+            bookingState,
           },
         });
       }),

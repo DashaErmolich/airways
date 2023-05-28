@@ -15,8 +15,8 @@ $slides-all: 7;
 $slides-visible-default: 5;
 $slides-visible-small: 3;
 
-$flex-col-3: (3/12)* 100%;
-$flex-col-9: (9/12)* 100%;
+$flex-col-3: calc(3/12)* 100%;
+$flex-col-9: calc(9/12)* 100%;
 
 $c-flights-dots-border-width: 3px;
 $c-flights-desc-gap: 2rem;

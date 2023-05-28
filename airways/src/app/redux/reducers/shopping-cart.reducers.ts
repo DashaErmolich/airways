@@ -1,12 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
-import { OrdersState } from '../state.models';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
+import { Order } from '../state.models';
 import * as ShoppingCartActions from '../actions/shopping-cart.actions';
 
 export const shoppingCartReducersNode = 'shopping-cart';
 
-const initialState: OrdersState = {
-  orders: [],
-};
+function getOrders(): Order[] {
+  const orders = localStorage.getItem(LocalStorageKeysEnum.CartOrders);
+  return orders ? JSON.parse(orders) : null;
+}
+
+export const initialState = getOrders() ? getOrders() : [];
 
 export const shoppingCartReducers = createReducer(
   initialState,
@@ -14,7 +18,7 @@ export const shoppingCartReducers = createReducer(
     ShoppingCartActions.addOrderToCartSuccess,
     (state, action) => ({
       ...state,
-      orders: [...state.orders, action.order],
+      orders: [...state, action.order],
     }),
   ),
 );

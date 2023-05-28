@@ -1,10 +1,10 @@
 import { createReducer, on } from '@ngrx/store';
-import { OrdersState } from '../state.models';
+import { UserTripsState } from '../state.models';
 import * as UserTripsActions from '../actions/user-trips.actions';
 
 export const userTripsReducersNode = 'user-trips';
 
-const initialState: OrdersState = {
+const initialState: UserTripsState = {
   orders: [],
 };
 

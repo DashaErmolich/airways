@@ -189,6 +189,7 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
       const basicPrice = (totalPrice) / (this.adult.length * BOOKING_PRICE_CONFIG.ADULT
         + this.child.length * BOOKING_PRICE_CONFIG.CHILD + this.infant.length * BOOKING_PRICE_CONFIG.INFANT);
 
+      // eslint-disable-next-line guard-for-in, no-restricted-syntax
       for (const key in this.totalPriceByCat) {
         const element = this.totalPriceByCat[key as keyof PriceByPassengerCategory];
         element.fare = basicPrice * this[key as keyof PriceByPassengerCategory].length * BOOKING_PRICE_CONFIG[key.toUpperCase() as keyof typeof BOOKING_PRICE_CONFIG] * (BOOKING_PRICE_CONFIG.TOTAL - BOOKING_PRICE_CONFIG.TAXES);

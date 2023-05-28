@@ -41,7 +41,7 @@ $form-gap: 40px;
 .passenger-wrapper {
   display: flex;
   flex-direction: column;
-  gap: $form-gap / 2;
+  gap: calc($form-gap / 2);
 }
 
 .passenger__form {

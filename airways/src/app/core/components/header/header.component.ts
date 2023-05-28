@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { selectIsAuth, selectUsername } from 'src/app/redux/selectors/auth.selectors';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AppState } from 'src/app/redux/state.models';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
@@ -52,12 +52,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.username$ = this.store$.pipe(select(selectUsername));
     this.step$ = this.store$.pipe(select(selectStep));
-
-    this.step$.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe((res) => {
-      this.currentBookingStepNumber = res;
-    });
   }
 
   ngOnDestroy(): void {

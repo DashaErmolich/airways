@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../state.models';
 
-export const selectFeature = (state: AppState) => state.settings;
+const selectFeature = (state: AppState) => state.settings;
 
 export const selectDateFormat = createSelector(
   selectFeature,

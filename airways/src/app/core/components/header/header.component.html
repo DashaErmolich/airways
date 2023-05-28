@@ -65,7 +65,7 @@
       </ng-container>
 
       <a mat-icon-button routerLink="/booking/cart" class="header__shopping-cart-link">
-        <mat-icon svgIcon="shopping_basket"></mat-icon>
+        <mat-icon svgIcon="shopping_basket" matBadgeColor="warn"></mat-icon>
       </a>
 
       <button *ngIf="layout.isSmall$ | async" mat-icon-button [matMenuTriggerFor]="menu">
