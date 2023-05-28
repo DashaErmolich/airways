@@ -1,4 +1,4 @@
-<div class="flights-info-wrapper">
+<div class="flights-info-wrapper" *ngIf="searchData$ | async">
   <div class="container flights-info-container" [ngClass]="{'flights-info-container_handset': layout.isHandset$ | async}">
     <div class="flights-info__directions">
       <span>{{ (searchData$ | async)!.from!.city }}</span>

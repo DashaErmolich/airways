@@ -23,9 +23,7 @@ import { selectDateFormat } from 'src/app/redux/selectors/settings.selectors';
 import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { Passengers } from 'src/app/flight/models/flight.models';
 import { selectPassengers } from 'src/app/redux/selectors/trip-search.selectors';
-import { LocalStorageService } from 'src/app/core/services/local-storage.service';
 import { selectBookingState } from 'src/app/redux/selectors/booking.selectors';
-import { DatesService } from 'src/app/flight/services/dates.service';
 import { MatIconService } from '../../../core/services/icon.service';
 import { PassengerBooking } from '../../models/passengers-bookings.model';
 import { MAX_CHECKED_BAGGAGE, MIN_CABIN_BAGGAGE } from '../../constants/baggage.constant';
@@ -65,8 +63,6 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
     private router: Router,
     private store$: Store<AppState>,
     private matIconService: MatIconService,
-    private localStorage: LocalStorageService,
-    private datesService: DatesService,
   ) { }
 
   ngOnInit(): void {
@@ -181,7 +177,7 @@ export class PassengersFormComponent implements OnInit, OnDestroy {
       ],
       gender: [val?.gender || 'male', Validators.required],
       dateOfBirth: [
-        (val?.dateOfBirth) || '',
+        val?.dateOfBirth ? new Date(val?.dateOfBirth) : '',
         [
           Validators.required,
           this.formValidatorService.dateValidator(),

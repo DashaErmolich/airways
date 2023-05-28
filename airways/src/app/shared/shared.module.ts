@@ -25,6 +25,7 @@ import { MatMomentDateModule, MomentDateModule } from '@angular/material-moment-
 import { MatBadgeModule } from '@angular/material/badge';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatTableModule } from '@angular/material/table';
 import { FlightsSearchSummaryComponent } from './components/search-summary/search-summary.component';
 
 import { CurrencyValuePipe } from './pipes/currency-value.pipe';
@@ -68,6 +69,7 @@ import { GoBackButtonComponent } from './components/go-back-button/go-back-butto
     MatBadgeModule,
     CurrencyValuePipe,
     GoBackButtonComponent,
+    MatTableModule,
   ],
   providers: [
     {

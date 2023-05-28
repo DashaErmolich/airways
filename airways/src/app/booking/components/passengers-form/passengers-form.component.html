@@ -55,7 +55,7 @@
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
                 </mat-error>
                 <mat-error *ngIf="this.adult.controls[i]?.get('dateOfBirth')?.hasError(customErrors.AdultAge)">
-                  Adult must be more than 14 years old
+                  {{ errorMessages.passengersForm.age.adultAge }}
                 </mat-error>
               </mat-form-field>
 
@@ -153,7 +153,7 @@
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
                 </mat-error>
                 <mat-error *ngIf="this.child.controls[i]?.get('dateOfBirth')?.hasError(customErrors.ChildAge)">
-                  Child must be from 2 to 14 years old
+                  {{ errorMessages.passengersForm.age.childAge }}
                 </mat-error>
               </mat-form-field>
             </div>
@@ -249,7 +249,7 @@
                   {{ errorMessages.authForm.dateOfBirth.validDate }}
                 </mat-error>
                 <mat-error *ngIf="this.infant.controls[i]?.get('dateOfBirth')?.hasError(customErrors.InfantAge)">
-                  Infant must be from 0 to 2 years old
+                  {{ errorMessages.passengersForm.age.infantAge }}
                 </mat-error>
               </mat-form-field>
             </div>

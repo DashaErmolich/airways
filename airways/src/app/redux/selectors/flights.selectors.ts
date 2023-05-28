@@ -2,7 +2,7 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { FlightsState } from '../state.models';
 import { flightsReducersNode } from '../reducers/flights.reducers';
 
-export const selectFlightsFeature = createFeatureSelector<FlightsState>(flightsReducersNode);
+const selectFlightsFeature = createFeatureSelector<FlightsState>(flightsReducersNode);
 
 export const selectSelectedFlightIsLoading = createSelector(
   selectFlightsFeature,

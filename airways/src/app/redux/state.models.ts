@@ -46,12 +46,15 @@ export interface BookingState {
 export type BookingDetails = Omit<BookingState, 'step'>;
 
 export interface Order {
-  flightsSearch: TripSearchState;
-  flights: FlightsState;
-  booking: BookingState;
+  tripSearchState: TripSearchState;
+  flightsState: FlightsState;
+  bookingState: BookingState;
+}
+export interface UserTripsState {
+  orders: Order[];
 }
 
-export interface OrdersState {
+export interface Orders {
   orders: Order[];
 }
 
@@ -61,6 +64,6 @@ export interface AppState {
   flightsSearch: TripSearchState;
   flights: FlightsState;
   booking: BookingState;
-  shoppingCart: OrdersState;
-  finishedOrders: OrdersState;
+  shoppingCart: Orders;
+  userTrips: UserTripsState;
 }
