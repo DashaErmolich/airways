@@ -1,12 +1,18 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import {
+  Observable, Subject, take, takeUntil,
+} from 'rxjs';
 import { FlightPrices, Passengers } from 'src/app/flight/models/flight.models';
 import { selectCurrency } from 'src/app/redux/selectors/settings.selectors';
 import { selectCartOrders } from 'src/app/redux/selectors/shopping-cart.selectors';
 import { AppState, FlightsState, Order } from 'src/app/redux/state.models';
+import * as ShoppingCartActions from 'src/app/redux/actions/shopping-cart.actions';
+import { BookingFinishedComponent } from '../../components/booking-finished/booking-finished.component';
 
 interface CartOrder {
   no: FlightsState;
@@ -15,6 +21,7 @@ interface CartOrder {
   date: FlightsState;
   passengers: Passengers;
   price: FlightPrices;
+  id: number;
 }
 
 @Component({
@@ -39,6 +46,8 @@ export class ShoppingCartPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private store$: Store<AppState>,
+    private dialog: MatDialog,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -49,13 +58,14 @@ export class ShoppingCartPageComponent implements OnInit, OnDestroy {
       select(selectCartOrders),
     ).subscribe((res: Order[]) => {
       this.cartData = res;
-      this.orders = res.map((item) => ({
+      this.orders = res.map((item, index) => ({
         no: item.flightsState,
         flight: item.flightsState,
         trip: item.tripSearchState.isOneWayTrip ? 'One way' : 'Round trip',
         date: item.flightsState,
         passengers: item.tripSearchState.passengers,
         price: item.flightsState.forwardFlight!.price,
+        id: index,
       }));
 
       this.dataSource = new MatTableDataSource<CartOrder>(this.orders);
@@ -88,6 +98,21 @@ export class ShoppingCartPageComponent implements OnInit, OnDestroy {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.no}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
+  }
+
+  getSelectedItemsIds() {
+    return this.selection.selected.map((item) => item.id);
+  }
+
+  buyProductsFromCart() {
+    const finishOrderDialog = this.dialog.open(BookingFinishedComponent);
+
+    finishOrderDialog.afterClosed().pipe(
+      take(1),
+    ).subscribe(() => {
+      this.store$.dispatch(ShoppingCartActions.buyProductsFromCart({ productsIds: this.getSelectedItemsIds() }));
+      this.router.navigateByUrl('/booking/user');
+    });
   }
 }

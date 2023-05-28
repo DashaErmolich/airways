@@ -17,4 +17,11 @@ export const userTripsReducers = createReducer(
       orders: [...state.orders, action.order],
     }),
   ),
+  on(
+    UserTripsActions.addOrdersFromCartSuccess,
+    (state, action) => ({
+      ...state,
+      orders: [...state.orders, ...action.orders],
+    }),
+  ),
 );

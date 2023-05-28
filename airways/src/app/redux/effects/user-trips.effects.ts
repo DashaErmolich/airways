@@ -3,7 +3,7 @@ import {
   Actions, createEffect, ofType,
 } from '@ngrx/effects';
 import {
-  catchError, map, withLatestFrom,
+  catchError, map, tap, withLatestFrom,
 } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
@@ -12,6 +12,8 @@ import * as UserTripsActions from '../actions/user-trips.actions';
 import { selectTripSearchState } from '../selectors/trip-search.selectors';
 import { selectFlightsState } from '../selectors/flights.selectors';
 import { AppState } from '../state.models';
+import { selectCartOrders } from '../selectors/shopping-cart.selectors';
+import { selectUserTrips } from '../selectors/user-trips.selectors';
 
 @Injectable()
 export class UserTripsEffects {
@@ -40,6 +42,34 @@ export class UserTripsEffects {
         catchError(async () => UserTripsActions.addOrderUserTripsFailure()),
       ),
     ),
+  );
+
+  addOrdersFromCart$ = createEffect(
+    () => this.actions$.pipe(
+      () => this.actions$.pipe(
+        ofType(UserTripsActions.addOrdersFromCart),
+        withLatestFrom(this.store$.select(selectCartOrders)),
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        map(
+          ([{ productsIds }, cartOrders]) => UserTripsActions.addOrdersFromCartSuccess({
+            orders: cartOrders.filter((_, index) => productsIds.some((id) => index === id)),
+          }),
+          catchError(async () => UserTripsActions.addOrderUserTripsFailure()),
+        ),
+      ),
+    ),
+  );
+
+  addOrdersFromCartSuccess$ = createEffect(
+    () => this.actions$.pipe(
+      ofType(UserTripsActions.addOrdersFromCartSuccess),
+      withLatestFrom(this.store$.select(selectUserTrips)),
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      tap(([_, userTrips]) => {
+        localStorage.setItem(LocalStorageKeysEnum.UserTrips, JSON.stringify(userTrips));
+      }),
+    ),
+    { dispatch: false },
   );
 
   constructor(

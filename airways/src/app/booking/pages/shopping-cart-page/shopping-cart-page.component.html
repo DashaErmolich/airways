@@ -1,9 +1,10 @@
 <div class="container">
   <h2>Cart</h2>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <h3 *ngIf="!orders.length">Your cart is empty</h3>
 
-  <!-- Checkbox Column -->
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="orders.length">
+
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
       <mat-checkbox (change)="$event ? toggleAllRows() : null"
@@ -73,5 +74,9 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+
+  <div class="page-actions">
+    <button mat-raised-button color="primary" (click)="buyProductsFromCart()" [disabled]="!getSelectedItemsIds().length">Continue to Payment</button>
+  </div>
 
 </div>
