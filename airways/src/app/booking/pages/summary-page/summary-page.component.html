@@ -7,7 +7,7 @@
           <article class="flight__item_highlight flight-container" *ngFor="let connectedFlight of flight.connectedFlights">
             <div class="passenger__header">
               <p class="color-primary-blue">{{ connectedFlight.flightNumber }}</p>
-              <p>{{ connectedFlight.form.city }} - {{ flight.to.city }}</p>
+              <p>{{ connectedFlight.form.city }} - {{ connectedFlight.to.city }}</p>
             </div>
               <p>{{ connectedFlight.takeoffDate | date:'full' }}</p>
               <p>{{ connectedFlight.landingDate | date:'full' }}</p>
