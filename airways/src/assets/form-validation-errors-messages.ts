@@ -1,8 +1,8 @@
 export const formValidationErrorsMessages = {
   authForm: {
     email: {
-      required: 'Please enter a login email',
-      email: 'The login email is invalid',
+      required: 'Please enter a email',
+      email: 'Invalid email',
     },
     password: {
       required: 'Please enter a password',
@@ -15,29 +15,29 @@ export const formValidationErrorsMessages = {
       },
     },
     firstName: {
-      required: 'Please enter your first name',
+      required: 'Please enter first name',
       pattern: 'Must contain only letters (EN)',
     },
     lastName: {
-      required: 'Please enter your last name',
+      required: 'Please enter last name',
       pattern: 'Must contain only letters (EN)',
     },
     dateOfBirth: {
-      required: 'Please enter your date of birth',
+      required: 'Please enter date of birth',
       validDate: 'The date is invalid',
     },
     gender: {
-      required: 'Please enter your gender',
+      required: 'Please enter gender',
     },
     countryCode: {
-      required: 'Please enter your country code',
+      required: 'Please enter country code',
     },
     phoneNumber: {
-      required: 'Please enter your phone number',
+      required: 'Please enter phone number',
       pattern: 'The phone number must contain only numbers',
     },
     citizenship: {
-      required: 'Please enter your citizenship',
+      required: 'Please enter citizenship',
     },
   },
   cardCreationForm: {

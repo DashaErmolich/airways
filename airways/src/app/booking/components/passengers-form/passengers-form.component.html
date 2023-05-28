@@ -12,11 +12,11 @@
         <h3 class="booking__title">Adult</h3>
         <div class="passengers-container">
           <article class="passenger-wrapper" formArrayName="adult" *ngFor="let item of adult.controls; let i = index">
-            <div class="passenger__form" [formGroupName]="i">
+            <div class="passenger__form" [formGroupName]="i" [ngClass]="{'passenger__form_handset': layout.isHandset$ | async}">
               <mat-form-field>
                 <mat-label>First name</mat-label>
                 <input matInput type="text" formControlName="firstName">
-                <mat-icon matSuffix>info_edit</mat-icon>
+                <mat-icon matSuffix color="primary">edit</mat-icon>
                 <mat-error *ngIf="this.adult.controls[i]?.get('firstName')?.hasError('required')">
                   {{  errorMessages.authForm.firstName.required }}
                 </mat-error>
@@ -28,7 +28,7 @@
               <mat-form-field>
                 <mat-label>Last name</mat-label>
                 <input matInput type="text" formControlName="lastName">
-                <mat-icon matSuffix>info_edit</mat-icon>
+                <mat-icon matSuffix color="primary">edit</mat-icon>
                 <mat-error *ngIf="this.adult.controls[i]?.get('lastName')?.hasError('required')">
                   {{  errorMessages.authForm.lastName.required }}
                 </mat-error>
@@ -38,8 +38,8 @@
               </mat-form-field>
 
               <mat-radio-group formControlName="gender">
-                <mat-radio-button value="male">Male</mat-radio-button>
-                <mat-radio-button value="female">Female</mat-radio-button>
+                <mat-radio-button value="male" color="primary">Male</mat-radio-button>
+                <mat-radio-button value="female" color="primary">Female</mat-radio-button>
               </mat-radio-group>
 
               <mat-form-field>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="bag-container">
-              <span matBadge="1" matBadgeOverlap="false" class="demo-section">
+              <span matBadge="1" matBadgeOverlap="false" class="demo-section" matBadgeColor="accent">
                 <mat-icon svgIcon="cabin-bag"></mat-icon>
               </span>
 
@@ -78,7 +78,7 @@
               <span
                 *ngIf="isCheckedBaggage('adult', i)"
                 [matBadge]="getCheckedBaggage('adult', i)"
-                matBadgeOverlap="false" class="demo-section">
+                matBadgeOverlap="false" class="demo-section" matBadgeColor="accent">
                 <mat-icon svgIcon="checked-bag"></mat-icon>
               </span>
 
@@ -110,11 +110,11 @@
         <h3 class="booking__title">Child</h3>
         <div class="passengers-container">
           <article class="passenger-wrapper" formArrayName="child" *ngFor="let item of child.controls; let i = index">
-            <div class="passenger__form" [formGroupName]="i">
+            <div class="passenger__form" [formGroupName]="i" [ngClass]="{'passenger__form_handset': layout.isHandset$ | async}">
               <mat-form-field>
                 <mat-label>First name</mat-label>
                 <input matInput type="text" formControlName="firstName">
-                <mat-icon matSuffix>info_edit</mat-icon>
+                <mat-icon matSuffix color="primary">edit</mat-icon>
                 <mat-error *ngIf="child.controls[i]?.get('firstName')?.hasError('required')">
                   {{  errorMessages.authForm.firstName.required }}
                 </mat-error>
@@ -126,7 +126,7 @@
               <mat-form-field>
                 <mat-label>Last name</mat-label>
                 <input matInput type="text" formControlName="lastName">
-                <mat-icon matSuffix>info_edit</mat-icon>
+                <mat-icon matSuffix color="primary">edit</mat-icon>
                 <mat-error *ngIf="this.child.controls[i]?.get('lastName')?.hasError('required')">
                   {{  errorMessages.authForm.lastName.required }}
                 </mat-error>
@@ -136,8 +136,8 @@
               </mat-form-field>
 
               <mat-radio-group formControlName="gender">
-                <mat-radio-button value="male">Male</mat-radio-button>
-                <mat-radio-button value="female">Female</mat-radio-button>
+                <mat-radio-button value="male" color="primary">Male</mat-radio-button>
+                <mat-radio-button value="female" color="primary">Female</mat-radio-button>
               </mat-radio-group>
 
               <mat-form-field class="date-name-field">
@@ -159,7 +159,7 @@
             </div>
 
             <div class="bag-container">
-              <span matBadge="1" matBadgeOverlap="false" class="demo-section">
+              <span matBadge="1" matBadgeOverlap="false" class="demo-section" matBadgeColor="accent">
                 <mat-icon svgIcon="cabin-bag"></mat-icon>
               </span>
 
@@ -175,7 +175,7 @@
               <span
                 *ngIf="isCheckedBaggage('child', i)"
                 [matBadge]="getCheckedBaggage('child', i)"
-                matBadgeOverlap="false" class="demo-section">
+                matBadgeOverlap="false" class="demo-section" matBadgeColor="accent">
                 <mat-icon svgIcon="checked-bag"></mat-icon>
               </span>
 
@@ -206,11 +206,11 @@
         <h3 class="booking__title">Infant</h3>
         <div class="passengers-container">
           <article class="passenger-wrapper" formArrayName="infant" *ngFor="let item of infant.controls; let i = index">
-            <div class="passenger__form" [formGroupName]="i">
+            <div class="passenger__form" [formGroupName]="i" [ngClass]="{'passenger__form_handset': layout.isHandset$ | async}">
               <mat-form-field>
                 <mat-label>First name</mat-label>
                 <input matInput type="text" formControlName="firstName">
-                <mat-icon matSuffix>info_edit</mat-icon>
+                <mat-icon matSuffix color="primary">edit</mat-icon>
                 <mat-error *ngIf="this.infant.controls[i]?.get('firstName')?.hasError('required')">
                   {{  errorMessages.authForm.firstName.required }}
                 </mat-error>
@@ -222,7 +222,7 @@
               <mat-form-field>
                 <mat-label>Last name</mat-label>
                 <input matInput type="text" formControlName="lastName">
-                <mat-icon matSuffix>info_edit</mat-icon>
+                <mat-icon matSuffix color="primary">edit</mat-icon>
                 <mat-error *ngIf="this.infant.controls[i]?.get('lastName')?.hasError('required')">
                   {{  errorMessages.authForm.lastName.required }}
                 </mat-error>
@@ -232,8 +232,8 @@
               </mat-form-field>
 
               <mat-radio-group formControlName="gender">
-                <mat-radio-button value="male">Male</mat-radio-button>
-                <mat-radio-button value="female">Female</mat-radio-button>
+                <mat-radio-button value="male" color="primary">Male</mat-radio-button>
+                <mat-radio-button value="female" color="primary">Female</mat-radio-button>
               </mat-radio-group>
 
               <mat-form-field>
@@ -268,7 +268,7 @@
     <p class="passengers-form__subtitle">We need contact details to be able to deliver the latest information regarding your flight.</p>
 
     <article class="form-section-container">
-      <div class="passenger__form" formGroupName="contactDetails">
+      <div class="passenger__form" formGroupName="contactDetails" [ngClass]="{'passenger__form_handset': layout.isHandset$ | async}">
         <mat-form-field>
           <mat-label>Country code</mat-label>
             <mat-select formControlName="countryCode">
@@ -292,7 +292,7 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field class="flex-1">
           <mat-label>Email</mat-label>
           <input matInput formControlName="email">
           <mat-error *ngIf="contactDetails.controls['email'].hasError('required')">

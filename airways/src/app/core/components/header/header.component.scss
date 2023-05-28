@@ -7,13 +7,6 @@
   display: flex;
   align-items: center;
   z-index: $z-index-header;
-}
-
-.header_smoky {
-  background-color: rgba($color: #74767A, $alpha: 0.1);
-}
-
-.header_solid {
   background-color: #fff;
   border-bottom: 1px solid #D0D9DF;
 }
@@ -27,8 +20,13 @@
   }
 }
 
-.header-container {
+.header-wrapper {
   width: $desktop-width;
+  margin: auto;
+
+}
+
+.header-container {
   display: flex;
   flex-direction: row;
   align-items: center;
