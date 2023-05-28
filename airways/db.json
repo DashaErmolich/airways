@@ -1,3 +1,17 @@
 {
-  "users": []
+  "users": [
+    {
+      "email": "eric.cartman@gmail.com",
+      "password": "$2a$10$i4n8FumumwPdMiprADrt/e7DtZ4x/iK7OPuc.Mrh5Ic5xC8P4itRO",
+      "firstName": "Eric",
+      "lastName": "Cartman",
+      "gender": "male",
+      "countryCode": "+1",
+      "phoneNumber": "1231231234",
+      "citizenship": "United States",
+      "agreement": true,
+      "dateOfBirth": "1988-06-30T22:00:00.000Z",
+      "id": 1
+    }
+  ]
 }

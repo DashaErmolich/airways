@@ -19,7 +19,7 @@ export class AuthEffects {
       mergeMap(({ user }) => this.authService.signUp(user).pipe(
         map((res: ActiveUser) => AuthActions.signUpSuccess({ activeUser: res })),
         catchError(
-          async (errorResponse) => AuthActions.signUpFailure({ error: errorResponse.error }),
+          async (errorResponse) => AuthActions.signUpFailure({ error: errorResponse.message }),
         ),
       )),
     ),
@@ -31,7 +31,7 @@ export class AuthEffects {
       mergeMap(({ user }) => this.authService.login(user).pipe(
         map((res: ActiveUser) => AuthActions.loginSuccess({ activeUser: res })),
         catchError(
-          async (errorResponse) => AuthActions.loginFailure({ error: errorResponse.error }),
+          async (errorResponse) => AuthActions.loginFailure({ error: errorResponse.message }),
         ),
       )),
     ),
