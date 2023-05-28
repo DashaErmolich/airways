@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { PassengerCategory } from 'src/app/booking/pages/summary-page/summary-page.component';
+import moment from 'moment';
 import { CustomFormValidatorErrorsEnum } from '../constants/custom-form-validator-errors.enum';
 import { validateBirthDateByCategory } from '../helpers/birth-date-helper';
 
@@ -137,6 +138,8 @@ export class FormValidatorService {
         return null;
       }
 
+      const momentDate = moment(value);
+
       const ageIntervalByCategory: number[] = validateBirthDateByCategory(passengerCategory);
 
       let dateValid = true;
@@ -147,7 +150,7 @@ export class FormValidatorService {
             new Date().getFullYear() - ageIntervalByCategory[0],
           ),
         );
-        dateValid = value.isBefore(minValue);
+        dateValid = momentDate.isBefore(minValue);
       } else if (ageIntervalByCategory.length === 2) {
         const minValue = new Date(
           new Date().setFullYear(
@@ -159,7 +162,7 @@ export class FormValidatorService {
             new Date().getFullYear() - ageIntervalByCategory[1],
           ),
         );
-        dateValid = value.isBetween(maxValue, minValue);
+        dateValid = momentDate.isBetween(maxValue, minValue);
       } else dateValid = true;
 
       let errorKey: CustomFormValidatorErrorsEnum;

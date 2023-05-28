@@ -9,14 +9,16 @@ $color-light-gray: #D0D9DF;
 $color-primary-deep-blue: #1e2756;
 $color-secondary-blue: #3f51b5;
 
+$color-blue-highlight: #479ecc;
+
 $z-index-header: 2;
 
 $slides-all: 7;
 $slides-visible-default: 5;
 $slides-visible-small: 3;
 
-$flex-col-3: (3/12)* 100%;
-$flex-col-9: (9/12)* 100%;
+$flex-col-3: calc(3/12)* 100%;
+$flex-col-9: calc(9/12)* 100%;
 
 $c-flights-dots-border-width: 3px;
 $c-flights-desc-gap: 2rem;

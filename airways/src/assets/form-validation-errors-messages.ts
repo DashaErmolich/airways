@@ -16,11 +16,11 @@ export const formValidationErrorsMessages = {
     },
     firstName: {
       required: 'Please enter your first name',
-      pattern: 'The first name cannot contain numbers',
+      pattern: 'Must contain only letters (EN)',
     },
     lastName: {
       required: 'Please enter your last name',
-      pattern: 'The last name cannot contain numbers',
+      pattern: 'Must contain only letters (EN)',
     },
     dateOfBirth: {
       required: 'Please enter your date of birth',
@@ -64,7 +64,12 @@ export const formValidationErrorsMessages = {
   },
   passengersForm: {
     firstName: {
-      pattern: 'Must not contain numbers',
+      pattern: 'Must contain only letters (EN)',
+    },
+    age: {
+      adultAge: 'Adult must be more than 14 YRS',
+      childAge: 'Child must be from 2 to 14 YRS',
+      infantAge: 'Infant must be from 0 to 2 YRS',
     },
   },
 };

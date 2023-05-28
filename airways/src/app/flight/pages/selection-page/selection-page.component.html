@@ -4,7 +4,7 @@
 
   <span *ngIf="isLoading$ | async">Loading...</span>
 
-  <span *ngIf="error$ | async">{{ error$ | async }}</span>
+  <span class="error-message" *ngIf="error$ | async">{{ error$ | async }}</span>
 
   <div *ngIf="(isLoading$ | async) === false">
     <app-search-form *ngIf="isSearchFormVisible" (toggleSearchFormVisibilityEvent)="toggleSearchFormVisibility($event)"></app-search-form>
@@ -27,11 +27,11 @@
       *ngIf="(searchData$ | async)!.isRoundTrip">
     </app-flight-selection>
 
-    <p *ngIf="(isAuth$ | async) === false" class="error-message">
+    <p *ngIf="(isAuth$ | async) === false && (error$ | async) === null" class="error-message">
       You must be signed in the app to continue
     </p>
 
-    <p *ngIf="!isNextStepAvailable()" class="error-message">
+    <p *ngIf="!isNextStepAvailable() && (error$ | async) === null" class="error-message">
       You must select flights to continue
     </p>
 
@@ -41,8 +41,7 @@
       <button
         mat-raised-button
         color="primary"
-        *ngIf="isAuth$ | async"
-        [disabled]="!isNextStepAvailable()"
+        [disabled]="!isNextStepAvailable() || (isAuth$ | async) === false"
         (click)="saveSelectedFlights()">
         Continue
       </button>

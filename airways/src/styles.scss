@@ -27,6 +27,7 @@ body {
   max-width: $desktop-width;
   margin: auto;
   overflow: hidden;
+  padding: 1rem 0;
 
   @media screen and (max-width: $desktop-width) {
     margin-left: 1rem;
@@ -122,4 +123,8 @@ body {
   align-items: center;
   justify-content: flex-end;
   gap: 1rem;
+}
+
+.color-blue-highlight {
+  color: $color-blue-highlight;
 }

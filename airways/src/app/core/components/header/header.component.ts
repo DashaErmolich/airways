@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { selectIsAuth, selectUsername } from 'src/app/redux/selectors/auth.selectors';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AppState } from 'src/app/redux/state.models';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,6 +14,7 @@ import { DateFormatEnum } from 'src/app/core/constants/date-format.enum';
 import { LayoutService } from 'src/app/core/services/layout.service';
 import { selectStep } from 'src/app/redux/selectors/booking.selectors';
 import { BookingStepsService } from 'src/app/core/services/booking-steps.service';
+import { selectCartOrdersQty } from 'src/app/redux/selectors/shopping-cart.selectors';
 
 @Component({
   selector: 'app-header',
@@ -39,6 +40,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public step$!: Observable<number>;
 
+  public cartOrdersQty$!: Observable<number>;
+
   constructor(
     private store$: Store<AppState>,
     private dialog: MatDialog,
@@ -52,12 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currency$ = this.store$.pipe(select(selectCurrency));
     this.username$ = this.store$.pipe(select(selectUsername));
     this.step$ = this.store$.pipe(select(selectStep));
-
-    this.step$.pipe(
-      takeUntil(this.destroy$),
-    ).subscribe((res) => {
-      this.currentBookingStepNumber = res;
-    });
+    this.cartOrdersQty$ = this.store$.pipe(select(selectCartOrdersQty));
   }
 
   ngOnDestroy(): void {
