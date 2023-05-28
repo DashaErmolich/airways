@@ -1,7 +1,7 @@
 <header class="header"
   [ngClass]="{
   'header_smoky': isSearchPage(),
-  'header_solid': isStepperVisible(),
+  'header_solid': !isSearchPage() || isStepperVisible(),
   'header_solid_small': layout.isSmall$ && this.isStepperVisible()
   }">
     <div class="container header-container"

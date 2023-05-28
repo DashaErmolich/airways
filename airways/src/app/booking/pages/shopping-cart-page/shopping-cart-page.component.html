@@ -1,5 +1,5 @@
 <div class="container">
-  <h2>Cart</h2>
+  <h2 class="color-primary-blue">Cart</h2>
 
   <h3 *ngIf="!orders.length">Your cart is empty</h3>
 
@@ -52,8 +52,10 @@
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Date & time</th>
       <td mat-cell *matCellDef="let element">
-        <p>{{element.date.forwardFlight.takeoffDate | date : 'medium'}} - {{element.date.forwardFlight.landingDate | date : 'short'}}</p>
-        <p *ngIf="element.date.returnFlight">{{element.date.returnFlight.takeoffDate | date : 'medium'}} - {{element.date.returnFlight.landingDate | date : 'short'}}</p>
+        <p>Departure: {{element.date.forwardFlight.takeoffDate | date : 'medium'}}</p>
+        <p>Arrival: {{element.date.forwardFlight.landingDate | date : 'medium'}}</p>
+        <p *ngIf="element.date.returnFlight">Departure: {{element.date.returnFlight.takeoffDate | date : 'medium'}}</p>
+        <p *ngIf="element.date.returnFlight">Arrival: {{element.date.returnFlight.landingDate | date : 'medium'}}</p>
       </td>
     </ng-container>
 
@@ -76,6 +78,7 @@
   </table>
 
   <div class="page-actions">
+    <button mat-raised-button color="basic" routerLink="/booking/user">Return to Account</button>
     <button mat-raised-button color="primary" (click)="buyProductsFromCart()" [disabled]="!getSelectedItemsIds().length">Continue to Payment</button>
   </div>
 

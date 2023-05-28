@@ -83,7 +83,6 @@ export class ShoppingCartPageComponent implements OnInit, OnDestroy {
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
@@ -93,7 +92,6 @@ export class ShoppingCartPageComponent implements OnInit, OnDestroy {
     this.selection.select(...this.dataSource.data);
   }
 
-  /** The label for the checkbox on the passed row */
   checkboxLabel(row?: CartOrder): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;

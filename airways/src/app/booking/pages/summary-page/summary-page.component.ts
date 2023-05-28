@@ -166,7 +166,7 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
       take(1),
     ).subscribe(() => {
       this.store$.dispatch(UserTripsActions.addOrderUserTrips());
-      this.router.navigateByUrl('/');
+      this.router.navigateByUrl('/booking/user');
     });
   }
 

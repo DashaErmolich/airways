@@ -1,11 +1,17 @@
 import { createReducer, on } from '@ngrx/store';
-import { UserTripsState } from '../state.models';
+import { LocalStorageKeysEnum } from 'src/app/core/constants/local-storage-keys.enum';
+import { Order, UserTripsState } from '../state.models';
 import * as UserTripsActions from '../actions/user-trips.actions';
 
 export const userTripsReducersNode = 'user-trips';
 
+function getOrders(): Order[] {
+  const orders = localStorage.getItem(LocalStorageKeysEnum.UserTrips);
+  return orders ? JSON.parse(orders) : null;
+}
+
 const initialState: UserTripsState = {
-  orders: [],
+  orders: getOrders() ? getOrders() : [],
 };
 
 export const userTripsReducers = createReducer(
