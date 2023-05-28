@@ -100,6 +100,7 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$),
     ).subscribe((res: string) => {
       this.currency = res;
+      this.setPriceForCategories();
     });
 
     this.forwardFlight$.pipe(
@@ -184,7 +185,7 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
   }
 
   setPriceForCategories(): void {
-    if (this.passengers.length) {
+    if (this.passengers && this.passengers.length) {
       const totalPrice = this.getPriceWithCoefficient(BOOKING_PRICE_CONFIG.TOTAL);
       const basicPrice = (totalPrice) / (this.adult.length * BOOKING_PRICE_CONFIG.ADULT
         + this.child.length * BOOKING_PRICE_CONFIG.CHILD + this.infant.length * BOOKING_PRICE_CONFIG.INFANT);
@@ -199,6 +200,7 @@ export class SummaryPageComponent implements OnInit, OnDestroy {
           0,
         );
       }
+      this.totalPriceByCat = { ...this.totalPriceByCat };
     }
   }
 }

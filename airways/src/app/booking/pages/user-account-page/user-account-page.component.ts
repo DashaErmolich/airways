@@ -1,18 +1,21 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component, OnDestroy, OnInit,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import {
-  Observable, Subject, take, takeUntil,
+  Observable, Subject, takeUntil,
 } from 'rxjs';
-import { FlightPrices, Passengers } from 'src/app/flight/models/flight.models';
+import { Flight, FlightPrices, Passengers } from 'src/app/flight/models/flight.models';
 import { selectCurrency } from 'src/app/redux/selectors/settings.selectors';
 import { AppState, FlightsState, Order } from 'src/app/redux/state.models';
-import * as ShoppingCartActions from 'src/app/redux/actions/shopping-cart.actions';
+import { CurrencyValuePipe } from 'src/app/shared/pipes/currency-value.pipe';
 import { selectUserTrips } from 'src/app/redux/selectors/user-trips.selectors';
-import { BookingFinishedComponent } from '../../components/booking-finished/booking-finished.component';
+import { PassengerBooking } from '../../models/passengers-bookings.model';
+import { BOOKING_PRICE_CONFIG } from '../../constants/price.constant';
 
 interface UserOrder {
   no: FlightsState;
@@ -20,7 +23,7 @@ interface UserOrder {
   trip: string;
   date: FlightsState;
   passengers: Passengers;
-  price: FlightPrices;
+  price: number;
   id: number;
 }
 
@@ -28,9 +31,12 @@ interface UserOrder {
   selector: 'app-user-account-page',
   templateUrl: './user-account-page.component.html',
   styleUrls: ['./user-account-page.component.scss'],
+  providers: [CurrencyValuePipe],
 })
 export class UserAccountPageComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
+
+  private data: Order[] = [];
 
   orders: UserOrder[] = [];
 
@@ -42,26 +48,47 @@ export class UserAccountPageComponent implements OnInit, OnDestroy {
 
   selection = new SelectionModel<UserOrder>(true, []);
 
+  currency!: string;
+
   constructor(
     private store$: Store<AppState>,
     private dialog: MatDialog,
     private router: Router,
+    private currencyValuePipe: CurrencyValuePipe,
   ) { }
 
   ngOnInit(): void {
     this.currency$ = this.store$.pipe(select(selectCurrency));
 
+    this.currency$.pipe(
+      takeUntil(this.destroy$),
+    ).subscribe((res: string) => {
+      this.currency = res;
+      this.orders = this.data.map((item, index) => ({
+        no: item.flightsState,
+        flight: item.flightsState,
+        trip: item.tripSearchState.isOneWayTrip ? 'One way' : 'Round trip',
+        date: item.flightsState,
+        passengers: item.tripSearchState.passengers,
+        price: this.getOrderPrice(item),
+        id: index,
+      }));
+
+      this.dataSource = new MatTableDataSource<UserOrder>(this.orders);
+    });
+
     this.store$.pipe(
       takeUntil(this.destroy$),
       select(selectUserTrips),
     ).subscribe((res: Order[]) => {
+      this.data = res;
       this.orders = res.map((item, index) => ({
         no: item.flightsState,
         flight: item.flightsState,
         trip: item.tripSearchState.isOneWayTrip ? 'One way' : 'Round trip',
         date: item.flightsState,
         passengers: item.tripSearchState.passengers,
-        price: item.flightsState.forwardFlight!.price,
+        price: this.getOrderPrice(item),
         id: index,
       }));
 
@@ -74,40 +101,17 @@ export class UserAccountPageComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  // eslint-disable-next-line class-methods-use-this
+  private getOrderPrice(order: Order) {
+    const baggageQty = [...order.bookingState.adult, ...order.bookingState.child, ...order.bookingState.infant]
+      .reduce((sum, item: PassengerBooking) => sum + item.checkedBag, 0);
+    const price = [order.flightsState.forwardFlight, order.flightsState.returnFlight]
+      .reduce((sum, item: Flight | null) => (item !== null ? sum + this.getPrice(item.price) : sum), 0);
+
+    return price + price * baggageQty * BOOKING_PRICE_CONFIG.BAGGAGE;
   }
 
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
-    }
-
-    this.selection.select(...this.dataSource.data);
-  }
-
-  checkboxLabel(row?: UserOrder): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id}`;
-  }
-
-  getSelectedItemsIds() {
-    return this.selection.selected.map((item) => item.id);
-  }
-
-  buyProductsFromCart() {
-    const finishOrderDialog = this.dialog.open(BookingFinishedComponent);
-
-    finishOrderDialog.afterClosed().pipe(
-      take(1),
-    ).subscribe(() => {
-      this.store$.dispatch(ShoppingCartActions.buyProductsFromCart({ productsIds: this.getSelectedItemsIds() }));
-      this.router.navigateByUrl('/booking/user');
-    });
+  private getPrice(prices: FlightPrices) {
+    return this.currencyValuePipe.transform(prices, this.currency);
   }
 }
