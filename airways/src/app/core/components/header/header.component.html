@@ -1,0 +1,93 @@
+<header class="header">
+    <div class="header-wrapper container">
+
+      <div class="header-container"
+      [ngClass]="{'header-container_small': layout.isSmall$ | async}">
+        <div class="header__logo-container">
+          <a mat-button routerLink="">
+            <svg class="header__logo" *ngIf="(layout.isHandset$ | async) === false">
+              <use xlink:href="assets/icons/sprite.svg#logo"></use>
+            </svg>
+            <svg class="header__logo_small" *ngIf="layout.isHandset$ | async">
+              <use xlink:href="assets/icons/sprite.svg#logo-small"></use>
+            </svg>
+          </a>
+        </div>
+
+        <mat-form-field *ngIf="(layout.isSmall$ | async) === false" appearance="outline" class="header__date-format-select">
+          <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
+            <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">
+              {{ dateFormat }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="(layout.isSmall$ | async) === false" appearance="outline" class="header__currency-select">
+          <mat-select [value]="currency$ | async" (selectionChange)="onCurrencyChange($event)">
+            <mat-option *ngFor="let currency of currencies" [value]="currency">
+              {{ currency }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <ng-container *ngIf="(isAuth$ | async) === false && (layout.isHandset$ | async) === false">
+          <button mat-stroked-button class="header__user-account-button" (click)="openDialog()">
+            <mat-icon svgIcon="user"></mat-icon>
+            Sign in
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="(isAuth$ | async) === false && (layout.isHandset$ | async)">
+          <button mat-icon-button (click)="openDialog()">
+            <mat-icon svgIcon="user"></mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="(isAuth$ | async) && (layout.isHandset$ | async) === false">
+          <button mat-stroked-button class="header__user-account-button" routerLink="/booking/user">
+            <mat-icon svgIcon="user"></mat-icon>
+            {{ username$ | async }}
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="(isAuth$ | async) && (layout.isHandset$ | async)">
+          <button mat-icon-button routerLink="/booking/user">
+            <mat-icon svgIcon="user"></mat-icon>
+          </button>
+        </ng-container>
+
+        <a mat-icon-button routerLink="/booking/cart" class="header__shopping-cart-link">
+          <mat-icon svgIcon="shopping_basket" matBadgeColor="warn" [matBadge]="cartOrdersQty$ | async"></mat-icon>
+        </a>
+
+        <button *ngIf="layout.isSmall$ | async" mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item>
+            <mat-form-field appearance="outline" class="header__currency-select">
+              <mat-select [value]="dateFormat$ | async" (selectionChange)="onDateFormatChange($event)">
+                <mat-option *ngFor="let dateFormat of dateFormats" [value]="dateFormat">
+                  {{ dateFormat }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </button>
+
+          <button mat-menu-item>
+            <mat-form-field appearance="outline" class="header__currency-select">
+              <mat-select [value]="currency$ | async" (selectionChange)="onCurrencyChange($event)">
+                <mat-option *ngFor="let currency of currencies" [value]="currency">
+                  {{ currency }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </button>
+
+        </mat-menu>
+      </div>
+
+      <app-stepper [currentBookingStepNumber]="currentBookingStepNumber"></app-stepper>
+    </div>
+</header>

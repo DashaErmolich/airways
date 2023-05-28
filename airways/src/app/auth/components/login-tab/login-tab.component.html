@@ -1,0 +1,33 @@
+<mat-dialog-content [formGroup]="loginForm" class="form">
+  <form [formGroup]="loginForm" class="form" (submit)="onSubmit()">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+      <mat-error *ngIf="loginForm.controls['email'].hasError('required')">
+        {{ errorsMessages.email.required }}
+      </mat-error>
+      <mat-error *ngIf="loginForm.controls['email'].hasError('email')">
+        {{ errorsMessages.email.email }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field [matTooltip]="getTooltipMessage()" matTooltipClass="form-control-tooltip">
+      <mat-label>Password</mat-label>
+      <input matInput formControlName="password" [type]="isPasswordHidden ? 'password' : 'text'">
+      <button mat-icon-button matSuffix (click)="isPasswordHidden = !isPasswordHidden" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="isPasswordHidden">
+        <mat-icon>{{isPasswordHidden ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-error *ngIf="loginForm.controls['password'].hasError('required')">
+        {{ errorsMessages.password.required }}
+      </mat-error>
+      <mat-error *ngIf="isPasswordErrors()">
+        {{ errorsMessages.password.strong.inform }}
+      </mat-error>
+    </mat-form-field>
+
+    <span *ngIf="error$ | async" class="error-message">{{ error$ | async }}</span>
+
+    <button type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid" class="form__button">Log in</button>
+  </form>
+</mat-dialog-content>
+

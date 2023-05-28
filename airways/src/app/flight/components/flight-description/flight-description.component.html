@@ -1,0 +1,30 @@
+<div class="info" *ngIf="flight" [ngClass]="{'flight-description__info': (layout.isHandset$ | async) === false, 'flight-description__info_handset': layout.isHandset$ | async}">
+  <div class="info__flight flight">
+    <span class="flight__date">{{ flight.takeoffDate | date:'E, d MMM y' }}</span>
+    <div class="flight__time-container">
+      <span class="flight__time">{{ flight.takeoffDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
+      <span class="flight__zone">{{ flight.takeoffDate | date:'z' }}</span>
+    </div>
+    <span class="flight__city">{{ flight.form.city }}</span>
+  </div>
+
+  <div class="info__duration">
+    <span>{{ flight.timeMins | flightTime }}</span>
+    <span class="line-outside">
+      <mat-icon svgIcon="airplane-takeoff" [ngClass]="{'icon_rotate-y-180': isReturnFlight()}"></mat-icon>
+    </span>
+    <span>{{ isDirectFlight ? 'Direct' : 'Connected' }}</span>
+  </div>
+
+  <div class="info__flight info__flight_right flight">
+    <span class="flight__date">{{ flight.landingDate | date:'E, d MMM y' }}</span>
+    <div class="flight__time-container flight__time-container_reverse">
+      <span class="flight__time">{{ flight.landingDate | date:'H' }}:{{ flight.landingDate | date:'mm' }}</span>
+      <span class="flight__zone">{{ flight.landingDate | date:'z' }}</span>
+    </div>
+    <span class="flight__city">{{ flight.to.city }}</span>
+  </div>
+
+  <span *ngIf="isDirectFlight"><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
+  <span *ngIf="connectedFlights"><span class="color-gray">Flights no. </span>{{ connectedFlights[0].flightNumber }}, {{ connectedFlights[1].flightNumber }}</span>
+</div>

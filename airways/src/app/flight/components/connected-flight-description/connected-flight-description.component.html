@@ -1,0 +1,44 @@
+<div class="flight-wrapper" *ngIf="flight">
+  <div class="flight-container">
+    <div class="flight-row">
+
+      <div class="flight__date font-weight-bold">
+        <span>{{ flight.takeoffDate | date:'E, d MMM y' }}</span>
+        <span>{{ flight.takeoffDate | date:'H' }}:{{ flight.takeoffDate | date:'mm' }}</span>
+        <span>{{ flight.takeoffDate | date:'z' }}</span>
+      </div>
+      <div class="flight__info">
+        <span class="font-weight-bold">{{ flight.form.city }}</span>
+        <span>{{ flight.form.name }} ({{ flight.form.key }})</span>
+      </div>
+    </div>
+
+    <div class="flight-row flight_highlight">
+      <div class="flight__date"></div>
+      <div class="flight__info p-relative">
+        <span>{{ flight.timeMins | flightTime }}</span>
+        <span><span class="color-gray">Flight no. </span>{{ flight.flightNumber }}</span>
+        <mat-icon svgIcon="plane" class="icon_rotate-90 description-icon p-absolute"></mat-icon>
+      </div>
+    </div>
+
+    <div class="flight-row">
+      <div class="flight__date font-weight-bold">
+        <span>{{ flight.landingDate | date:'E, d MMM y' }}</span>
+        <span>{{ flight.landingDate | date:'H' }}:{{ flight.landingDate | date:'mm' }}</span>
+        <span>{{ flight.landingDate | date:'z' }}</span>
+      </div>
+      <div class="flight__info">
+        <span class="flight__city font-weight-bold">{{ flight.to.city }}</span>
+        <span class="flight__city">{{ flight.to.name }} ({{ flight.to.key }})</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flight-row flight__layover" *ngIf="layoverTime">
+    <div class="flight__date"></div>
+    <div class="flight__info p-relative">
+      <span>{{ layoverTime | flightTime }} layover</span>
+      <mat-icon svgIcon="clock" class="description-icon p-absolute"></mat-icon>
+    </div>
+</div>

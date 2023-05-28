@@ -1,0 +1,14 @@
+.form {
+  display: flex !important;
+  flex-direction: column;
+}
+
+.form__radio-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form__button {
+  width: 100%;
+}

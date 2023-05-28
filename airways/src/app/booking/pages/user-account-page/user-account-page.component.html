@@ -1,0 +1,77 @@
+<div class="container">
+  <h2 class="color-primary-blue">User account</h2>
+
+  <h3 *ngIf="!orders.length">Your trips list is empty</h3>
+
+  <section class="table-container" *ngIf="orders.length">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="no">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element" class="color-primary-blue font-weight-bold">
+            <span *ngIf="!element.no.forwardFlight.connectedFlights.length">{{ element.no.forwardFlight.flightNumber }}<br></span>
+            <span *ngIf="element.no.forwardFlight.connectedFlights.length">{{ element.no.forwardFlight.connectedFlights[0].flightNumber }}<br></span>
+            <span *ngIf="element.no.forwardFlight.connectedFlights.length">{{ element.no.forwardFlight.connectedFlights[1].flightNumber }}<br></span>
+            <span *ngIf="element.no.returnFlight && !element.no.returnFlight.connectedFlights.length">{{ element.no.returnFlight.flightNumber }}<br></span>
+            <span *ngIf="element.no.returnFlight && element.no.returnFlight.connectedFlights.length">{{ element.no.returnFlight.connectedFlights[0].flightNumber }}<br></span>
+            <span *ngIf="element.no.returnFlight && element.no.returnFlight.connectedFlights.length">{{ element.no.returnFlight.connectedFlights[1].flightNumber }}<br></span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="flight">
+          <th mat-header-cell *matHeaderCellDef>Flight</th>
+          <td mat-cell *matCellDef="let element" class="">
+            <span>
+              {{ element.flight.forwardFlight.form.city }} - {{ element.flight.forwardFlight.to.city }}
+            <br></span>
+            <span class="color-gray">
+              ({{ element.flight.forwardFlight.connectedFlights.length ? 'Connected' : 'Direct' }})
+            <br></span>
+            <span *ngIf="element.flight.returnFlight">
+              {{ element.flight.returnFlight.form.city }} - {{ element.flight.returnFlight.to.city }}
+              <br></span>
+              <span class="color-gray" *ngIf="element.flight.returnFlight">
+                ({{ element.flight.returnFlight.connectedFlights.length ? 'Connected' : 'Direct' }})
+              <br></span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="trip">
+          <th mat-header-cell *matHeaderCellDef>Trip type</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.trip}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date & time</th>
+          <td mat-cell *matCellDef="let element">
+            <span>Departure: {{element.date.forwardFlight.takeoffDate | date : 'medium'}}<br></span>
+            <span>Arrival: {{element.date.forwardFlight.landingDate | date : 'medium'}}<br></span>
+            <span *ngIf="element.date.returnFlight">Departure: {{element.date.returnFlight.takeoffDate | date : 'medium'}}<br></span>
+            <span *ngIf="element.date.returnFlight">Arrival: {{element.date.returnFlight.landingDate | date : 'medium'}}<br></span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="passengers">
+          <th mat-header-cell *matHeaderCellDef>Passengers</th>
+          <td mat-cell *matCellDef="let element">
+            <span>{{ element.passengers.adult }} x Adult<br></span>
+            <span *ngIf="element.passengers.child">{{ element.passengers.child }} X Child<br></span>
+            <span *ngIf="element.passengers.infant">{{ element.passengers.infant }} X Infant<br></span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td class="color-blue-highlight font-weight-bold" mat-cell *matCellDef="let element">
+            {{element.price | currency:(currency$ | async)! : 'symbol-narrow'}}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  </section>
+
+</div>

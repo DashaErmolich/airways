@@ -1,0 +1,11 @@
+.table-container {
+  width: 100%;
+  overflow: auto;
+}
+
+table {
+  td, th {
+    padding: 1rem;
+    line-height: 150%;
+  }
+}

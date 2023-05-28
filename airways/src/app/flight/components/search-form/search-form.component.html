@@ -1,0 +1,148 @@
+  <form
+    [formGroup]="searchForm"
+    [ngClass]="{
+      'search__form': isSearchPage,
+      'search__form_small': (layout.isSmall$ | async) && isSearchPage,
+      'search__form_handset': (layout.isHandset$ | async) && isSearchPage,
+      'selection__form': !isSearchPage,
+      'selection__form_small': (layout.isSmall$ | async) && !isSearchPage,
+      'selection__form_handset': (layout.isHandset$ | async) && !isSearchPage,
+    }"
+    (ngSubmit)="submitForm()">
+
+    <div class="form__control">
+      <mat-radio-group aria-label="Select an option" formControlName="tripType">
+        <mat-radio-button color="primary" value="round-trip" [checked]="searchState.isRoundTrip">Round Trip</mat-radio-button>
+        <mat-radio-button color="primary" value="one-way-trip" [checked]="searchState.isOneWayTrip">One Way</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <form [ngClass]="isSearchPage ? 'form__directions' : 'form__directions_selection'" formGroupName="directions">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>From</mat-label>
+        <input matInput placeholder="From" formControlName="departureFrom" [matAutocomplete]="from" type="text" >
+        <mat-autocomplete #from="matAutocomplete" [displayWith]="displayAirport">
+          <mat-option *ngFor="let airportFrom of filteredAirportsFrom | async" [value]="airportFrom" [disabled]="isFromAirportUnavailable(airportFrom.key)">
+            <div class="airport__info"><span>{{airportFrom.city}}</span><span> ({{airportFrom.key}})</span> </div>
+            <div class="airport__subinfo"><span>{{airportFrom.name}}</span><span> {{airportFrom.country}}</span></div>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="searchForm.get('directions')?.get('departureFrom')?.hasError('required')">
+          Please select from
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('directions')?.get('departureFrom')?.hasError(customErrors.ValidAirport)">
+          Choose airport from the list
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Destination</mat-label>
+        <input matInput placeholder="Destination" formControlName="destinationTo" [matAutocomplete]="to" type="text">
+        <mat-autocomplete #to="matAutocomplete" [displayWith]="displayAirport">
+          <mat-option *ngFor="let airportTo of filteredAirportsTo | async" [value]="airportTo" [disabled]="isToAirportUnavailable(airportTo.key)">
+            <div class="airport__info"><span>{{airportTo.city}}</span><span> ({{airportTo.key}})</span> </div>
+            <div class="airport__subinfo"><span>{{airportTo.name}}</span><span> {{airportTo.country}}</span></div>
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="searchForm.get('directions')?.get('destinationTo')?.hasError('required')">
+          Please select destination
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('directions')?.get('destinationTo')?.hasError(customErrors.ValidAirport)">
+          Choose airport from the list
+        </mat-error>
+      </mat-form-field>
+
+      <mat-error class="form__directions_error" *ngIf="searchForm.get('directions')?.hasError('sameDirectionsValidator')">
+        Please choose different airports
+      </mat-error>
+
+      <button mat-mini-fab class="form__directions_btn" color="primary" type="button"
+        (click)="swapDirections()"><mat-icon>sync_alt</mat-icon></button>
+    </form>
+
+    <div [ngClass]="isSearchPage ? 'form__control' : 'form__control_selection'">
+      <mat-form-field class="dates__form" *ngIf="isRoundTrip()" appearance="fill">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input matDateRangeInput [rangePicker]="picker" formGroupName="range" [dateFilter]="unavailableDate">
+          <input matStartDate formControlName="start" placeholder="Start date">
+          <input matEndDate formControlName="end" placeholder="End date">
+        </mat-date-range-input>
+        <mat-hint>{{ dateFormat$ | async }} - {{ dateFormat$ | async }}</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+        <mat-error
+          *ngIf="searchForm.get('range')?.get('start')?.hasError('required') || searchForm.get('range')?.get('end')?.hasError('required') ">
+          Please select dates
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('range')?.get('start')?.hasError('matStartDateInvalid')">Invalid start
+          date</mat-error>
+        <mat-error *ngIf="searchForm.get('range')?.get('end')?.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="dates__form" *ngIf="!this.isRoundTrip()" appearance="fill">
+        <mat-label>Enter a date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="date" [matDatepickerFilter]="unavailableDate">
+        <mat-hint>{{ dateFormat$ | async }}</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="searchForm.get('date')?.hasError('required')">Please enter a date</mat-error>
+      </mat-form-field>
+
+      <div class="passengers__form">
+        <mat-form-field class="example-full-width" (click)="visibleCounter()" appearance="fill">
+          <mat-label>Passengers</mat-label>
+          <input class="passengers__info" matInput readonly [value]="getCountPassengers()">
+          <mat-icon class="passengers__btn" color="primary">arrow_drop_down</mat-icon>
+        </mat-form-field>
+
+        <div *ngIf="isVisibleCounter" formGroupName="passengers" class="passengers__options">
+          <div class="passengers__option">
+            <div class="option__info">
+              <span class="option__name">Adult</span>
+              <span class="option__age">{{ getIntervalDescription('adult') }}</span>
+            </div>
+            <div class="option__counter">
+              <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('adult')"
+                (click)="decrement('adult')"><mat-icon [color]="isDecreaseDisabled('adult') ? 'warn' : 'primary'">remove</mat-icon></button>
+              <input class="option__count" type="text" readonly formControlName="adult">
+              <button class="option__counter_btn" type="button" [disabled]="isIncreaseDisabled('adult')"
+                (click)="increment('adult')"><mat-icon [color]="isIncreaseDisabled('adult') ? 'warn' : 'primary'">add</mat-icon></button>
+            </div>
+          </div>
+
+          <div class="passengers__option">
+            <div class="option__info">
+              <span class="option__name">Child</span>
+              <span class="option__age">{{ getIntervalDescription('child') }}</span>
+            </div>
+            <div class="option__counter">
+              <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('child')"
+                (click)="decrement('child')"><mat-icon [color]="isDecreaseDisabled('child') ? 'warn' : 'primary'">remove</mat-icon></button>
+              <input class="option__count" type="text" readonly formControlName="child">
+              <button class="option__counter_btn" type="button" [disabled]="isIncreaseDisabled('child')"
+                (click)="increment('child')"><mat-icon [color]="isIncreaseDisabled('child') ? 'warn' : 'primary'">add</mat-icon></button>
+            </div>
+          </div>
+
+          <div class="passengers__option">
+            <div class="option__info">
+              <span class="option__name">Infant</span>
+              <span class="option__age">{{ getIntervalDescription('infant') }}</span>
+            </div>
+            <div class="option__counter">
+              <button class="option__counter_btn" type="button" [disabled]="isDecreaseDisabled('infant')"
+                (click)="decrement('infant')"><mat-icon [color]="isDecreaseDisabled('infant') ? 'warn' : 'primary'">remove</mat-icon></button>
+              <input class="option__count" type="text" readonly formControlName="infant">
+              <button class="option__counter_btn" type="button" [disabled]="isIncreaseDisabled('infant')"
+                (click)="increment('infant')"><mat-icon [color]="isIncreaseDisabled('infant') ? 'warn' : 'primary'">add</mat-icon></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form__control">
+      <button class="form__btn" mat-raised-button color="primary" type="submit"
+        [disabled]="isFormInvalid()">Search</button>
+    </div>
+  </form>

@@ -1,0 +1,32 @@
+<div class="stepper"
+  *ngIf="currentBookingStepNumber && isStepperVisible()"
+  [ngClass]="{'stepper_small': layout.isSmall$ | async}">
+
+  <div class="step" *ngFor="let step of steps">
+    <button
+      mat-mini-fab
+      [color]="isPrimaryColor(step.number) ? 'primary' : 'basic'"
+      class="step__icon">
+
+      <mat-icon
+        *ngIf="isDone(step.number)">
+          done
+      </mat-icon>
+
+      <mat-icon
+        *ngIf="isActive(step.number)">
+          edit
+      </mat-icon>
+
+      <mat-icon
+        [svgIcon]="step.icon"
+        *ngIf="isFuture(step.number)">
+      </mat-icon>
+    </button>
+
+    <span *ngIf="(layout.isSmall$ | async) === false">{{ step.label }}</span>
+
+    <span *ngIf="!isLastStep(step.number)">-</span>
+
+  </div>
+</div>

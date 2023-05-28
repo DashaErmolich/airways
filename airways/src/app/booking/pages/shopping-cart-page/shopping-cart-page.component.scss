@@ -1,0 +1,21 @@
+.table-container {
+  width: 100%;
+  overflow: auto;
+}
+
+table {
+  td, th {
+    padding: 1rem;
+    line-height: 150%;
+  }
+}
+
+.cart-total {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 2rem 0;
+  justify-content: flex-end;
+  font-size: large;
+  font-weight: bolder;
+}

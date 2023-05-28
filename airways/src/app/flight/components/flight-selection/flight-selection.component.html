@@ -1,0 +1,67 @@
+<div class="flight-selection-container" *ngIf="flight">
+  <div class="flight-selection__title">
+    <mat-icon svgIcon="plane" [ngClass]="{'icon_rotate-180': isReturnFlight()}"></mat-icon>
+    <h2>From {{ flight.form.city }} to {{ flight.to.city }}</h2>
+  </div>
+
+  <app-calendar-slider
+    [searchData]="searchData"
+    [flight]="flight"
+    [flightTypeIndex]="flightTypeIndex"
+    [isFlightSelected]="isFlightSelected"
+    (isFlightSelectedEvent)="toggleFlightSelection($event)"
+  ></app-calendar-slider>
+
+  <span *ngIf="isFlightAvailable(flight.seats.avaible, (passengersQty$ | async)!)" class="error-message">
+    Sorry, the number of available seats ({{ flight.seats.avaible }}) is less then passengers quantity ({{passengersQty$ | async}}). Choose another flight.
+  </span>
+
+  <div class="flight-selection__data" *ngIf="isValidDate(flight.takeoffDate)" [ngClass]="{'flight-selection__data_small': layout.isSmall$ | async}">
+    <div class="flight-selection__flights-description">
+      <app-flight-description *ngIf="isDirectFlight()"
+        [flight]="flight"
+        [flightTypeIndex]="flightTypeIndex"
+        [isDirectFlight]="isDirectFlight()"
+      ></app-flight-description>
+
+      <app-connected-flight *ngIf="connectedFlights"
+        [connectedFlights]="connectedFlights"
+        [flight]="flight"
+        [flightTypeIndex]="flightTypeIndex"
+        ></app-connected-flight>
+
+    </div>
+
+    <div class="flight-price-container">
+      <span
+        [appFlightAvailableSeats]="flight.seats"
+        [appFlightAvailableSeatsStyle]="'background-color'">
+          {{ flight.seats.avaible }} seats <br> available
+      </span>
+      <span class="color-gray">Price</span>
+      <span class="flight-price_active" [ngClass]="{'flight-price_active_handset': layout.isHandset$ | async}">
+        {{ flight.price | currencyValue:(currency$ | async)! | currency:(currency$ | async)! : 'symbol-narrow' }}
+      </span>
+    </div>
+
+    <button
+      *ngIf="isFlightNotSelected(flight.takeoffDate)"
+      mat-raised-button
+      color="primary"
+      [disabled]="isFlightAvailable(flight.seats.avaible, (passengersQty$ | async)!)"
+      (click)="toggleFlightSelection()">
+        Select
+    </button>
+
+    <button
+      *ngIf="isFlightSelected"
+      mat-button
+      color="primary"
+      (click)="toggleFlightSelection()">
+        Edit
+      </button>
+  </div>
+
+  <span *ngIf="!isValidDate(flight.takeoffDate)" class="error-message">Sorry, there are no available flights on {{ flight.takeoffDate | date }}. Choose another date.</span>
+</div>
+
