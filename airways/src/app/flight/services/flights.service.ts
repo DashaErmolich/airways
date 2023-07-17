@@ -14,7 +14,7 @@ import { DatesService } from 'src/app/flight/services/dates.service';
   providedIn: 'root',
 })
 export class FlightsService {
-  private BASE_URL = 'http://localhost:3001';
+  private BASE_URL = 'https://airways-backend-ba6c.onrender.com';
 
   constructor(
     private http: HttpClient,

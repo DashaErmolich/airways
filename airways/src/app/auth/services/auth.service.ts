@@ -12,7 +12,7 @@ import { ActiveUser, User } from 'src/app/auth/models/user.model';
   providedIn: 'root',
 })
 export class AuthService {
-  BASE_URL = ' http://localhost:3000';
+  BASE_URL = 'https://airways-auth.onrender.com';
 
   constructor(
     private http: HttpClient,
